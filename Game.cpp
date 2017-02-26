@@ -47,9 +47,8 @@ void Game::Start(void)
 
     if(_gameState != Uninitialized)
         return;
-    window.create(sf::VideoMode(Settings::SCREEN_WIDTH,Settings::SCREEN_HEIGHT,32),"Genland!");
+    window.create(sf::VideoMode(Settings::SCREEN_WIDTH,Settings::SCREEN_HEIGHT,32),"Prince of persia!");
 
-    // sf::View viewPlayer(sf::FloatRect(200, 200, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT));
 
     _gameState= Game::ShowingMenu;
     sf::Clock clock1;
@@ -76,9 +75,6 @@ void Game::Start(void)
     int fps_count2=0;
 
     MenuMain::view = MagicView(&window,MagicView::expanded,sf::Vector2i(2000,2000));
-    //NewGameMenu::view = MagicView(&window,MagicView::expanded,sf::Vector2i(2000,2000));
-    //MenuLoadGame::view = MagicView(&window,MagicView::expanded,sf::Vector2i(2000,2000));
-    //MenuConfigGame::view = MagicView(&window,MagicView::expanded,sf::Vector2i(2000,2000));
 
     while(!IsExiting())
     {
@@ -146,7 +142,7 @@ void Game::GameLoop(double delta)
     {
         case Game::ShowingMenu:
         {
-            if(MenuMain::newGameClicked(Game::inputs)) _gameState = NewGame;
+            if(MenuMain::newGameClicked(Game::inputs)) _gameState = Playing;
             else if(MenuMain::exitClicked(Game::inputs)) {
                 ExitGame();
             }
@@ -159,13 +155,6 @@ void Game::GameLoop(double delta)
                     Game::inputs.UpdateWheel(currentEvent.mouseWheel.delta);
                 }
 
-                else if (
-                        (currentEvent.type == sf::Event::KeyPressed) &&
-                        (currentEvent.key.code == sf::Keyboard::Tab))
-                {
-                    std::cout << "bye" << std::endl;
-                    _gameState = Playing;
-                }
                 else if (currentEvent.type == sf::Event::Resized){
                     MenuMain::view.update();
                     std::cout << "res" << std::endl;
@@ -212,8 +201,8 @@ void Game::GameLoop(double delta)
                     Game::ExitGame();
                 }
             }
-            //Game::game.update(window,delta,inputs);
-            //Game::game.draw(window);
+            Game::game.update(window,delta,inputs);
+            Game::game.draw(window);
             break;
         }
         case Game::Config:

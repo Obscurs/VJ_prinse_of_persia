@@ -22,7 +22,7 @@ public:
     TextureManager* texMan;
     void update(sf::RenderWindow &window,float delta,Inputs &inputs);
     void draw(sf::RenderWindow &window);
-    sf::Sprite get_plain_sprite(sf::RenderWindow& renderWindow,sf::VertexArray &render_array);
+    sf::Sprite get_plain_sprite(sf::VertexArray &render_array);
 
 };
 

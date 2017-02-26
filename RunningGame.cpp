@@ -10,10 +10,10 @@ RunningGame::RunningGame(sf::RenderWindow &window)
           view_game(&window,MagicView::crop,sf::Vector2i(Settings::GAME_WIDTH,Settings::GAME_HEIGHT))
 {
     texture_plain_sprite.create(Settings::GAME_WIDTH, Settings::GAME_HEIGHT);
-    texMan = new TextureManager("resources/tiles2.png", 16, 16);
+    texMan = new TextureManager("resources/map_tiles.png", 16, 16);
 }
 
-sf::Sprite RunningGame::get_plain_sprite(sf::RenderWindow& renderWindow,sf::VertexArray &render_array){
+sf::Sprite RunningGame::get_plain_sprite(sf::VertexArray &render_array){
     texture_plain_sprite.clear(sf::Color(0,0,0,0));
     sf::RenderStates states;
     states.texture = texMan->getTexture();
@@ -28,9 +28,10 @@ void RunningGame::update(sf::RenderWindow &window,float delta,Inputs &inputs){
 }
 void RunningGame::draw(sf::RenderWindow &window){
     const sf::View &aux = window.getView();
-
     window.setView(view_game);
-    //drawer.Draw(window);
+    sf::VertexArray render_array(sf::Quads , (uint)(4));
+    sf::Sprite sprite = get_plain_sprite(render_array);
+    window.draw(sprite);
     window.setView(aux);
 }
 void RunningGame::restart(){
