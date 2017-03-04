@@ -9,12 +9,12 @@
 
 
 #define SCREEN_X 0
-#define SCREEN_Y 0
+#define SCREEN_Y -13
 
 #define CHUNK_X_SIZE 256
 #define CHUNK_Y_SIZE 256
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_Y_TILES 4
 
 #define DBOUT( s )            \
 {                             \
@@ -26,6 +26,8 @@
 Scene::Scene()
 {
 	map = NULL;
+	background = NULL;
+	foreground = NULL;
 	player = NULL;
 }
 
@@ -33,6 +35,10 @@ Scene::~Scene()
 {
 	if(map != NULL)
 		delete map;
+	if (background != NULL)
+		delete background;
+	if (foreground != NULL)
+		delete foreground;
 	if(player != NULL)
 		delete player;
 }
@@ -41,7 +47,9 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level01test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	background = TileMap::createTileMap("levels/level01testb.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	foreground = TileMap::createTileMap("levels/level01testf.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -76,8 +84,18 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	background->render();
 	map->render();
 	player->render();
+
+	texProgram.free();
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	modelview = glm::mat4(1.0f);
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	foreground->render();
 }
 
 void Scene::initShaders()
