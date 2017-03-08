@@ -57,6 +57,9 @@ artifacts/
 *.pch
 *.pdb
 *.pgc
+*.sln
+*.vcxproj
+*.filters
 *.pgd
 *.rsp
 *.sbr
