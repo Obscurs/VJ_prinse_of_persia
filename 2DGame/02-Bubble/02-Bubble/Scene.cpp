@@ -132,6 +132,8 @@ void Scene::initShaders()
 	vShader.free();
 	fShader.free();
 }
-
+ShaderProgram& Scene::getProgram(){
+	return texProgram;
+}
 
 

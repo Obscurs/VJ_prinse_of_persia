@@ -13,8 +13,9 @@ void Game::init()
 	game_status = MAINMENU;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
-	menu.init();
-	pause.init();
+	
+	menu.init(scene.getProgram());
+	pause.init(scene.getProgram());
 }
 
 bool Game::update(int deltaTime)
@@ -65,7 +66,7 @@ void Game::keyReleased(int key)
 	{
 		switch (game_status){
 		case PLAYING:
-			game_status = MAINMENU;
+			game_status = PAUSE;
 			break;
 		case PAUSE:
 			game_status = PLAYING;

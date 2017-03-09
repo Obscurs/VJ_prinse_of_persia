@@ -8,7 +8,7 @@ class Pause
 public:
 	Pause();
 	~Pause();
-	void init();
+	void init(ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
 private:

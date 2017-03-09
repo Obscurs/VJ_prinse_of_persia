@@ -12,9 +12,9 @@ Pause::~Pause()
 {
 }
 
-void Pause::init()
+void Pause::init(ShaderProgram &shaderProgram)
 {
-	initShaders();
+	texProgram = shaderProgram;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
 	menu_tex.loadFromFile("images/pause.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -30,35 +30,7 @@ void Pause::init()
 	sprite->setPosition(glm::vec2(float(SCREEN_WIDTH / 2 - SCREEN_WIDTH / 4), float(SCREEN_HEIGHT / 2 - SCREEN_HEIGHT / 8)));
 
 }
-void Pause::initShaders()
-{
-	Shader vShader, fShader;
 
-	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if (!vShader.isCompiled())
-	{
-		cout << "Vertex Shader Error" << endl;
-		cout << "" << vShader.log() << endl << endl;
-	}
-	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if (!fShader.isCompiled())
-	{
-		cout << "Fragment Shader Error" << endl;
-		cout << "" << fShader.log() << endl << endl;
-	}
-	texProgram.init();
-	texProgram.addShader(vShader);
-	texProgram.addShader(fShader);
-	texProgram.link();
-	if (!texProgram.isLinked())
-	{
-		cout << "Shader Linking Error" << endl;
-		cout << "" << texProgram.log() << endl << endl;
-	}
-	texProgram.bindFragmentOutput("outColor");
-	vShader.free();
-	fShader.free();
-}
 
 void Pause::update(int deltaTime)
 {

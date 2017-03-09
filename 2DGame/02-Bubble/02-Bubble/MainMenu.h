@@ -8,7 +8,7 @@ class MainMenu
 public:
 	MainMenu();
 	~MainMenu();
-	void init();
+	void init(ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
 private:
