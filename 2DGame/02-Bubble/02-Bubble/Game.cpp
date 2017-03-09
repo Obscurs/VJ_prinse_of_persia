@@ -2,29 +2,58 @@
 #include <GL/glut.h>
 #include "Game.h"
 
+enum GameStatus
+{
+	PLAYING, MAINMENU, PAUSE
+};
 
 void Game::init()
 {
 	bPlay = true;
+	game_status = MAINMENU;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
+	menu.init();
+	pause.init();
 }
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
-	
+	switch (game_status){
+		case PLAYING:
+			scene.update(deltaTime);
+			break;
+		case MAINMENU:
+			menu.update(deltaTime);
+			break;
+		case PAUSE:
+			pause.update(deltaTime);
+			break;
+	}
 	return bPlay;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+	
+	switch (game_status){
+		case PLAYING:
+			scene.render();
+			break;
+		case MAINMENU:
+			menu.render();
+			break;
+		case PAUSE:
+			scene.render();
+			pause.render();
+			break;
+	}
 }
 
 void Game::keyPressed(int key)
 {
+	
 	if(key == 27) // Escape code
 		bPlay = false;
 	keys[key] = true;
@@ -32,6 +61,20 @@ void Game::keyPressed(int key)
 
 void Game::keyReleased(int key)
 {
+	if (key == 80 || key == 112) // "P" key
+	{
+		switch (game_status){
+		case PLAYING:
+			game_status = MAINMENU;
+			break;
+		case PAUSE:
+			game_status = PLAYING;
+			break;
+		}
+	}
+	else if (key == 32 && game_status == MAINMENU){
+		game_status = PLAYING;
+	}
 	keys[key] = false;
 }
 
