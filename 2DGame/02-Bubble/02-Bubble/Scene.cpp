@@ -51,18 +51,20 @@ void Scene::init()
 	background = TileMap::createTileMap("levels/level01testb.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	foreground = TileMap::createTileMap("levels/level01testf.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	gui = new Gui();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y+8), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+	gui->init(player, texProgram);
 }
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-
+	
 	
 	int x = player->getPosition().x + 16;
 	int y = player->getPosition().y + 16;
@@ -71,6 +73,7 @@ void Scene::update(int deltaTime)
 	x = chunk_x*(CHUNK_X_SIZE);
 	y = chunk_y*(CHUNK_Y_SIZE);
 	DBOUT("positionX: " << x << "\n");
+	gui->update(deltaTime, glm::vec2(x,y));
 	projection = glm::ortho((float)x, x + float(CHUNK_X_SIZE), y + float(CHUNK_Y_SIZE), (float)y);
 }
 
@@ -96,6 +99,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	foreground->render();
+	gui->render();
 }
 
 void Scene::initShaders()
