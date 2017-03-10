@@ -76,6 +76,15 @@ void Game::keyReleased(int key)
 	else if (key == 32 && game_status == MAINMENU){
 		game_status = PLAYING;
 	}
+	else if ((key == 72 || key == 104) && game_status == MAINMENU){
+		menu.menu_status = 1;
+	}
+	else if ((key == 67 || key == 99) && game_status == MAINMENU){
+		menu.menu_status = 2;
+	}
+	else if ((key == 77 || key == 109) && game_status == MAINMENU){
+		menu.menu_status = 0;
+	}
 	keys[key] = false;
 }
 
