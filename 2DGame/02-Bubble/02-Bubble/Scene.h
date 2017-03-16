@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "TileMap.h"
+#include "EntityMap.h"
 #include "Player.h"
 #include "Gui.h"
 
@@ -28,6 +29,7 @@ private:
 	void initShaders();
 
 private:
+	EntityMap *entities;
 	TileMap *map;
 	TileMap *background;
 	TileMap *foreground;

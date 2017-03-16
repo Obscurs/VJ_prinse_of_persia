@@ -25,6 +25,7 @@
 
 Scene::Scene()
 {
+	entities = NULL;
 	map = NULL;
 	background = NULL;
 	foreground = NULL;
@@ -35,6 +36,8 @@ Scene::~Scene()
 {
 	if(map != NULL)
 		delete map;
+	if (entities != NULL)
+		delete entities;
 	if (background != NULL)
 		delete background;
 	if (foreground != NULL)
@@ -48,6 +51,7 @@ void Scene::init()
 {
 	initShaders();
 	map = TileMap::createTileMap("levels/level01test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	entities = EntityMap::createTileMap("levels/level01teste.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	background = TileMap::createTileMap("levels/level01testb.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	foreground = TileMap::createTileMap("levels/level01testf.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
@@ -64,7 +68,7 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	
+	entities->update(deltaTime);
 	
 	int x = player->getPosition().x + 16;
 	int y = player->getPosition().y + 16;
@@ -89,6 +93,14 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();
 	map->render();
+	texProgram.free();
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	modelview = glm::mat4(1.0f);
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	entities->render();
 	player->render();
 
 	texProgram.free();
