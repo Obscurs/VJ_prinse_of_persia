@@ -4,13 +4,14 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "GameActor.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
 
 
-class Player
+class Player: public GameActor
 {
 
 public:
@@ -21,8 +22,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	glm::vec2 getPosition();
-	int health;
-	int max_health;
+	glm::vec2 size;
 	
 private:
 	bool bJumping;
@@ -30,7 +30,6 @@ private:
 	int jumpAngle, startY;
 	
 	Texture spritesheet;
-	Sprite *sprite;
 	TileMap *map;
 
 };

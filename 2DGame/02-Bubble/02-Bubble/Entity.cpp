@@ -72,6 +72,16 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_position = glm::vec2(position.x + 16, position.y + 32);
 		col_size = glm::vec2(32, 14);
 	}
+	else if (type == 6){
+		position = glm::vec2(position.x + 3, position.y);
+		sprite->setPosition(position);
+		sprite->addKeyframe(ANIM1, glm::vec2(0.0f, 0.75f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.25f, 0.75f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.75f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.75f, 0.75f));
+		col_position = glm::vec2(position.x + 16, position.y);
+		col_size = glm::vec2(32, 14);
+	}
 	sprite->changeAnimation(ANIM1);
 }
 
@@ -86,7 +96,42 @@ void Entity::render()
 	
 	sprite->render();
 }
-
+bool Entity::action(GameActor &actor){
+	//spikes
+	if (type == 1){
+		if (actor.health>0)actor.health--;
+		
+	}//saw
+	else if (type == 2){
+		if (actor.health>0 && sprite->getCurrentKeyframe()<2)actor.health--;
+	}//potion1
+	else if (type == 3){
+		if (actor.down_key){
+			if (actor.health < actor.max_health) actor.health++;
+			return true;
+		}
+	}//potion2
+	else if (type == 4){
+		if (actor.down_key){
+			actor.max_health++;
+			return true;
+		}
+	}//potion3
+	else if (type == 5){
+		if (actor.down_key){
+			if (actor.health>0)actor.health--;
+			return true;
+		}
+	}
+	return false;
+}
+bool Entity::overlapping1D(glm::vec2 box1, glm::vec2 box2){
+	return (box1.y >= box2.x && box2.y >= box1.x);
+}
+bool Entity::collides(glm::vec2 pos, glm::vec2 size){
+	return (overlapping1D(glm::vec2(pos.x, pos.x + size.x), glm::vec2(col_position.x, col_position.x + col_size.x)) 
+		&& overlapping1D(glm::vec2(pos.y, pos.y + size.y), glm::vec2(col_position.y, col_position.y + col_size.y)));
+}
 
 
 

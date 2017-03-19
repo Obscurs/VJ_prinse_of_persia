@@ -72,7 +72,9 @@ void Sprite::setNumberAnimations(int nAnimations)
 	animations.clear();
 	animations.resize(nAnimations);
 }
-
+int Sprite::getCurrentKeyframe(){
+	return currentKeyframe;
+}
 void Sprite::setAnimationSpeed(int animId, int keyframesPerSec)
 {
 	if(animId < int(animations.size()))
