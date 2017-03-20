@@ -4,7 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-
+#include "GameActor.h"
 
 // Player is basically a Sprite that represents the player. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
@@ -19,7 +19,7 @@ enum PlayerAnims
 	STAND_LEFT, STAND_RIGHT, RUN_LEFT, RUN_RIGHT, WALK_LEFT, WALK_RIGHT, JUMP_RUN_RIGHT, JUMP_RUN_LEFT, TURN_RIGHT, TURN_LEFT, STOP_RIGHT, STOP_LEFT
 };
 
-class Player
+class Player: public GameActor
 {
 
 public:
@@ -33,8 +33,6 @@ public:
 	void setState(PlayerState newState);
 	void setAnimation(PlayerAnims newState);
 	glm::vec2 getPosition();
-	int health;
-	int max_health;
 	
 private:
 	bool bJumping;
@@ -44,7 +42,6 @@ private:
 	int jumpAngle, startY, frame;
 	PlayerState state;
 	Texture spritesheet;
-	Sprite *sprite;
 	TileMap *map;
 };
 

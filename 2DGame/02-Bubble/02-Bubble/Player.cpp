@@ -287,7 +287,7 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case TURNING_RIGHT:
-		if (sprite->animation() >= 5) {
+		if (sprite->getCurrentKeyframe() >= 5) {
 			setState(STANDING_RIGHT);
 			setAnimation(STAND_RIGHT);
 		}
@@ -296,7 +296,7 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case TURNING_LEFT:
-		if (sprite->animation() >= 5) {
+		if (sprite->getCurrentKeyframe() >= 5) {
 			setState(STANDING_LEFT);
 			setAnimation(STAND_LEFT);
 		}
@@ -305,7 +305,7 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case STOPING_RIGHT:
-		if (sprite->animation() >= 6) {
+		if (sprite->getCurrentKeyframe() >= 6) {
 			setState(STANDING_RIGHT);
 			setAnimation(STAND_RIGHT);
 		}
@@ -314,7 +314,7 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case STOPING_LEFT:
-		if (sprite->animation() >= 6) {
+		if (sprite->getCurrentKeyframe() >= 6) {
 			setState(STANDING_LEFT);
 			setAnimation(STAND_LEFT);
 		}
@@ -352,7 +352,7 @@ void Player::update(int deltaTime)
 		{
 			if (up)
 			{
-				if (sprite->animation() != JUMP_RUN_RIGHT) sprite->changeAnimation(JUMP_RUN_RIGHT);
+				if (sprite->getCurrentKeyframe() != JUMP_RUN_RIGHT) sprite->changeAnimation(JUMP_RUN_RIGHT);
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
