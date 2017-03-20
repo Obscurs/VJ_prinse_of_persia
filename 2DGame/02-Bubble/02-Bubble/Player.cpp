@@ -34,7 +34,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->setAnimationSpeed(STAND_RIGHT, 8);
 		sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
 		
-		sprite->setAnimationSpeed(RUN_LEFT, 10);
+		sprite->setAnimationSpeed(RUN_LEFT, 15);
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-1 *stepX, 0.f));
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-1* stepX, stepY));
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-2* stepX, stepY));
@@ -51,7 +51,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-13*stepX, stepY));
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-14*stepX, stepY));
 
-		sprite->setAnimationSpeed(RUN_RIGHT, 10);
+		sprite->setAnimationSpeed(RUN_RIGHT, 15);
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(0*stepX, stepY));
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(1*stepX, stepY));
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(2*stepX, stepY));
@@ -67,7 +67,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(12*stepX, stepY));
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(13*stepX, stepY));
 
-		sprite->setAnimationSpeed(WALK_RIGHT, 10);
+		sprite->setAnimationSpeed(WALK_RIGHT, 17);
 		sprite->addKeyframe(WALK_RIGHT, glm::vec2(0 * stepX, 3 * stepY));
 		sprite->addKeyframe(WALK_RIGHT, glm::vec2(1 * stepX, 3 * stepY));
 		sprite->addKeyframe(WALK_RIGHT, glm::vec2(2 * stepX, 3 * stepY));
@@ -77,7 +77,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(WALK_RIGHT, glm::vec2(6 * stepX, 3 * stepY));
 		sprite->addKeyframe(WALK_RIGHT, glm::vec2(7 * stepX, 3 * stepY));
 
-		sprite->setAnimationSpeed(WALK_LEFT, 10);
+		sprite->setAnimationSpeed(WALK_LEFT, 17);
 		sprite->addKeyframe(WALK_LEFT, glm::vec2(-1 * stepX, 3 * stepY));
 		sprite->addKeyframe(WALK_LEFT, glm::vec2(-2 * stepX, 3 * stepY));
 		sprite->addKeyframe(WALK_LEFT, glm::vec2(-3 * stepX, 3 * stepY));
@@ -202,7 +202,7 @@ void Player::update(int deltaTime)
 				setState(JUMPING_LEFT);
 				setAnimation(JUMP_RUN_LEFT);
 			}
-			else {
+			else if (!left) {
 				//frenada
 				setState(STOPING_LEFT);
 				setAnimation(STOP_LEFT);
