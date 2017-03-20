@@ -72,9 +72,7 @@ void Sprite::setNumberAnimations(int nAnimations)
 	animations.clear();
 	animations.resize(nAnimations);
 }
-int Sprite::getCurrentKeyframe(){
-	return currentKeyframe;
-}
+
 void Sprite::setAnimationSpeed(int animId, int keyframesPerSec)
 {
 	if(animId < int(animations.size()))
@@ -100,7 +98,7 @@ void Sprite::changeAnimation(int animId)
 
 int Sprite::animation() const
 {
-	return currentAnimation;
+	return currentKeyframe;
 }
 
 void Sprite::setPosition(const glm::vec2 &pos)
