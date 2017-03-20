@@ -78,7 +78,7 @@ void Scene::update(int deltaTime)
 	int chunk_y = y / (CHUNK_Y_SIZE);
 	x = chunk_x*(CHUNK_X_SIZE);
 	y = chunk_y*(CHUNK_Y_SIZE);
-	DBOUT("positionX: " << x << "\n");
+	//DBOUT("positionX: " << x << " " << y << "\n");
 	gui->update(deltaTime, glm::vec2(x,y));
 	projection = glm::ortho((float)x, x + float(CHUNK_X_SIZE), y + float(CHUNK_Y_SIZE), (float)y);
 }

@@ -35,6 +35,7 @@ void EntityMap::update(int deltaTime)
 {
 	for (int i = 0; i < entities.size(); i++){
 		entities[i]->update(deltaTime);
+		
 	}
 }
 void EntityMap::render() const
@@ -50,8 +51,7 @@ void EntityMap::free()
 
 }
 void EntityMap::interactEntitiesWithActor(GameActor &actor){
-	Sprite *actorSprite = actor.getSprite();
-	glm::vec2 actorPos = actorSprite->position;
+	glm::vec2 actorPos = actor.position_col;
 	glm::vec2 actorSize = actor.size;
 	for (int i = 0; i < entities.size(); i++){
 		if (entities[i]->collides(actorPos, actorSize)) {

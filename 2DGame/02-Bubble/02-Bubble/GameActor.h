@@ -9,6 +9,7 @@ public:
 	int max_health;
 	bool down_key;
 	glm::vec2 size;
+	glm::vec2 position_col;
 protected:
 	
 	Sprite *sprite;

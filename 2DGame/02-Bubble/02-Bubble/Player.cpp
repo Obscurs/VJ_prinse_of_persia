@@ -26,6 +26,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.loadFromFile("images/Prince.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
+	
 	sprite->setNumberAnimations(12);
 	
 		sprite->setAnimationSpeed(STAND_LEFT, 8);
@@ -149,8 +150,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		setAnimation(STAND_LEFT);
 		setState(STANDING_LEFT);
 
-	tileMapDispl = tileMapPos;
+	tileMapDispl = glm::vec2(0,0);;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	size = glm::vec2(float(11), float(42));
+	position_col = glm::vec2(float(posPlayer.x + 16), float(posPlayer.y + 16));
 	
 }
 
@@ -158,7 +161,7 @@ void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	input();
-
+	
 	switch (state) {
 	case STANDING_RIGHT:
 		if (right && shift) {
@@ -424,7 +427,10 @@ void Player::update(int deltaTime)
 		}
 	}*/
 	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
+	position_col = glm::vec2(float(posPlayer.x+24), float(posPlayer.y + 22));
+	//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << posPlayer.x + 64 << " " << posPlayer.y + 64 << std::endl;
+	//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 }
 
 void Player::render()
@@ -439,8 +445,13 @@ void Player::setTileMap(TileMap *tileMap)
 
 void Player::setPosition(const glm::vec2 &pos)
 {
+	
 	posPlayer = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
+	position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
+	std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
+	std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
+	//std::cout << position_col.x << " " << position_col.y << std::endl;
 }
 
 glm::vec2 Player::getPosition()
