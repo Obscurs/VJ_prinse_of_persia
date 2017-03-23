@@ -80,7 +80,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 
 	}
 	else if (type == 6){
-		position = glm::vec2(position.x + 3, position.y-16);
+		position = glm::vec2(position.x + 3, position.y-32);
 		sprite->setPosition(position);
 		sprite->addKeyframe(ANIM1, glm::vec2(0.0f, 0.75f));
 		sprite->addKeyframe(ANIM1, glm::vec2(0.25f, 0.75f));
