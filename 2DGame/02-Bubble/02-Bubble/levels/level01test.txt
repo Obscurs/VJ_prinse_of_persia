@@ -3,20 +3,20 @@ TILEMAP
 32 64 -- Tile size & block size
 images/tiles.png 	-- Tilesheet
 8 8 								-- Number of tiles in tilesheet
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-ee        ee                      ee
-bb        bb                      bb
-eeaa      ee         aa   aaaa    ee
-bbbb      bb         bb   bbbb    bb
-ee                  aa     ee     ee
-bb                  bb     bb     bb
-ee  aaaaaaaaaaaaaaaaeeaaaaaeeaaaaaaa
-bb  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-ee                                ee
-bb                                bb
-eeaaaaa  aaaaa              aa    ee
-bbbb         b              bb    bb
-eeee         ba  a   aa     eea  aee
-bbbb         bb  b   bb     bbb  bbb
-eeeeaaaaaaaaaeeaaaaaaeeaaaaaeeeaaeee
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+fa        fe                      fe
+rb        rb                      rb
+fffa      fe         fa   fffa    fe
+rrrb      rb         rb   rrrb    rb
+fe                  fa     fe     fe
+rb                  rb     rb     rb
+fe  ffffffffffffffffffffffffffffffff
+rb  rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+fe                                fe
+rb                                bb
+ffaaaaa  aaaaa              aa    fe
+rrrb         b              bb    bb
+fffe         ba  a   aa     ffa  afe
+rrrb         bb  b   bb     bbb  bbb
+ffffaaaaaaaaaffaaaaaaffaaaaafffaafff
 
