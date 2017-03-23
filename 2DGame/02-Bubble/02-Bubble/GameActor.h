@@ -10,6 +10,8 @@ public:
 	bool down_key;
 	glm::vec2 size;
 	glm::vec2 position_col;
+	float magic = 16.0f;
+	float speed = 2.0f;
 protected:
 	
 	Sprite *sprite;

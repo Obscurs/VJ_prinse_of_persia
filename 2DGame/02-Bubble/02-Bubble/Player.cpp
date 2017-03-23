@@ -278,11 +278,11 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case STANDING_LEFT:
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
+		/*if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
 			setState(FALLING_LEFT);
 			setAnimation(FALL_RIGHT);
-		}
-		else if (left && shift) {
+		}*/
+		if (left && shift) {
 			setState(WALKING_LEFT);
 			setAnimation(WALK_LEFT);
 		}
@@ -304,12 +304,12 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case RUNING_LEFT:
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
+		/*if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
 			setState(FALLING_LEFT);
 			cout << "DOWN" << endl;
 			setAnimation(FALL_RIGHT);
-		}
-		else if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !left) {
+		}*/
+		if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !left) {
 			if (right) {
 				setState(TURN_RUNING_LEFT);
 				setAnimation(TURN_RUN_LEFT);
@@ -325,9 +325,9 @@ void Player::update(int deltaTime)
 			}
 		}
 		else {
-			posPlayer.x -= 2;
+			posPlayer.x -= deltaTime / magic;
 			if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 64))) {
-				posPlayer.x += 2;
+				posPlayer.x += deltaTime / magic;
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
 			}
@@ -353,11 +353,11 @@ void Player::update(int deltaTime)
 				setState(STOPING_RIGHT);
 			}
 		}
-		else {
-			posPlayer.x += 2;
+		else{
+			posPlayer.x += deltaTime/magic;
 			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 64)))
 			{
-				posPlayer.x -= 2;
+				posPlayer.x -= deltaTime/magic;
 				setAnimation(STAND_RIGHT);
 				setState(STANDING_RIGHT);
 			}
@@ -369,10 +369,11 @@ void Player::update(int deltaTime)
 			setState(STANDING_RIGHT);
 		}
 		else {
-			posPlayer.x += 1;
+			posPlayer.x += deltaTime / magic / 4.0f;
+			cout << deltaTime / magic / 4.0f << endl;
 			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 64)))
 			{
-				posPlayer.x -= 1;
+				posPlayer.x -= deltaTime / magic / 4.0f;
 				setAnimation(STAND_RIGHT);
 				setState(STANDING_RIGHT);
 			}
@@ -384,10 +385,11 @@ void Player::update(int deltaTime)
 			setState(STANDING_LEFT);
 		}
 		else {
-			posPlayer.x -= 1;
+			posPlayer.x -= deltaTime / magic / 4.0f;
+			cout << deltaTime / magic / 4.0f << endl;
 			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 64)))
 			{
-				posPlayer.x += 1;
+				posPlayer.x += deltaTime / magic / 4.0f;
 				setAnimation(STAND_LEFT);
 				setState(STANDING_LEFT);
 			}
