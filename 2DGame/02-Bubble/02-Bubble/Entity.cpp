@@ -51,6 +51,14 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
 		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
 		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.25f));
 		position = glm::vec2(position.x, position.y - 16);
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x + 16, position.y + 20);
