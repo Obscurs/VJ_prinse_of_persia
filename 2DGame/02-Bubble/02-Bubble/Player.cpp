@@ -87,7 +87,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(WALK_LEFT, glm::vec2(-8 * stepX, 3 * stepY));
 
 
-		sprite->setAnimationSpeed(JUMP_RUN_RIGHT, 6);
+		sprite->setAnimationSpeed(JUMP_RUN_RIGHT, 13);
 		sprite->addKeyframe(JUMP_RUN_RIGHT, glm::vec2(0*stepX, 2*stepY));
 		sprite->addKeyframe(JUMP_RUN_RIGHT, glm::vec2(1*stepX, 2*stepY));
 		sprite->addKeyframe(JUMP_RUN_RIGHT, glm::vec2(2*stepX, 2*stepY));
@@ -98,8 +98,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(JUMP_RUN_RIGHT, glm::vec2(7*stepX, 2*stepY));
 		sprite->addKeyframe(JUMP_RUN_RIGHT, glm::vec2(8*stepX, 2*stepY));
 		sprite->addKeyframe(JUMP_RUN_RIGHT, glm::vec2(9*stepX, 2*stepY));
+		sprite->addKeyframe(JUMP_RUN_RIGHT, glm::vec2(9*stepX, 2*stepY)); //copy
+
 		
-		sprite->setAnimationSpeed(JUMP_RUN_LEFT, 6);
+		sprite->setAnimationSpeed(JUMP_RUN_LEFT, 13);
 		sprite->addKeyframe(JUMP_RUN_LEFT, glm::vec2(-1 * stepX, 2 * stepY));
 		sprite->addKeyframe(JUMP_RUN_LEFT, glm::vec2(-2 * stepX, 2 * stepY));
 		sprite->addKeyframe(JUMP_RUN_LEFT, glm::vec2(-3 * stepX, 2 * stepY));
@@ -110,6 +112,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(JUMP_RUN_LEFT, glm::vec2(-8 * stepX, 2 * stepY));
 		sprite->addKeyframe(JUMP_RUN_LEFT, glm::vec2(-9 * stepX, 2 * stepY));
 		sprite->addKeyframe(JUMP_RUN_LEFT, glm::vec2(-10 *stepX, 2 * stepY));
+		sprite->addKeyframe(JUMP_RUN_LEFT, glm::vec2(-10 *stepX, 2 * stepY)); //copy
 
 		sprite->setAnimationSpeed(TURN_RIGHT, 10);
 		sprite->addKeyframe(TURN_RIGHT, glm::vec2(0 * stepX, 4 * stepY));
@@ -309,14 +312,14 @@ void Player::update(int deltaTime)
 			cout << "DOWN" << endl;
 			setAnimation(FALL_RIGHT);
 		}*/
-		if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !left) {
+		if (up && posPlayer.x % 32 == 0 && posPlayer != posStartAnim) {
+			setState(JUMPING_LEFT);
+			setAnimation(JUMP_RUN_LEFT);
+		}
+		else if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !left) {
 			if (right) {
 				setState(TURN_RUNING_LEFT);
 				setAnimation(TURN_RUN_LEFT);
-			}
-			else if (up) {
-				setState(JUMPING_LEFT);
-				setAnimation(JUMP_RUN_LEFT);
 			}
 			else {
 				//frenada
@@ -351,15 +354,14 @@ void Player::update(int deltaTime)
 			setState(FALLING_RIGHT);
 			//setAnimation(FALL_RIGHT); //TODO
 		}*/
-		
-		if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !right) {
+		if (up && posPlayer.x % 32 == 0 && posPlayer != posStartAnim) {
+			setState(JUMPING_RIGHT);
+			setAnimation(JUMP_RUN_RIGHT);
+		}
+		else if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !right) {
 			if (left) {
 				setState(TURN_RUNING_RIGHT);
 				setAnimation(TURN_RUN_RIGHT);
-			}
-			else if (up) {
-				setState(JUMPING_RIGHT);
-				setAnimation(JUMP_RUN_RIGHT);
 			}
 			else {
 				//frenada
@@ -447,15 +449,52 @@ void Player::update(int deltaTime)
 		break;
 
 	case JUMPING_RIGHT:
-		if (right) {
+		if (sprite->getCurrentKeyframe() >= 10){
 			setState(STANDING_RIGHT);
 			setAnimation(STAND_RIGHT);
 		}
+		else {
+			glm::ivec2 new_pos = glm::ivec2((posPlayer.x + deltaTime / magic*speed), posPlayer.y);
+			if (!map->collisionMoveRight(new_pos, glm::ivec2(32, 64))) {
+				if (64 * int(posPlayer.x / 64) != 64 * int(new_pos.x / 64)) {
+
+					posPlayer.x = 64 * int(new_pos.x / 64);
+				}
+				else {
+					posPlayer.x = new_pos.x;
+				}
+			}
+			else {
+				setAnimation(STAND_RIGHT);
+				setState(STANDING_RIGHT);
+			}
+		}
 		break;
 	case JUMPING_LEFT:
-		if (left) {
+		if (sprite->getCurrentKeyframe() >= 10) {
 			setState(STANDING_LEFT);
 			setAnimation(STAND_LEFT);
+		}
+		else {
+			glm::ivec2 new_pos = glm::ivec2(ceil(posPlayer.x - deltaTime / magic*speed), posPlayer.y);
+			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, posPlayer.y + 5), glm::ivec2(32, 64), &posPlayer.y))
+			{
+				posPlayer.x = new_pos.x;
+				setState(FALLING_LEFT);
+				setAnimation(FALL_LEFT);
+			}
+			else if (!map->collisionMoveLeft(new_pos, glm::ivec2(32, 64))) {
+				if (64 * int(posPlayer.x / 64) != 64 * int(new_pos.x / 64) && posPlayer.x % 64 != 0) {
+					posPlayer.x = 64 * int(posPlayer.x / 64);
+				}
+				else {
+					posPlayer.x = new_pos.x;
+				}
+			}
+			else {
+				setState(STANDING_LEFT);
+				setAnimation(STAND_LEFT);
+			}
 		}
 		break;
 	case TURNING_RIGHT:
