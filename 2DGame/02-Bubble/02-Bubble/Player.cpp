@@ -16,7 +16,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	float stepX = 1.0f / 15.0f;
 	float stepY = 1.0f / 20.0f;
-
+	tileMapDispl = tileMapPos;
 	health = 3;
 	max_health = 4;
 	bJumping = false;
@@ -242,10 +242,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		setAnimation(FALL_RIGHT);
 		setState(FALLING_RIGHT);
 
-	tileMapDispl = glm::vec2(0,0);;
+	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	size = glm::vec2(float(11), float(42));
-	position_col = glm::vec2(float(posPlayer.x + 16), float(posPlayer.y + 16));
+	position_col = glm::vec2(float(posPlayer.x + 16), float(posPlayer.y  + 16));
 	
 }
 
@@ -578,8 +578,8 @@ void Player::update(int deltaTime)
 	}
 
 	
-	sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
-	position_col = glm::vec2(float(posPlayer.x+24), float(posPlayer.y + 22));
+	sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
+	position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
 	//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << posPlayer.x + 64 << " " << posPlayer.y + 64 << std::endl;
 	//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 }
@@ -599,7 +599,7 @@ void Player::setPosition(const glm::vec2 &pos)
 	
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
-	position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
+	position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
 	std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 	std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 	//std::cout << position_col.x << " " << position_col.y << std::endl;
