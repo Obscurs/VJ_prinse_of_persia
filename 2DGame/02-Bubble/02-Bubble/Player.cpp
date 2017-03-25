@@ -14,6 +14,7 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	is_up = false;
 	alive = true;
 	float stepX = 1.0f / 15.0f;
 	float stepY = 1.0f / 20.0f;
@@ -293,6 +294,65 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 		sprite->setAnimationSpeed(GRAB_RIGHT_STATIC, 6);
 		sprite->addKeyframe(GRAB_RIGHT_STATIC, glm::vec2(0 * stepX, 9 * stepY));
+
+		sprite->setAnimationSpeed(CLIMB_RIGHT, 6);
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(0 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(1 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(2 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(3 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(4 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(5 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(6 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(7 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(8 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(9 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(10 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(11 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(11 * stepX, 10 * stepY));
+		
+
+		sprite->setAnimationSpeed(CLIMB_LEFT, 6);
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-1 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-2 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-3 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-4 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-5 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-6 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-7 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-8 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-9 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-10 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-11 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-12 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-12 * stepX, 10 * stepY));
+
+		sprite->setAnimationSpeed(CLIMB_LEFT_DOWN, 6);
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-12 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-11 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-10 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-8 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-7 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-6 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-5 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-4 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-3 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-2 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-1 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-1 * stepX, 10 * stepY));
+
+		sprite->setAnimationSpeed(CLIMB_RIGHT_DOWN, 6);
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(11 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(10 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(8 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(7 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(6 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(5 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(4 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(3 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(2 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(1 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(0 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(0 * stepX, 10 * stepY));
 		//END ANIMATIONS
 
 		setAnimation(FALL_RIGHT);
@@ -315,7 +375,11 @@ void Player::update(int deltaTime)
 		std::cout << position_col.x << " " << position_col.y << std::endl;
 		switch (state) {
 		case STANDING_RIGHT:
-			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
+			is_up = false;
+			if (map->collisionPoint(glm::ivec2(position_col.x+size.x, position_col.y))) {
+				position_col.x -= 1;
+			}
+			else if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
 			{
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
@@ -337,8 +401,14 @@ void Player::update(int deltaTime)
 				setAnimation(PRE_JUMP_RIGHT);
 			}
 			else if (down) {
-				state = DOWNING_RIGHT;
-				setAnimation(DOWN_RIGHT);
+				if (!map->collisionPoint(glm::ivec2(position_col.x, position_col.y+size.y + 5))) {
+					setState(CLIMBING_RIGHT_DOWN);
+					setAnimation(CLIMB_RIGHT_DOWN);
+				}
+				else{
+					state = DOWNING_RIGHT;
+					setAnimation(DOWN_RIGHT);
+				}
 			}
 			break;
 		case STANDING_LEFT:
@@ -346,8 +416,11 @@ void Player::update(int deltaTime)
 				setState(FALLING_LEFT);
 				setAnimation(FALL_RIGHT);
 				}*/
-
-			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
+			is_up = false;
+			if (map->collisionPoint(glm::ivec2(position_col.x, position_col.y))) {
+				position_col.x += 1;
+			}
+			else if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
 			{
 				setState(FALLING_LEFT);
 				setAnimation(FALL_LEFT);
@@ -369,8 +442,14 @@ void Player::update(int deltaTime)
 				setAnimation(PRE_JUMP_LEFT);
 			}
 			else if (down) {
-				state = DOWNING_LEFT;
-				setAnimation(DOWN_LEFT);
+				if (!map->collisionPoint(glm::ivec2(position_col.x + size.x, position_col.y+size.y + 5))) {
+					setState(CLIMBING_LEFT_DOWN);
+					setAnimation(CLIMB_LEFT_DOWN);
+				}
+				else{
+					state = DOWNING_LEFT;
+					setAnimation(DOWN_LEFT);
+				}
 			}
 			break;
 		case RUNING_LEFT:
@@ -460,6 +539,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case WALKING_RIGHT:
+			is_up = false;
 			if (position_col.x % 32 == 0 && position_col != posStartAnim && !left) {
 				setAnimation(STAND_RIGHT);
 				setState(STANDING_RIGHT);
@@ -488,6 +568,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case WALKING_LEFT:
+			is_up = false;
 			if (position_col.x % 32 == 0 && position_col != posStartAnim && !right) {
 				setAnimation(STAND_LEFT);
 				setState(STANDING_LEFT);
@@ -597,6 +678,9 @@ void Player::update(int deltaTime)
 		case FALLING_RIGHT:
 			//posPlayer.y += FALL_STEP;
 			position_col.y = position_col.y + deltaTime / magic*speed * 2;
+			if (map->collisionPoint(glm::ivec2(position_col.x+size.x, position_col.y))) {
+				position_col.x -= 1;
+			}
 			if (map->collisionMoveDown(position_col, size, &position_col.y))
 			{
 				//ajupir
@@ -604,7 +688,7 @@ void Player::update(int deltaTime)
 				setState(DOWNING_RIGHT);
 				setAnimation(DOWN_RIGHT);
 			}
-			else if (shift && !map->collisionPoint(glm::ivec2(old_position_col.x + size.x+5, old_position_col.y)) && map->collisionPoint(glm::ivec2(position_col.x + size.x+5, position_col.y))) {
+			else if (shift && !map->collisionPoint(glm::ivec2(old_position_col.x + size.x+2, old_position_col.y)) && map->collisionPoint(glm::ivec2(position_col.x + size.x+2, position_col.y))) {
 				setState(GRABING_RIGHT);
 				setAnimation(GRAB_RIGHT);
 			}
@@ -612,13 +696,16 @@ void Player::update(int deltaTime)
 		case FALLING_LEFT:
 			//posPlayer.y += FALL_STEP;
 			position_col.y = position_col.y + deltaTime / magic*speed * 2;
+			if (map->collisionPoint(glm::ivec2(position_col.x, position_col.y))) {
+				position_col.x += 1;
+			}
 			if (map->collisionMoveDown(position_col, size, &position_col.y)){
 				//ajupir
 				//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
 				setState(DOWNING_LEFT);
 				setAnimation(DOWN_LEFT);
 			}
-			else if (shift && !map->collisionPoint(glm::ivec2(old_position_col.x-5, old_position_col.y)) && map->collisionPoint(glm::ivec2(position_col.x-5, position_col.y))) {
+			else if (shift && !map->collisionPoint(glm::ivec2(old_position_col.x-2, old_position_col.y)) && map->collisionPoint(glm::ivec2(position_col.x-2, position_col.y))) {
 				setState(GRABING_LEFT);
 				setAnimation(GRAB_LEFT);
 			}
@@ -703,6 +790,10 @@ void Player::update(int deltaTime)
 				setAnimation(FALL_RIGHT);
 			}
 			else if (sprite->getCurrentKeyframe() >= 15)  setAnimation(GRAB_RIGHT_STATIC);
+			else if (up){
+				setState(CLIMBING_RIGHT);
+				setAnimation(CLIMB_RIGHT);
+			}
 			break;
 		case GRABING_LEFT:
 			if (!shift) {
@@ -710,9 +801,60 @@ void Player::update(int deltaTime)
 				setAnimation(FALL_LEFT);
 			}
 			else if (sprite->getCurrentKeyframe() >= 15) setAnimation(GRAB_LEFT_STATIC);
+			else if (up){
+				setState(CLIMBING_LEFT);
+				setAnimation(CLIMB_LEFT);
+			}
+			break;
+		case CLIMBING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 12){
+				setState(WALKING_LEFT);
+				setAnimation(WALK_LEFT);
+				is_up = false;
+			}
+			else if (sprite->getCurrentKeyframe() >= 6 && !is_up){
+				is_up = true;
+				position_col.y -= 45;
+				position_col.x -= 4;
+			}
+			break;
+		case CLIMBING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 12){
+				setState(WALKING_RIGHT);
+				setAnimation(WALK_RIGHT);
+				is_up = false;
+			}
+			else if (sprite->getCurrentKeyframe() >= 6 && !is_up){
+				position_col.y -= 45;
+				position_col.x += 4;
+				is_up = true;
+			}
+			break;
+		case CLIMBING_LEFT_DOWN:
+			if (sprite->getCurrentKeyframe() >= 11){
+				setState(GRABING_LEFT);
+				setAnimation(GRAB_LEFT);
+				is_up = false;
+			}
+			else if (sprite->getCurrentKeyframe() >= 5 && !is_up){
+				is_up = true;
+				position_col.y += 45;
+				position_col.x += 4;
+			}
+			break;
+		case CLIMBING_RIGHT_DOWN:
+			if (sprite->getCurrentKeyframe() >= 11){
+				setState(GRABING_RIGHT);
+				setAnimation(GRAB_RIGHT);
+				is_up = false;
+			}
+			else if (sprite->getCurrentKeyframe() >= 5 && !is_up){
+				position_col.y += 45;
+				position_col.x -= 4;
+				is_up = true;
+			}
 			break;
 		}
-
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
 		//position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
