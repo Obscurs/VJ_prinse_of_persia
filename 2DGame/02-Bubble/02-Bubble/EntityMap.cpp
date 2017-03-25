@@ -51,17 +51,18 @@ void EntityMap::free()
 
 }
 void EntityMap::interactEntitiesWithActor(GameActor &actor){
-	glm::vec2 actorPos = actor.position_col;
-	glm::vec2 actorSize = actor.size;
-	for (int i = 0; i < entities.size(); i++){
-		if (entities[i]->collides(actorPos, actorSize)) {
-			bool destroy = entities[i]->action(actor);
-			if (destroy) {
-				delete entities[i];
-				entities.erase(entities.begin() + i);
+	if (actor.alive){
+		glm::vec2 actorPos = actor.position_col;
+		glm::vec2 actorSize = actor.size;
+		for (int i = 0; i < entities.size(); i++){
+			if (entities[i]->collides(actorPos, actorSize)) {
+				bool destroy = entities[i]->action(actor);
+				if (destroy) {
+					delete entities[i];
+					entities.erase(entities.begin() + i);
+				}
 			}
 		}
-			
 	}
 }
 bool EntityMap::loadLevel(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)

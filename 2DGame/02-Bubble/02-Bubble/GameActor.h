@@ -12,6 +12,7 @@ public:
 	glm::ivec2 position_col;
 	float magic = 16.0f;
 	float speed = 2.0f;
+	bool alive;
 protected:
 	
 	Sprite *sprite;

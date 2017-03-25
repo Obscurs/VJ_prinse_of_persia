@@ -14,6 +14,7 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	alive = true;
 	float stepX = 1.0f / 15.0f;
 	float stepY = 1.0f / 20.0f;
 	tileMapDispl = tileMapPos;
@@ -254,383 +255,386 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime)
 {
-	sprite->update(deltaTime);
-	input();
-	position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
-	std::cout << position_col.x << " " << position_col.y << std::endl;
-	switch (state) {
-	case STANDING_RIGHT:
-		if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
-		{
-			setState(FALLING_RIGHT);
-			setAnimation(FALL_RIGHT);
-		}
-		else if (right && shift) {
-			setState(WALKING_RIGHT);
-			setAnimation(WALK_RIGHT);
-		}
-		else if (right) {
-			setState(RUNING_RIGHT);
-			setAnimation(RUN_RIGHT);
-		}
-		else if (left) {
-			setState(TURNING_LEFT);
-			setAnimation(TURN_LEFT);
-		}
-		else if (up) {
-			state = PRE_JUMPING_RIGHT;
-			setAnimation(PRE_JUMP_RIGHT);
-		}
-		else if (down) {
-			state = DOWNING_RIGHT;
-			setAnimation(DOWN_RIGHT);
-		}
-		break;
-	case STANDING_LEFT:
-		/*if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
-			setState(FALLING_LEFT);
-			setAnimation(FALL_RIGHT);
-		}*/
-
-		if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
-		{
-			setState(FALLING_LEFT);
-			setAnimation(FALL_LEFT);
-		}else if (left && shift) {
-			setState(WALKING_LEFT);
-			setAnimation(WALK_LEFT);
-		}
-		else if (left) {
-			setState(RUNING_LEFT);
-			setAnimation(RUN_LEFT);
-		}
-		else if (right) {
-			setState(TURNING_RIGHT);
-			setAnimation(TURN_RIGHT);
-		}
-		else if (up) {
-			state = PRE_JUMPING_LEFT;
-			setAnimation(PRE_JUMP_LEFT);
-		}
-		else if (down) {
-			state = DOWNING_LEFT;
-			setAnimation(DOWN_LEFT);
-		}
-		break;
-	case RUNING_LEFT:
-		/*if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
-			setState(FALLING_LEFT);
-			cout << "DOWN" << endl;
-			setAnimation(FALL_RIGHT);
-		}*/
-		if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
-			setState(JUMPING_LEFT);
-			setAnimation(JUMP_RUN_LEFT);
-		}
-		else if (position_col.x % 64 == 0 && position_col != posStartAnim && !left) {
-			if (right) {
-				setState(TURN_RUNING_LEFT);
-				setAnimation(TURN_RUN_LEFT);
-			}
-			else {
-				//frenada
-				setState(STOPING_LEFT);
-				setAnimation(STOP_LEFT);
-			}
-		}
-		else{
-			glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic*speed), position_col.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, position_col.y + 5), size, &position_col.y))
+	if (alive){
+		sprite->update(deltaTime);
+		input();
+		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
+		std::cout << position_col.x << " " << position_col.y << std::endl;
+		switch (state) {
+		case STANDING_RIGHT:
+			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
 			{
-				position_col.x = new_pos.x;
-				setState(FALLING_LEFT);
-				setAnimation(FALL_LEFT);
-			}
-			else if (!map->collisionMoveLeft(new_pos, size)){
-				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64) && position_col.x % 64 != 0){
-					position_col.x = 64 * int(position_col.x / 64);
-				}
-				else {
-					position_col.x = new_pos.x;
-				}
-			}
-			else{
-				setState(STANDING_LEFT);
-				setAnimation(STAND_LEFT);
-			}
-		}
-		break;
-	case RUNING_RIGHT:
-		/*if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
-			setState(FALLING_RIGHT);
-			//setAnimation(FALL_RIGHT); //TODO
-		}*/
-		if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
-			setState(JUMPING_RIGHT);
-			setAnimation(JUMP_RUN_RIGHT);
-		}
-		else if (position_col.x % 64 == 0 && position_col != posStartAnim && !right) {
-			if (left) {
-				setState(TURN_RUNING_RIGHT);
-				setAnimation(TURN_RUN_RIGHT);
-			}
-			else {
-				//frenada
-				setAnimation(STOP_RIGHT);
-				setState(STOPING_RIGHT);
-			}
-		}
-		else{
-			glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic*speed), position_col.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, position_col.y + 5), size, &position_col.y))
-			{
-				position_col.x = new_pos.x;
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
 			}
-			else if (!map->collisionMoveRight(new_pos, size)){
-				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64)){
+			else if (right && shift) {
+				setState(WALKING_RIGHT);
+				setAnimation(WALK_RIGHT);
+			}
+			else if (right) {
+				setState(RUNING_RIGHT);
+				setAnimation(RUN_RIGHT);
+			}
+			else if (left) {
+				setState(TURNING_LEFT);
+				setAnimation(TURN_LEFT);
+			}
+			else if (up) {
+				state = PRE_JUMPING_RIGHT;
+				setAnimation(PRE_JUMP_RIGHT);
+			}
+			else if (down) {
+				state = DOWNING_RIGHT;
+				setAnimation(DOWN_RIGHT);
+			}
+			break;
+		case STANDING_LEFT:
+			/*if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
+				setState(FALLING_LEFT);
+				setAnimation(FALL_RIGHT);
+				}*/
 
-					position_col.x = 64 * int(new_pos.x / 64);
+			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
+			{
+				setState(FALLING_LEFT);
+				setAnimation(FALL_LEFT);
+			}
+			else if (left && shift) {
+				setState(WALKING_LEFT);
+				setAnimation(WALK_LEFT);
+			}
+			else if (left) {
+				setState(RUNING_LEFT);
+				setAnimation(RUN_LEFT);
+			}
+			else if (right) {
+				setState(TURNING_RIGHT);
+				setAnimation(TURN_RIGHT);
+			}
+			else if (up) {
+				state = PRE_JUMPING_LEFT;
+				setAnimation(PRE_JUMP_LEFT);
+			}
+			else if (down) {
+				state = DOWNING_LEFT;
+				setAnimation(DOWN_LEFT);
+			}
+			break;
+		case RUNING_LEFT:
+			/*if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
+				setState(FALLING_LEFT);
+				cout << "DOWN" << endl;
+				setAnimation(FALL_RIGHT);
+				}*/
+			if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
+				setState(JUMPING_LEFT);
+				setAnimation(JUMP_RUN_LEFT);
+			}
+			else if (position_col.x % 64 == 0 && position_col != posStartAnim && !left) {
+				if (right) {
+					setState(TURN_RUNING_LEFT);
+					setAnimation(TURN_RUN_LEFT);
 				}
 				else {
-					position_col.x = new_pos.x;
+					//frenada
+					setState(STOPING_LEFT);
+					setAnimation(STOP_LEFT);
 				}
 			}
 			else{
-				setAnimation(STAND_RIGHT);
-				setState(STANDING_RIGHT);
+				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic*speed), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x, position_col.y + 5), size, &position_col.y))
+				{
+					position_col.x = new_pos.x;
+					setState(FALLING_LEFT);
+					setAnimation(FALL_LEFT);
+				}
+				else if (!map->collisionMoveLeft(new_pos, size)){
+					if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64) && position_col.x % 64 != 0){
+						position_col.x = 64 * int(position_col.x / 64);
+					}
+					else {
+						position_col.x = new_pos.x;
+					}
+				}
+				else{
+					setState(STANDING_LEFT);
+					setAnimation(STAND_LEFT);
+				}
 			}
-		}
-		break;
-	case WALKING_RIGHT:
-		if (position_col.x % 32 == 0 && position_col != posStartAnim && !left) {
-			setAnimation(STAND_RIGHT);
-			setState(STANDING_RIGHT);
-		}
-		else{
-			glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x+10, position_col.y + 5), size, &position_col.y))
-			{
-				//position_col.x = new_pos.x;
-				setState(STANDING_RIGHT);
-				setAnimation(STAND_RIGHT);
+			break;
+		case RUNING_RIGHT:
+			/*if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
+				setState(FALLING_RIGHT);
+				//setAnimation(FALL_RIGHT); //TODO
+				}*/
+			if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
+				setState(JUMPING_RIGHT);
+				setAnimation(JUMP_RUN_RIGHT);
 			}
-			else if (!map->collisionMoveRight(new_pos, size)){
-				if (32 * int(position_col.x / 32) != 32 * int(new_pos.x / 32)){
-
-					position_col.x = 32 * int(new_pos.x / 32);
+			else if (position_col.x % 64 == 0 && position_col != posStartAnim && !right) {
+				if (left) {
+					setState(TURN_RUNING_RIGHT);
+					setAnimation(TURN_RUN_RIGHT);
 				}
 				else {
-					position_col.x = new_pos.x;
+					//frenada
+					setAnimation(STOP_RIGHT);
+					setState(STOPING_RIGHT);
 				}
 			}
 			else{
+				glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic*speed), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x, position_col.y + 5), size, &position_col.y))
+				{
+					position_col.x = new_pos.x;
+					setState(FALLING_RIGHT);
+					setAnimation(FALL_RIGHT);
+				}
+				else if (!map->collisionMoveRight(new_pos, size)){
+					if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64)){
+
+						position_col.x = 64 * int(new_pos.x / 64);
+					}
+					else {
+						position_col.x = new_pos.x;
+					}
+				}
+				else{
+					setAnimation(STAND_RIGHT);
+					setState(STANDING_RIGHT);
+				}
+			}
+			break;
+		case WALKING_RIGHT:
+			if (position_col.x % 32 == 0 && position_col != posStartAnim && !left) {
 				setAnimation(STAND_RIGHT);
 				setState(STANDING_RIGHT);
 			}
-		}
-		break;
-	case WALKING_LEFT:
-		if (position_col.x % 32 == 0 && position_col != posStartAnim && !right) {
-			setAnimation(STAND_LEFT);
-			setState(STANDING_LEFT);
-		}
-		else{
-			glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x-10, position_col.y + 5), size, &position_col.y))
+			else{
+				glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x + 10, position_col.y + 5), size, &position_col.y))
+				{
+					//position_col.x = new_pos.x;
+					setState(STANDING_RIGHT);
+					setAnimation(STAND_RIGHT);
+				}
+				else if (!map->collisionMoveRight(new_pos, size)){
+					if (32 * int(position_col.x / 32) != 32 * int(new_pos.x / 32)){
+
+						position_col.x = 32 * int(new_pos.x / 32);
+					}
+					else {
+						position_col.x = new_pos.x;
+					}
+				}
+				else{
+					setAnimation(STAND_RIGHT);
+					setState(STANDING_RIGHT);
+				}
+			}
+			break;
+		case WALKING_LEFT:
+			if (position_col.x % 32 == 0 && position_col != posStartAnim && !right) {
+				setAnimation(STAND_LEFT);
+				setState(STANDING_LEFT);
+			}
+			else{
+				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x - 10, position_col.y + 5), size, &position_col.y))
+				{
+					//position_col.x = new_pos.x;
+					setState(STANDING_LEFT);
+					setAnimation(STAND_LEFT);
+				}
+				else  if (!map->collisionMoveLeft(new_pos, size)){
+					if (32 * int(position_col.x / 32) != 32 * int(new_pos.x / 32) && position_col.x % 32 != 0){
+						position_col.x = 64 * int(position_col.x / 32);
+					}
+					else {
+						position_col.x = new_pos.x;
+					}
+				}
+				else {
+					setState(STANDING_LEFT);
+					setAnimation(STAND_LEFT);
+				}
+			}
+			break;
+
+		case JUMPING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 10){
+				setState(STANDING_RIGHT);
+				setAnimation(STAND_RIGHT);
+			}
+			else {
+				glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic*speed), position_col.y);
+				if (!map->collisionMoveRight(new_pos, size)) {
+					if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64)) {
+
+						position_col.x = 64 * int(new_pos.x / 64);
+					}
+					else {
+						position_col.x = new_pos.x;
+					}
+				}
+				else {
+					setAnimation(STAND_RIGHT);
+					setState(STANDING_RIGHT);
+				}
+			}
+			break;
+		case JUMPING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 10) {
+				setState(STANDING_LEFT);
+				setAnimation(STAND_LEFT);
+			}
+			else {
+				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic*speed), position_col.y);
+				if (!map->collisionMoveLeft(new_pos, size)) {
+					if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64) && position_col.x % 64 != 0) {
+						position_col.x = 64 * int(position_col.x / 64);
+					}
+					else {
+						position_col.x = new_pos.x;
+					}
+				}
+				else {
+					setState(STANDING_LEFT);
+					setAnimation(STAND_LEFT);
+				}
+			}
+			break;
+		case TURNING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				setState(STANDING_RIGHT);
+				setAnimation(STAND_RIGHT);
+			}
+			else {
+				frame++;
+			}
+			break;
+		case TURNING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				setState(STANDING_LEFT);
+				setAnimation(STAND_LEFT);
+			}
+			else {
+				frame++;
+			}
+			break;
+		case STOPING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 6) {
+				setState(STANDING_RIGHT);
+				setAnimation(STAND_RIGHT);
+			}
+			else {
+				frame++;
+			}
+			break;
+		case STOPING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 6) {
+				setState(STANDING_LEFT);
+				setAnimation(STAND_LEFT);
+			}
+			else {
+				frame++;
+			}
+			break;
+		case FALLING_RIGHT:
+			//posPlayer.y += FALL_STEP;
+			position_col.y = position_col.y + deltaTime / magic*speed * 2;
+			if (map->collisionMoveDown(position_col, size, &position_col.y))
 			{
-				//position_col.x = new_pos.x;
-				setState(STANDING_LEFT);
-				setAnimation(STAND_LEFT);
+				//ajupir
+				//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
+				setState(DOWNING_RIGHT);
+				setAnimation(DOWN_RIGHT);
 			}
-			else  if (!map->collisionMoveLeft(new_pos, size)){
-				if (32 * int(position_col.x / 32) != 32 * int(new_pos.x / 32) && position_col.x % 32 != 0){
-					position_col.x = 64 * int(position_col.x / 32);
-				}
-				else {
-					position_col.x = new_pos.x;
-				}
+			break;
+		case FALLING_LEFT:
+			//posPlayer.y += FALL_STEP;
+			position_col.y = position_col.y + deltaTime / magic*speed * 2;
+			if (map->collisionMoveDown(position_col, size, &position_col.y)){
+				//ajupir
+				//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
+				setState(DOWNING_LEFT);
+				setAnimation(DOWN_LEFT);
 			}
-			else {
-				setState(STANDING_LEFT);
-				setAnimation(STAND_LEFT);
-			}
-		}
-		break;
-
-	case JUMPING_RIGHT:
-		if (sprite->getCurrentKeyframe() >= 10){
-			setState(STANDING_RIGHT);
-			setAnimation(STAND_RIGHT);
-		}
-		else {
-			glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic*speed), position_col.y);
-			if (!map->collisionMoveRight(new_pos, size)) {
-				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64)) {
-
-					position_col.x = 64 * int(new_pos.x / 64);
-				}
-				else {
-					position_col.x = new_pos.x;
-				}
-			}
-			else {
-				setAnimation(STAND_RIGHT);
+			break;
+		case DOWNING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(STANDING_RIGHT);
+				setAnimation(STAND_RIGHT);
 			}
-		}
-		break;
-	case JUMPING_LEFT:
-		if (sprite->getCurrentKeyframe() >= 10) {
-			setState(STANDING_LEFT);
-			setAnimation(STAND_LEFT);
-		}
-		else {
-			glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic*speed), position_col.y);
-			 if (!map->collisionMoveLeft(new_pos, size)) {
-				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64) && position_col.x % 64 != 0) {
-					position_col.x = 64 * int(position_col.x / 64);
-				}
-				else {
-					position_col.x = new_pos.x;
-				}
-			}
-			else {
+			break;
+		case DOWNING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
 			}
+			break;
+		case JUMP_STANDING_RIGHT:
+			jumpAngle += JUMP_ANGLE_STEP;
+			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
+			if (jumpAngle > 90) {
+				setState(FALLING_RIGHT);
+				setAnimation(FALL_RIGHT);
+			}
+			if (map->collisionMoveDown(position_col, size, &position_col.y)) {
+				setState(DOWNING_RIGHT);
+				setAnimation(DOWN_RIGHT);
+			}
+			break;
+		case JUMP_STANDING_LEFT:
+			jumpAngle += JUMP_ANGLE_STEP;
+			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
+			if (jumpAngle > 90) {
+				setState(FALLING_LEFT);
+				setAnimation(FALL_LEFT);
+			}
+			if (map->collisionMoveDown(position_col, size, &position_col.y)) {
+				setState(DOWNING_LEFT);
+				setAnimation(DOWN_LEFT);
+			}
+			break;
+		case TURN_RUNING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 11) {
+				setState(RUNING_LEFT);
+				setAnimation(RUN_LEFT);
+			}
+			break;
+		case TURN_RUNING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 11) {
+				setState(RUNING_RIGHT);
+				setAnimation(RUN_RIGHT);
+			}
+			break;
+		case PRE_JUMPING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 8) {
+				setState(JUMP_STANDING_RIGHT);
+				setAnimation(JUMP_STAND_RIGHT);
+			}
+			break;
+		case PRE_JUMPING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 8) {
+				setState(JUMP_STANDING_LEFT);
+				setAnimation(JUMP_STAND_LEFT);
+			}
+			break;
 		}
-		break;
-	case TURNING_RIGHT:
-		if (sprite->getCurrentKeyframe() >= 5) {
-			setState(STANDING_RIGHT);
-			setAnimation(STAND_RIGHT);
-		}
-		else {
-			frame++;
-		}
-		break;
-	case TURNING_LEFT:
-		if (sprite->getCurrentKeyframe() >= 5) {
-			setState(STANDING_LEFT);
-			setAnimation(STAND_LEFT);
-		}
-		else {
-			frame++;
-		}
-		break;
-	case STOPING_RIGHT:
-		if (sprite->getCurrentKeyframe() >= 6) {
-			setState(STANDING_RIGHT);
-			setAnimation(STAND_RIGHT);
-		}
-		else {
-			frame++;
-		}
-		break;
-	case STOPING_LEFT:
-		if (sprite->getCurrentKeyframe() >= 6) {
-			setState(STANDING_LEFT);
-			setAnimation(STAND_LEFT);
-		}
-		else {
-			frame++;
-		}
-		break;
-	case FALLING_RIGHT:
-		//posPlayer.y += FALL_STEP;
-		position_col.y = position_col.y + deltaTime / magic*speed * 2;
-		if (map->collisionMoveDown(position_col, size, &position_col.y))
-		{
-			//ajupir
-			//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
-			setState(DOWNING_RIGHT);
-			setAnimation(DOWN_RIGHT);
-		}
-		break;
-	case FALLING_LEFT:
-		//posPlayer.y += FALL_STEP;
-		position_col.y = position_col.y + deltaTime / magic*speed * 2;
-		if (map->collisionMoveDown(position_col,size, &position_col.y)){
-			//ajupir
-			//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
-			setState(DOWNING_LEFT);
-			setAnimation(DOWN_LEFT);
-		}
-		break;
-	case DOWNING_RIGHT:
-		if (sprite->getCurrentKeyframe() >= 11) {
-			setState(STANDING_RIGHT);
-			setAnimation(STAND_RIGHT);
-		}
-		break;
-	case DOWNING_LEFT:
-		if (sprite->getCurrentKeyframe() >= 11) {
-			setState(STANDING_LEFT);
-			setAnimation(STAND_LEFT);
-		}
-		break;
-	case JUMP_STANDING_RIGHT:
-		jumpAngle += JUMP_ANGLE_STEP;
-		position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
-		if (jumpAngle > 90) {
-			setState(FALLING_RIGHT);
-			setAnimation(FALL_RIGHT);
-		}
-		if (map->collisionMoveDown(position_col, size, &position_col.y)) {
-			setState(DOWNING_RIGHT);
-			setAnimation(DOWN_RIGHT);
-		}
-		break;
-	case JUMP_STANDING_LEFT:
-		jumpAngle += JUMP_ANGLE_STEP;
-		position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
-		if (jumpAngle > 90) {
-			setState(FALLING_LEFT);
-			setAnimation(FALL_LEFT);
-		}
-		if (map->collisionMoveDown(position_col, size, &position_col.y)) {
-			setState(DOWNING_LEFT);
-			setAnimation(DOWN_LEFT);
-		}
-		break;
-	case TURN_RUNING_RIGHT:
-		if (sprite->getCurrentKeyframe() >= 11) {
-			setState(RUNING_LEFT);
-			setAnimation(RUN_LEFT);
-		}
-		break;
-	case TURN_RUNING_LEFT:
-		if (sprite->getCurrentKeyframe() >= 11) {
-			setState(RUNING_RIGHT);
-			setAnimation(RUN_RIGHT);
-		}
-		break;
-	case PRE_JUMPING_RIGHT:
-		if (sprite->getCurrentKeyframe() >= 8) {
-			setState(JUMP_STANDING_RIGHT);
-			setAnimation(JUMP_STAND_RIGHT);
-		}
-		break;
-	case PRE_JUMPING_LEFT:
-		if (sprite->getCurrentKeyframe() >= 8) {
-			setState(JUMP_STANDING_LEFT);
-			setAnimation(JUMP_STAND_LEFT);
-		}
-		break;
+
+		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
+		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
+		//position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
+		//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << posPlayer.x + 64 << " " << posPlayer.y + 64 << std::endl;
+		//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 	}
-
-	posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
-	sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
-	//position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
-	//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << posPlayer.x + 64 << " " << posPlayer.y + 64 << std::endl;
-	//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 }
 
 void Player::render()
 {
-	sprite->render();
+	if(alive)sprite->render();
 }
 
 void Player::setTileMap(TileMap *tileMap)

@@ -21,6 +21,7 @@ public:
 	bool collides(glm::vec2 pos, glm::vec2 size);
 	bool action(GameActor &actor);
 	int type;
+	int actived;
 
 private:
 	bool overlapping1D(glm::vec2 box1, glm::vec2 box2);

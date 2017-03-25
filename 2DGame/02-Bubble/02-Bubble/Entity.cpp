@@ -28,22 +28,40 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 	position = pos;
 	position = glm::vec2(float(position.x), float(position.y));
 	type = tp;
-	
+	actived = true;
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);		//el 46 es superhardcoded
 	sprite->setPosition(position);
 	
-	sprite->setNumberAnimations(1);
-	sprite->setAnimationSpeed(ANIM1, 8);
+	
+	
 	
 	if (type == 1){
+		sprite->setNumberAnimations(2);
+		sprite->setAnimationSpeed(ANIM1, 8);
+		sprite->addKeyframe(ANIM2, glm::vec2(0.75f, 0.f));
+
 		sprite->addKeyframe(ANIM1, glm::vec2(0.f, 0.f));
-		position = glm::vec2(position.x, position.y);
+		sprite->addKeyframe(ANIM1, glm::vec2(0.f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.25f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.25f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.f, 0.f));
+		sprite->addKeyframe(ANIM1, glm::vec2(0.f, 0.f));
+
+		position = glm::vec2(position.x-3, position.y+8);
 		sprite->setPosition(position);
-		col_position = glm::vec2(position.x+16, position.y+8);
-		col_size = glm::vec2(32, 38);
+		col_position = glm::vec2(position.x+8, position.y+16);
+		col_size = glm::vec2(24, 32);
+		actived = false;
 
 	}
 	else if (type == 2){
+		sprite->setNumberAnimations(1);
+		sprite->setAnimationSpeed(ANIM1, 8);
 		sprite->setAnimationSpeed(ANIM1, 8);
 		sprite->addKeyframe(ANIM1, glm::vec2(0.f, 0.25f));
 		sprite->addKeyframe(ANIM1, glm::vec2(0.25f, 0.25f));
@@ -65,6 +83,8 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_size = glm::vec2(32, 26);
 	}
 	else if (type == 3){
+		sprite->setNumberAnimations(1);
+		sprite->setAnimationSpeed(ANIM1, 8);
 		position = glm::vec2(position.x - 4, position.y - 12);
 		sprite->setPosition(position);
 		sprite->addKeyframe(ANIM1, glm::vec2(0.f, 0.5f));
@@ -72,6 +92,8 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_size = glm::vec2(8, 8);
 	}
 	else if (type == 4){
+		sprite->setNumberAnimations(1);
+		sprite->setAnimationSpeed(ANIM1, 8);
 		position = glm::vec2(position.x - 4, position.y - 12);
 		sprite->setPosition(position);
 		sprite->addKeyframe(ANIM1, glm::vec2(0.25f, 0.5f));
@@ -79,6 +101,8 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_size = glm::vec2(8, 8);
 	}
 	else if (type == 5){
+		sprite->setNumberAnimations(1);
+		sprite->setAnimationSpeed(ANIM1, 8);
 		position = glm::vec2(position.x-4, position.y-12);
 		sprite->setPosition(position);
 		sprite->addKeyframe(ANIM1, glm::vec2(0.5f, 0.5f));
@@ -88,6 +112,8 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 
 	}
 	else if (type == 6){
+		sprite->setNumberAnimations(1);
+		sprite->setAnimationSpeed(ANIM1, 8);
 		position = glm::vec2(position.x + 3, position.y-32);
 		sprite->setPosition(position);
 		sprite->addKeyframe(ANIM1, glm::vec2(0.0f, 0.75f));
@@ -102,7 +128,13 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 
 void Entity::update(int deltaTime)
 {
-	sprite->update(deltaTime);
+	if(actived) sprite->update(deltaTime);
+	if (type == 1 && actived){
+		if (sprite->getCurrentKeyframe() >= 9){
+			actived = false;
+			sprite->changeAnimation(ANIM1);
+		}
+	}
 	
 }
 
@@ -113,33 +145,44 @@ void Entity::render()
 }
 bool Entity::action(GameActor &actor){
 	//spikes
-	if (type == 1){
-		if (actor.health>0)actor.health--;
-		
-	}//saw
-	else if (type == 2){
-		if (actor.health>0 && sprite->getCurrentKeyframe()<2)actor.health--;
-	}//potion1
-	else if (type == 3){
-		if (actor.down_key){
-			if (actor.health < actor.max_health) actor.health++;
-			return true;
-		}
-	}//potion2
-	else if (type == 4){
-		if (actor.down_key){
-			actor.max_health++;
-			return true;
-		}
-	}//potion3
-	else if (type == 5){
-		if (actor.down_key){
+	if (actor.alive){
+		if (type == 1){
+			actived = true;
+			if (sprite->getCurrentKeyframe() >= 4){
+				actor.health = 0;
+				actor.alive = false;
+				sprite->changeAnimation(ANIM2);
+				actived = false;
+			}
 			
-			if (actor.health>0)actor.health--;
-			return true;
+
+		}//saw
+		else if (type == 2){
+			if (actor.health > 0 && sprite->getCurrentKeyframe() < 2){
+				actor.health = 0;
+				actor.alive = false;
+			}
+		}//potion1
+		else if (type == 3){
+			if (actor.down_key){
+				if (actor.health < actor.max_health) actor.health++;
+				return true;
+			}
+		}//potion2
+		else if (type == 4){
+			if (actor.down_key){
+				actor.max_health++;
+				return true;
+			}
+		}//potion3
+		else if (type == 5){
+			if (actor.down_key){
+
+				if (actor.health > 0)actor.health--;
+				return true;
+			}
 		}
 	}
-
 	return false;
 }
 bool Entity::overlapping1D(glm::vec2 box1, glm::vec2 box2){
