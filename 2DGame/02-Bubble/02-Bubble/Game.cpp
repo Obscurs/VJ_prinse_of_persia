@@ -73,8 +73,20 @@ void Game::keyReleased(int key)
 			break;
 		}
 	}
-	else if (key == 32 && game_status == MAINMENU){
-		game_status = PLAYING;
+	else if (key == 32){
+		switch (game_status){
+		case MAINMENU:
+			game_status = PLAYING;
+			break;
+		}
+	}
+	else if (key == 82 || key == 114){
+		switch (game_status){
+		case PLAYING:
+			scene.init();
+			game_status = MAINMENU;
+			break;
+		}
 	}
 	else if ((key == 72 || key == 104) && game_status == MAINMENU){
 		menu.menu_status = 1;

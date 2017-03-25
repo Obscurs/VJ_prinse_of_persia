@@ -14,8 +14,8 @@ fe  ffffffffffffffffffffffffffffffff
 rb  rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 fe                                fe
 rb                                bb
-ffaaa a  aa  a              aa    fe
-rrrb         b              bb    bb
-fffe         ba  a   aa     ffa  afe
-rrrb         bb  b   bb     bbb  bbb
+ffffa a  aa  a              aa    fe
+rrrrb        b              bb    bb
+fffe         fa  a   aa     ffa  afe
+rrrb         rb  b   bb     bbb  bbb
 ffffaaaaaaaaaffaaaaaaffaaaaafffaafff
