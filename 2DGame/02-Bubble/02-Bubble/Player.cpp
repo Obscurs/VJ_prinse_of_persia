@@ -247,7 +247,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-	size = glm::vec2(float(11), float(42));
+	size = glm::vec2(float(19), float(42));
 	position_col = glm::vec2(float(posPlayer.x + 16), float(posPlayer.y  + 16));
 	
 }

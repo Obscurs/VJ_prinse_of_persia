@@ -56,7 +56,7 @@ void Scene::init()
 	foreground = TileMap::createTileMap("levels/level01testf.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	gui = new Gui();
-	player->init(glm::ivec2(SCREEN_X+8, SCREEN_Y+8), texProgram);
+	player->init(glm::ivec2(SCREEN_X+16, SCREEN_Y+8), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 	
