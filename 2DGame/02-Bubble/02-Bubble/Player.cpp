@@ -256,10 +256,16 @@ void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	input();
-	
+	position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
+	std::cout << position_col.x << " " << position_col.y << std::endl;
 	switch (state) {
 	case STANDING_RIGHT:
-		if (right && shift) {
+		if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
+		{
+			setState(FALLING_RIGHT);
+			setAnimation(FALL_RIGHT);
+		}
+		else if (right && shift) {
 			setState(WALKING_RIGHT);
 			setAnimation(WALK_RIGHT);
 		}
@@ -285,7 +291,12 @@ void Player::update(int deltaTime)
 			setState(FALLING_LEFT);
 			setAnimation(FALL_RIGHT);
 		}*/
-		if (left && shift) {
+
+		if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y))
+		{
+			setState(FALLING_LEFT);
+			setAnimation(FALL_LEFT);
+		}else if (left && shift) {
 			setState(WALKING_LEFT);
 			setAnimation(WALK_LEFT);
 		}
@@ -312,11 +323,11 @@ void Player::update(int deltaTime)
 			cout << "DOWN" << endl;
 			setAnimation(FALL_RIGHT);
 		}*/
-		if (up && posPlayer.x % 32 == 0 && posPlayer != posStartAnim) {
+		if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
 			setState(JUMPING_LEFT);
 			setAnimation(JUMP_RUN_LEFT);
 		}
-		else if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !left) {
+		else if (position_col.x % 64 == 0 && position_col != posStartAnim && !left) {
 			if (right) {
 				setState(TURN_RUNING_LEFT);
 				setAnimation(TURN_RUN_LEFT);
@@ -328,19 +339,19 @@ void Player::update(int deltaTime)
 			}
 		}
 		else{
-			glm::ivec2 new_pos = glm::ivec2(ceil(posPlayer.x - deltaTime / magic*speed), posPlayer.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, posPlayer.y + 5), glm::ivec2(32, 64), &posPlayer.y))
+			glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic*speed), position_col.y);
+			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, position_col.y + 5), size, &position_col.y))
 			{
-				posPlayer.x = new_pos.x;
+				position_col.x = new_pos.x;
 				setState(FALLING_LEFT);
 				setAnimation(FALL_LEFT);
 			}
-			else if (!map->collisionMoveLeft(new_pos, glm::ivec2(32, 64))){
-				if (64 * int(posPlayer.x / 64) != 64 * int(new_pos.x / 64) && posPlayer.x % 64 != 0){
-					posPlayer.x = 64 * int(posPlayer.x / 64);
+			else if (!map->collisionMoveLeft(new_pos, size)){
+				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64) && position_col.x % 64 != 0){
+					position_col.x = 64 * int(position_col.x / 64);
 				}
 				else {
-					posPlayer.x = new_pos.x;
+					position_col.x = new_pos.x;
 				}
 			}
 			else{
@@ -354,11 +365,11 @@ void Player::update(int deltaTime)
 			setState(FALLING_RIGHT);
 			//setAnimation(FALL_RIGHT); //TODO
 		}*/
-		if (up && posPlayer.x % 32 == 0 && posPlayer != posStartAnim) {
+		if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
 			setState(JUMPING_RIGHT);
 			setAnimation(JUMP_RUN_RIGHT);
 		}
-		else if (posPlayer.x % 64 == 0 && posPlayer != posStartAnim && !right) {
+		else if (position_col.x % 64 == 0 && position_col != posStartAnim && !right) {
 			if (left) {
 				setState(TURN_RUNING_RIGHT);
 				setAnimation(TURN_RUN_RIGHT);
@@ -370,20 +381,20 @@ void Player::update(int deltaTime)
 			}
 		}
 		else{
-			glm::ivec2 new_pos = glm::ivec2((posPlayer.x + deltaTime / magic*speed), posPlayer.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, posPlayer.y + 5), glm::ivec2(32, 64), &posPlayer.y))
+			glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic*speed), position_col.y);
+			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, position_col.y + 5), size, &position_col.y))
 			{
-				posPlayer.x = new_pos.x;
+				position_col.x = new_pos.x;
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
 			}
-			else if (!map->collisionMoveRight(new_pos, glm::ivec2(32, 64))){
-				if (64 * int(posPlayer.x / 64) != 64*int(new_pos.x / 64)){
+			else if (!map->collisionMoveRight(new_pos, size)){
+				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64)){
 
-					posPlayer.x = 64 * int(new_pos.x / 64);
+					position_col.x = 64 * int(new_pos.x / 64);
 				}
 				else {
-					posPlayer.x = new_pos.x;
+					position_col.x = new_pos.x;
 				}
 			}
 			else{
@@ -393,25 +404,25 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case WALKING_RIGHT:
-		if (posPlayer.x % 32 == 0 && posPlayer != posStartAnim && !left) {
+		if (position_col.x % 32 == 0 && position_col != posStartAnim && !left) {
 			setAnimation(STAND_RIGHT);
 			setState(STANDING_RIGHT);
 		}
 		else{
-			glm::ivec2 new_pos = glm::ivec2((posPlayer.x + deltaTime / magic), posPlayer.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, posPlayer.y + 5), glm::ivec2(32, 64), &posPlayer.y))
+			glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
+			if (!map->collisionMoveDown(glm::ivec2(new_pos.x+10, position_col.y + 5), size, &position_col.y))
 			{
-				posPlayer.x = new_pos.x;
-				setState(FALLING_RIGHT);
-				setAnimation(FALL_RIGHT);
+				//position_col.x = new_pos.x;
+				setState(STANDING_RIGHT);
+				setAnimation(STAND_RIGHT);
 			}
-			else if (!map->collisionMoveRight(new_pos, glm::ivec2(32, 64))){
-				if (32 * int(posPlayer.x / 32) != 32 * int(new_pos.x / 32)){
+			else if (!map->collisionMoveRight(new_pos, size)){
+				if (32 * int(position_col.x / 32) != 32 * int(new_pos.x / 32)){
 
-					posPlayer.x = 32 * int(new_pos.x / 32);
+					position_col.x = 32 * int(new_pos.x / 32);
 				}
 				else {
-					posPlayer.x = new_pos.x;
+					position_col.x = new_pos.x;
 				}
 			}
 			else{
@@ -421,24 +432,24 @@ void Player::update(int deltaTime)
 		}
 		break;
 	case WALKING_LEFT:
-		if (posPlayer.x % 32 == 0 && posPlayer != posStartAnim && !right) {
+		if (position_col.x % 32 == 0 && position_col != posStartAnim && !right) {
 			setAnimation(STAND_LEFT);
 			setState(STANDING_LEFT);
 		}
 		else{
-			glm::ivec2 new_pos = glm::ivec2(ceil(posPlayer.x - deltaTime / magic), posPlayer.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, posPlayer.y + 5), glm::ivec2(32, 64), &posPlayer.y))
+			glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
+			if (!map->collisionMoveDown(glm::ivec2(new_pos.x-10, position_col.y + 5), size, &position_col.y))
 			{
-				posPlayer.x = new_pos.x;
-				setState(FALLING_LEFT);
-				setAnimation(FALL_LEFT);
+				//position_col.x = new_pos.x;
+				setState(STANDING_LEFT);
+				setAnimation(STAND_LEFT);
 			}
-			else  if (!map->collisionMoveLeft(new_pos, glm::ivec2(32, 64))){
-				if (32 * int(posPlayer.x / 32) != 32 * int(new_pos.x / 32) && posPlayer.x % 32 != 0){
-					posPlayer.x = 64 * int(posPlayer.x / 32);
+			else  if (!map->collisionMoveLeft(new_pos, size)){
+				if (32 * int(position_col.x / 32) != 32 * int(new_pos.x / 32) && position_col.x % 32 != 0){
+					position_col.x = 64 * int(position_col.x / 32);
 				}
 				else {
-					posPlayer.x = new_pos.x;
+					position_col.x = new_pos.x;
 				}
 			}
 			else {
@@ -454,14 +465,14 @@ void Player::update(int deltaTime)
 			setAnimation(STAND_RIGHT);
 		}
 		else {
-			glm::ivec2 new_pos = glm::ivec2((posPlayer.x + deltaTime / magic*speed), posPlayer.y);
-			if (!map->collisionMoveRight(new_pos, glm::ivec2(32, 64))) {
-				if (64 * int(posPlayer.x / 64) != 64 * int(new_pos.x / 64)) {
+			glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic*speed), position_col.y);
+			if (!map->collisionMoveRight(new_pos, size)) {
+				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64)) {
 
-					posPlayer.x = 64 * int(new_pos.x / 64);
+					position_col.x = 64 * int(new_pos.x / 64);
 				}
 				else {
-					posPlayer.x = new_pos.x;
+					position_col.x = new_pos.x;
 				}
 			}
 			else {
@@ -476,19 +487,13 @@ void Player::update(int deltaTime)
 			setAnimation(STAND_LEFT);
 		}
 		else {
-			glm::ivec2 new_pos = glm::ivec2(ceil(posPlayer.x - deltaTime / magic*speed), posPlayer.y);
-			if (!map->collisionMoveDown(glm::ivec2(new_pos.x, posPlayer.y + 5), glm::ivec2(32, 64), &posPlayer.y))
-			{
-				posPlayer.x = new_pos.x;
-				setState(FALLING_LEFT);
-				setAnimation(FALL_LEFT);
-			}
-			else if (!map->collisionMoveLeft(new_pos, glm::ivec2(32, 64))) {
-				if (64 * int(posPlayer.x / 64) != 64 * int(new_pos.x / 64) && posPlayer.x % 64 != 0) {
-					posPlayer.x = 64 * int(posPlayer.x / 64);
+			glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic*speed), position_col.y);
+			 if (!map->collisionMoveLeft(new_pos, size)) {
+				if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64) && position_col.x % 64 != 0) {
+					position_col.x = 64 * int(position_col.x / 64);
 				}
 				else {
-					posPlayer.x = new_pos.x;
+					position_col.x = new_pos.x;
 				}
 			}
 			else {
@@ -535,8 +540,8 @@ void Player::update(int deltaTime)
 		break;
 	case FALLING_RIGHT:
 		//posPlayer.y += FALL_STEP;
-		posPlayer.y = posPlayer.y + deltaTime / magic*speed*2;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y))
+		position_col.y = position_col.y + deltaTime / magic*speed * 2;
+		if (map->collisionMoveDown(position_col, size, &position_col.y))
 		{
 			//ajupir
 			//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
@@ -546,8 +551,8 @@ void Player::update(int deltaTime)
 		break;
 	case FALLING_LEFT:
 		//posPlayer.y += FALL_STEP;
-		posPlayer.y = posPlayer.y + deltaTime / magic*speed*2;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)){
+		position_col.y = position_col.y + deltaTime / magic*speed * 2;
+		if (map->collisionMoveDown(position_col,size, &position_col.y)){
 			//ajupir
 			//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
 			setState(DOWNING_LEFT);
@@ -568,24 +573,24 @@ void Player::update(int deltaTime)
 		break;
 	case JUMP_STANDING_RIGHT:
 		jumpAngle += JUMP_ANGLE_STEP;
-		posPlayer.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
+		position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
 		if (jumpAngle > 90) {
 			setState(FALLING_RIGHT);
 			setAnimation(FALL_RIGHT);
 		}
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
+		if (map->collisionMoveDown(position_col, size, &position_col.y)) {
 			setState(DOWNING_RIGHT);
 			setAnimation(DOWN_RIGHT);
 		}
 		break;
 	case JUMP_STANDING_LEFT:
 		jumpAngle += JUMP_ANGLE_STEP;
-		posPlayer.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
+		position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
 		if (jumpAngle > 90) {
 			setState(FALLING_LEFT);
 			setAnimation(FALL_LEFT);
 		}
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) {
+		if (map->collisionMoveDown(position_col, size, &position_col.y)) {
 			setState(DOWNING_LEFT);
 			setAnimation(DOWN_LEFT);
 		}
@@ -616,9 +621,9 @@ void Player::update(int deltaTime)
 		break;
 	}
 
-	
+	posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 	sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
-	position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
+	//position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
 	//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << posPlayer.x + 64 << " " << posPlayer.y + 64 << std::endl;
 	//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 }
@@ -646,7 +651,7 @@ void Player::setPosition(const glm::vec2 &pos)
 
 glm::vec2 Player::getPosition()
 {
-	return posPlayer;
+	return position_col;
 }
 
 void Player::input() {
@@ -663,7 +668,7 @@ void Player::setState(PlayerState newState) {
 
 void Player::setAnimation(PlayerAnims newAnim) {
 	sprite->changeAnimation(newAnim);
-	posStartAnim = posPlayer;
+	posStartAnim = position_col;
 	jumpAngle = 0;
 	frame = 0;
 }
