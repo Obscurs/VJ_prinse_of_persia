@@ -4,8 +4,8 @@ TILEMAP
 images/tiles.png 	-- Tilesheet
 8 8 								-- Number of tiles in tilesheet
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-fa        fe                      fe
-rb        rb                      rb
+fa       ffe                      fe
+rb       rrb                      rb
 fffa      fe         fa   fffa    fe
 rrrb      rb         rb   rrrb    rb
 fe                  fa     fe     fe
@@ -19,4 +19,3 @@ rrrb         b              bb    bb
 fffe         ba  a   aa     ffa  afe
 rrrb         bb  b   bb     bbb  bbb
 ffffaaaaaaaaaffaaaaaaffaaaaafffaafff
-

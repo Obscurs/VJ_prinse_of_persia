@@ -85,14 +85,14 @@ bool TileMap::loadLevel(const string &levelFile)
 			fin.get(tile);
 			if (tile == ' ' || tile == '0'){
 				map[j*mapSize.x + i] = 0;
-				//std::cout << " ";
+				std::cout << " ";
 			}
 			else{
 				map[j*mapSize.x + i] = tile - int('a')+1;
-				//std::cout << tile - int('a')+1;
+				std::cout << tile;
 			}
 		}
-		//std::cout << std::endl;
+		std::cout << std::endl;
 		fin.get(tile);
 #ifndef _WIN32
 		fin.get(tile);
