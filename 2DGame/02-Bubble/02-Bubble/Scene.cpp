@@ -49,6 +49,7 @@ Scene::~Scene()
 
 void Scene::init()
 {
+	first_update = true;
 	initShaders();
 	map = TileMap::createTileMap("levels/level01test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	entities = EntityMap::createTileMap("levels/level01teste.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -67,6 +68,14 @@ void Scene::init()
 
 void Scene::update(int deltaTime)
 {
+	//PlaySound(TEXT("sounds/test.wav"), NULL, SND_APPLICATION);
+	//mciSendString("open C:\\M0.wav alias MY_SND");
+	if (first_update){
+		mciSendString(TEXT("stop menu_song"), NULL, 0, 0);
+		mciSendString(TEXT("play scene_song"), NULL, 0, 0);
+		first_update = false;
+	}
+	
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	player->down_key = true;

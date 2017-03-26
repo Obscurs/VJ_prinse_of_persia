@@ -4,7 +4,7 @@
 #include <GL/glut.h>
 #include "Entity.h"
 #include "Game.h"
-
+#include <MMSystem.h>
 
 
 enum Animations
@@ -31,7 +31,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 	actived = true;
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);		//el 46 es superhardcoded
 	sprite->setPosition(position);
-	
+	sound_playing = false;
 	
 	
 	
@@ -133,6 +133,8 @@ void Entity::update(int deltaTime)
 		if (sprite->getCurrentKeyframe() >= 9){
 			actived = false;
 			sprite->changeAnimation(ANIM1);
+			//mciSendString(TEXT("stop spike"), NULL, 0, 0);
+			sound_playing = false;
 		}
 	}
 	
@@ -148,11 +150,17 @@ bool Entity::action(GameActor &actor){
 	if (actor.alive){
 		if (type == 1){
 			actived = true;
+			if (!sound_playing){
+				PlaySound(TEXT("sounds/spike"), NULL, SND_ASYNC);
+				sound_playing = true;
+			}
+			
 			if (sprite->getCurrentKeyframe() >= 4){
 				actor.health = 0;
 				actor.alive = false;
 				sprite->changeAnimation(ANIM2);
 				actived = false;
+				
 			}
 			
 
