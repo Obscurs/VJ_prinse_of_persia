@@ -29,6 +29,7 @@ private:
 	void initShaders();
 
 private:
+	bool first_update;
 	EntityMap *entities;
 	TileMap *map;
 	TileMap *background;

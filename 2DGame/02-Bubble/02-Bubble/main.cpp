@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <Windows.h>
+#include <MMSystem.h>
 #include "Game.h"
 
 
@@ -108,6 +109,12 @@ int main(int argc, char **argv)
 	Game::instance().init();
 	prevTime = glutGet(GLUT_ELAPSED_TIME);
 	// GLUT gains control of the application
+	//PlaySound(TEXT("sounds/test.wav"), NULL, SND_ASYNC);
+	mciSendString(TEXT("open sounds/Crypto.wav alias scene_song"),NULL,0,0);
+	mciSendString(TEXT("open sounds/test.wav alias menu_song"), NULL, 0, 0);
+	mciSendString(TEXT("open sounds/spike.wav alias spike"), NULL, 0, 0);
+	mciSendString(TEXT("play menu_song"), NULL, 0, 0);
+
 	glutMainLoop();
 
 	return 0;

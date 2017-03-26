@@ -8,10 +8,10 @@ fa       ffe                      fe
 rb       rrb                      rb
 fffa      fe         fa   fffa    fe
 rrrb      rb         rb   rrrb    rb
-fe                  fa     fe     fe
-rb                  rb     rb     rb
-fe  ffffffffffffffffffffffffffffffff
-rb  rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+fe                  fa      fe    fe
+rb                  rb      rb    rb
+fe  ffffffffffffffffffffffa ffffffff
+rb  rrrrrrrrrrrrrrrrrrrrrrb rrrrrrrr
 fe                                fe
 rb                                bb
 ffffa a  aa  a              aa    fe

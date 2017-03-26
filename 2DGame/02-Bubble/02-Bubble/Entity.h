@@ -24,6 +24,7 @@ public:
 	int actived;
 
 private:
+	bool sound_playing;
 	bool overlapping1D(glm::vec2 box1, glm::vec2 box2);
 	glm::ivec2 tileMapDispl, position, col_position, col_size;
 	Sprite *sprite;
