@@ -150,7 +150,7 @@ bool Entity::action(GameActor &actor){
 	if (actor.alive){
 		if (type == 1){
 			actived = true;
-			if (!sound_playing){
+			if (!sound_playing && sprite->getCurrentKeyframe() >= 2){
 				PlaySound(TEXT("sounds/spike"), NULL, SND_ASYNC);
 				sound_playing = true;
 			}
