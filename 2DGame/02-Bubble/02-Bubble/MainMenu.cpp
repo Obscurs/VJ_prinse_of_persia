@@ -19,7 +19,7 @@ void MainMenu::init(ShaderProgram &shaderProgram)
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
 	menu_tex.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &menu_tex, &texProgram);
+	sprite = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(0.5f, 1.f), &menu_tex, &texProgram);
 
 	menu_tex2.loadFromFile("images/help.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite_help = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &menu_tex2, &texProgram);
@@ -28,8 +28,9 @@ void MainMenu::init(ShaderProgram &shaderProgram)
 	sprite_credits = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &menu_tex3, &texProgram);
 
 	sprite->setNumberAnimations(1);
-	sprite->setAnimationSpeed(0, 8);
+	sprite->setAnimationSpeed(0, 2);
 	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(0, glm::vec2(0.5f, 0.f));
 	sprite->changeAnimation(0);
 	sprite->setPosition(glm::vec2(float(0), float(0)));
 
