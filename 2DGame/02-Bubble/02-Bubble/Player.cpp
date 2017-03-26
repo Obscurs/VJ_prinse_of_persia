@@ -439,6 +439,20 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->setAnimationSpeed(SWORD_STEP_LEFT, 8);
 		sprite->addKeyframe(SWORD_STEP_LEFT, glm::vec2(-1 * stepX, 13 * stepY));
 		sprite->addKeyframe(SWORD_STEP_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+
+		sprite->setAnimationSpeed(DRINK_RIGHT, 8);
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(0 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(1 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(2 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(3 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(4 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(5 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(6 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(7 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(8 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(9 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(10* stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(10* stepX, 15 * stepY)); //copy
 		//END ANIMATIONS
 
 		setAnimation(FALL_RIGHT);
@@ -1110,7 +1124,12 @@ void Player::update(int deltaTime)
 				}
 			}
 			break;
-			///////////////////////////////////
+		case DRINKING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 11) {
+				setState(STANDING_RIGHT);
+				setAnimation(STAND_RIGHT);
+			}
+			break;
 
 		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
@@ -1136,8 +1155,8 @@ void Player::setPosition(const glm::vec2 &pos)
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
 	position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
-	std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
-	std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
+	//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
+	//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 	//std::cout << position_col.x << " " << position_col.y << std::endl;
 }
 
@@ -1150,7 +1169,7 @@ void Player::input() {
 	left = Game::instance().getSpecialKey(GLUT_KEY_LEFT);
 	right = Game::instance().getSpecialKey(GLUT_KEY_RIGHT);
 	up = Game::instance().getSpecialKey(GLUT_KEY_UP);
-	down = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
+	down = down_key = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
 	shift = Game::instance().getSpecialKey(112);
 }
 
@@ -1169,4 +1188,7 @@ void Player::DIE() {
 	//TODO
 }
 
+void Player::drink() {
+	cout << "Drinking!" << endl;
+}
 
