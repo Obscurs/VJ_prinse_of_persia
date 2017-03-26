@@ -453,6 +453,20 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(9 * stepX, 15 * stepY));
 		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(10* stepX, 15 * stepY));
 		sprite->addKeyframe(DRINK_RIGHT, glm::vec2(10* stepX, 15 * stepY)); //copy
+
+		sprite->setAnimationSpeed(DRINK_LEFT, 8);
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-1 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-2 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-3 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-4 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-5 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-6 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-7 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-8 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-9 * stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-10* stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-11* stepX, 15 * stepY));
+		sprite->addKeyframe(DRINK_LEFT, glm::vec2(-11* stepX, 15 * stepY)); //copy
 		//END ANIMATIONS
 
 		setAnimation(FALL_RIGHT);
@@ -472,7 +486,7 @@ void Player::update(int deltaTime)
 		sprite->update(deltaTime);
 		input();
 		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
-		std::cout << position_col.x << " " << position_col.y << std::endl;
+		//std::cout << position_col.x << " " << position_col.y << std::endl;
 		switch (state) {
 		case STANDING_RIGHT:
 			is_up = false;
@@ -1130,6 +1144,12 @@ void Player::update(int deltaTime)
 				setAnimation(STAND_RIGHT);
 			}
 			break;
+		case DRINKING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 11) {
+				setState(STANDING_LEFT);
+				setAnimation(STAND_LEFT);
+			}
+			break;
 
 		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
@@ -1190,5 +1210,13 @@ void Player::DIE() {
 
 void Player::drink() {
 	cout << "Drinking!" << endl;
+	if (state == DOWNING_RIGHT) {
+		setState(DRINKING_RIGHT);
+		setAnimation(DRINK_RIGHT);
+	}
+	else if (state == DOWNING_LEFT) {
+		setState(DRINKING_LEFT);
+		setAnimation(DRINK_LEFT);
+	}
 }
 

@@ -173,18 +173,21 @@ bool Entity::action(GameActor &actor){
 		}//potion1
 		else if (type == 3){
 			if (actor.state == DOWNING_LEFT || actor.state == DOWNING_RIGHT){
+				actor.drink();
 				if (actor.health < actor.max_health) actor.health++;
 				return true;
 			}
 		}//potion2
 		else if (type == 4){
 			if (actor.state == DOWNING_LEFT || actor.state == DOWNING_RIGHT){
+				actor.drink();
 				actor.max_health++;
 				return true;
 			}
 		}//potion3
 		else if (type == 5){
 			if (actor.state == DOWNING_LEFT || actor.state == DOWNING_RIGHT){
+				actor.drink();
 				if (actor.health > 0) actor.health--;
 				return true;
 			}

@@ -35,7 +35,7 @@ public:
 	void setAnimation(PlayerAnims newState);
 	void DIE();
 	glm::vec2 getPosition();
-	void drink();
+	virtual void drink();
 	
 private:
 	bool bJumping;
