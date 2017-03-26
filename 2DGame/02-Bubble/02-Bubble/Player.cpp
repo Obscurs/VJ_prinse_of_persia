@@ -384,7 +384,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(7 * stepX, 12 * stepY));
 		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(7 * stepX, 12 * stepY)); //copy
 
-		sprite->setAnimationSpeed(PARRY_RIGHT, 8);
+		sprite->setAnimationSpeed(PARRY_RIGHT, 9);
 		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(0 * stepX, 13 * stepY));
 		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(1 * stepX, 13 * stepY));
 		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(2 * stepX, 13 * stepY));
@@ -392,6 +392,53 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(2 * stepX, 13 * stepY));
 		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(1 * stepX, 13 * stepY));
 		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(0 * stepX, 13 * stepY)); //copy
+
+		sprite->setAnimationSpeed(SWORD_STEP_RIGHT, 8);
+		sprite->addKeyframe(SWORD_STEP_RIGHT, glm::vec2(0 * stepX, 13 * stepY));
+		sprite->addKeyframe(SWORD_STEP_RIGHT, glm::vec2(4 * stepX, 11 * stepY));
+		//
+		sprite->setAnimationSpeed(SWORD_OUT_LEFT, 8);
+		sprite->addKeyframe(SWORD_OUT_LEFT, glm::vec2(-1 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_LEFT, glm::vec2(-2 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_LEFT, glm::vec2(-3 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_LEFT, glm::vec2(-4 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_LEFT, glm::vec2(-5 * stepX, 11 * stepY)); //copy
+
+		sprite->setAnimationSpeed(SWORD_STAND_LEFT, 1);
+		sprite->addKeyframe(SWORD_STAND_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+
+		sprite->setAnimationSpeed(SWORD_IN_LEFT, 8);
+		sprite->addKeyframe(SWORD_IN_LEFT, glm::vec2(-1 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_LEFT, glm::vec2(-2 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_LEFT, glm::vec2(-3 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_LEFT, glm::vec2(-4 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_LEFT, glm::vec2(-5 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_LEFT, glm::vec2(-5 * stepX, 14 * stepY)); //copy
+
+		sprite->setAnimationSpeed(SWORD_ATTACK_LEFT, 9);
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-1 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-2 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-3 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-4 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-5 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-6 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-7 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-8 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_LEFT, glm::vec2(-8 * stepX, 12 * stepY)); //copy
+
+		sprite->setAnimationSpeed(PARRY_LEFT, 9);
+		sprite->addKeyframe(PARRY_LEFT, glm::vec2(-1 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_LEFT, glm::vec2(-2 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_LEFT, glm::vec2(-3 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_LEFT, glm::vec2(-4 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_LEFT, glm::vec2(-3 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_LEFT, glm::vec2(-2 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_LEFT, glm::vec2(-1 * stepX, 13 * stepY)); //copy
+
+		sprite->setAnimationSpeed(SWORD_STEP_LEFT, 8);
+		sprite->addKeyframe(SWORD_STEP_LEFT, glm::vec2(-1 * stepX, 13 * stepY));
+		sprite->addKeyframe(SWORD_STEP_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
 		//END ANIMATIONS
 
 		setAnimation(FALL_RIGHT);
@@ -479,6 +526,10 @@ void Player::update(int deltaTime)
 			else if (right) {
 				setState(TURNING_RIGHT);
 				setAnimation(TURN_RIGHT);
+			}
+			else if (up && shift) {
+				setState(SWORDING_OUT_LEFT);
+				setAnimation(SWORD_OUT_LEFT);
 			}
 			else if (up) {
 				state = PRE_JUMPING_LEFT;
@@ -916,6 +967,14 @@ void Player::update(int deltaTime)
 				setState(SWORDING_IN_RIGHT);
 				setAnimation(SWORD_IN_RIGHT);
 			}
+			else if (right) {	
+				setState(SWORD_STEPING_F_RIGHT);
+				setAnimation(SWORD_STEP_RIGHT);
+			}
+			else if (left) {
+				setState(SWORD_STEPING_B_RIGHT);
+				setAnimation(SWORD_STEP_RIGHT);
+			}
 			break;
 		case SWORDING_IN_RIGHT:
 			if(sprite->getCurrentKeyframe() >= 5) {
@@ -935,6 +994,124 @@ void Player::update(int deltaTime)
 				setAnimation(SWORD_STAND_RIGHT);
 			}
 			break;
+		case SWORD_STEPING_F_RIGHT:
+			if (!right) {
+				setState(SWORD_STANDING_RIGHT);
+				setAnimation(SWORD_STAND_RIGHT);
+			}
+			else {
+				glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x + 10, position_col.y + 5), size, &position_col.y))
+				{
+					setState(STANDING_RIGHT);
+					setAnimation(STAND_RIGHT);
+				}
+				else if (!map->collisionMoveRight(new_pos, size)) {
+					position_col.x = new_pos.x;
+				}
+			}
+			break;
+		case SWORD_STEPING_B_RIGHT:
+			if (!left) {
+				setState(SWORD_STANDING_RIGHT);
+				setAnimation(SWORD_STAND_RIGHT);
+			}
+			else {
+				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x - 10, position_col.y + 5), size, &position_col.y))
+				{
+					setState(STANDING_RIGHT);
+					setAnimation(STAND_RIGHT);
+				}
+				else if (!map->collisionMoveLeft(new_pos, size)) {
+					position_col.x = new_pos.x;
+				}
+			}
+			break;
+
+			/////////////////////////////////CUIDAOOOOO
+		case SWORDING_OUT_LEFT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				setState(SWORD_STANDING_LEFT);
+				setAnimation(SWORD_STAND_LEFT);
+			}
+			break;
+		case SWORD_STANDING_LEFT:
+			if (shift) {
+				setState(SWORD_ATTACKING_LEFT);
+				setAnimation(SWORD_ATTACK_LEFT);
+			}
+			else if (up) {
+				setState(PARRYING_LEFT);
+				setAnimation(PARRY_LEFT);
+			}
+			else if (down) {
+				setState(SWORDING_IN_LEFT);
+				setAnimation(SWORD_IN_LEFT);
+			}
+			else if (right) {
+				setState(SWORD_STEPING_B_LEFT);
+				setAnimation(SWORD_STEP_LEFT);
+			}
+			else if (left) {
+				setState(SWORD_STEPING_F_LEFT);
+				setAnimation(SWORD_STEP_LEFT);
+			}
+			break;
+		case SWORDING_IN_LEFT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				setState(STANDING_LEFT);
+				setAnimation(STAND_LEFT);
+			}
+			break;
+		case SWORD_ATTACKING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 8) {
+				setState(SWORD_STANDING_LEFT);
+				setAnimation(SWORD_STAND_LEFT);
+			}
+			break;
+		case PARRYING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 6) {
+				setState(SWORD_STANDING_LEFT);
+				setAnimation(SWORD_STAND_LEFT);
+			}
+			break;
+		case SWORD_STEPING_F_LEFT:
+			if (!left) {
+				setState(SWORD_STANDING_LEFT);
+				setAnimation(SWORD_STAND_LEFT);
+			}
+			else {
+				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x - 10, position_col.y + 5), size, &position_col.y))
+				{
+					setState(STANDING_LEFT);
+					setAnimation(STAND_LEFT);
+				}
+				else if (!map->collisionMoveLeft(new_pos, size)) {
+					position_col.x = new_pos.x;
+				}
+			}
+			break;
+		case SWORD_STEPING_B_LEFT:
+			if (!right) {
+				setState(SWORD_STANDING_LEFT);
+				setAnimation(SWORD_STAND_LEFT);
+			}
+			else {
+				glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
+				if (!map->collisionMoveDown(glm::ivec2(new_pos.x + 10, position_col.y + 5), size, &position_col.y))
+				{
+					setState(STANDING_LEFT);
+					setAnimation(STAND_LEFT);
+				}
+				else if (!map->collisionMoveRight(new_pos, size)) {
+					position_col.x = new_pos.x;
+				}
+			}
+			break;
+			///////////////////////////////////
+
 		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
