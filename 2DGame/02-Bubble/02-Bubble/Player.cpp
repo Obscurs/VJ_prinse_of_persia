@@ -353,6 +353,45 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(1 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(0 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(0 * stepX, 10 * stepY));
+		
+		sprite->setAnimationSpeed(SWORD_OUT_RIGHT, 8);
+		sprite->addKeyframe(SWORD_OUT_RIGHT, glm::vec2(0 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_RIGHT, glm::vec2(1 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_RIGHT, glm::vec2(2 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_RIGHT, glm::vec2(3 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_RIGHT, glm::vec2(4 * stepX, 11 * stepY));
+		sprite->addKeyframe(SWORD_OUT_RIGHT, glm::vec2(4 * stepX, 11 * stepY)); //copy
+
+		sprite->setAnimationSpeed(SWORD_STAND_RIGHT, 1);
+		sprite->addKeyframe(SWORD_STAND_RIGHT, glm::vec2(4 * stepX, 11 * stepY));
+
+		sprite->setAnimationSpeed(SWORD_IN_RIGHT, 8);
+		sprite->addKeyframe(SWORD_IN_RIGHT, glm::vec2(0 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_RIGHT, glm::vec2(1 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_RIGHT, glm::vec2(2 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_RIGHT, glm::vec2(3 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_RIGHT, glm::vec2(4 * stepX, 14 * stepY));
+		sprite->addKeyframe(SWORD_IN_RIGHT, glm::vec2(4 * stepX, 14 * stepY)); //copy
+
+		sprite->setAnimationSpeed(SWORD_ATTACK_RIGHT, 9);
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(0 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(1 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(2 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(3 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(4 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(5 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(6 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(7 * stepX, 12 * stepY));
+		sprite->addKeyframe(SWORD_ATTACK_RIGHT, glm::vec2(7 * stepX, 12 * stepY)); //copy
+
+		sprite->setAnimationSpeed(PARRY_RIGHT, 8);
+		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(0 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(1 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(2 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(3 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(2 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(1 * stepX, 13 * stepY));
+		sprite->addKeyframe(PARRY_RIGHT, glm::vec2(0 * stepX, 13 * stepY)); //copy
 		//END ANIMATIONS
 
 		setAnimation(FALL_RIGHT);
@@ -395,6 +434,10 @@ void Player::update(int deltaTime)
 			else if (left) {
 				setState(TURNING_LEFT);
 				setAnimation(TURN_LEFT);
+			}
+			else if (up && shift) {
+				setState(SWORDING_OUT_RIGHT);
+				setAnimation(SWORD_OUT_RIGHT);
 			}
 			else if (up) {
 				state = PRE_JUMPING_RIGHT;
@@ -852,6 +895,44 @@ void Player::update(int deltaTime)
 				position_col.y += 45;
 				position_col.x -= 4;
 				is_up = true;
+			}
+			break;
+		case SWORDING_OUT_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				setState(SWORD_STANDING_RIGHT);
+				setAnimation(SWORD_STAND_RIGHT);
+			}
+			break;
+		case SWORD_STANDING_RIGHT:
+			if (shift) {
+				setState(SWORD_ATTACKING_RIGHT);
+				setAnimation(SWORD_ATTACK_RIGHT);
+			}
+			else if (up) {
+				setState(PARRYING_RIGHT);
+				setAnimation(PARRY_RIGHT);
+			}
+			else if (down) {
+				setState(SWORDING_IN_RIGHT);
+				setAnimation(SWORD_IN_RIGHT);
+			}
+			break;
+		case SWORDING_IN_RIGHT:
+			if(sprite->getCurrentKeyframe() >= 5) {
+				setState(STANDING_RIGHT);
+				setAnimation(STAND_RIGHT);
+			}
+			break;
+		case SWORD_ATTACKING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 8) {
+				setState(SWORD_STANDING_RIGHT);
+				setAnimation(SWORD_STAND_RIGHT);
+			}
+			break;
+		case PARRYING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 6) {
+				setState(SWORD_STANDING_RIGHT);
+				setAnimation(SWORD_STAND_RIGHT);
 			}
 			break;
 		}
