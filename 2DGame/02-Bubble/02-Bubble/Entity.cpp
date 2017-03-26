@@ -146,21 +146,19 @@ void Entity::render()
 	sprite->render();
 }
 bool Entity::action(GameActor &actor){
-	//spikes
 	if (actor.alive){
+		//spikes
 		if (type == 1){
 			actived = true;
 			if (!sound_playing && sprite->getCurrentKeyframe() >= 2){
 				PlaySound(TEXT("sounds/spike"), NULL, SND_ASYNC);
 				sound_playing = true;
 			}
-			
-			if (sprite->getCurrentKeyframe() >= 4){
+			if (sprite->getCurrentKeyframe() >= 4 && actor.state == RUNING_RIGHT || actor.state == RUNING_LEFT){
 				actor.health = 0;
 				actor.alive = false;
 				sprite->changeAnimation(ANIM2);
-				actived = false;
-				
+				actived = false;	
 			}
 			
 
