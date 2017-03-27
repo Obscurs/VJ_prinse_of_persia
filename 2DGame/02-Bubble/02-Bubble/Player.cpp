@@ -483,6 +483,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime)
 {
+	//deltaTime = 50;
 	if (alive){
 		old_position_col = position_col;
 		sprite->update(deltaTime);
@@ -707,7 +708,7 @@ void Player::update(int deltaTime)
 				}
 				else  if (!map->collisionMoveLeft(new_pos, size)){
 					if (32 * int(position_col.x / 32) != 32 * int(new_pos.x / 32) && position_col.x % 32 != 0){
-						position_col.x = 64 * int(position_col.x / 32);
+						position_col.x = 32 * int(position_col.x / 32);
 					}
 					else {
 						position_col.x = new_pos.x;
