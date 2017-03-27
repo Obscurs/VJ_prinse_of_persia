@@ -6,7 +6,7 @@
 #include "Game.h"
 #include <math.h>  
 
-#define JUMP_ANGLE_STEP 4
+#define JUMP_ANGLE_STEP 5
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 #define JUMP 40
@@ -295,7 +295,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->setAnimationSpeed(GRAB_RIGHT_STATIC, 6);
 		sprite->addKeyframe(GRAB_RIGHT_STATIC, glm::vec2(0 * stepX, 9 * stepY));
 
-		sprite->setAnimationSpeed(CLIMB_RIGHT, 6);
+		sprite->setAnimationSpeed(CLIMB_RIGHT, 8);
 		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(0 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(1 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(2 * stepX, 10 * stepY));
@@ -311,7 +311,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(11 * stepX, 10 * stepY));
 		
 
-		sprite->setAnimationSpeed(CLIMB_LEFT, 6);
+		sprite->setAnimationSpeed(CLIMB_LEFT, 8);
 		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-1 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-2 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-3 * stepX, 10 * stepY));
@@ -326,7 +326,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-12 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(-12 * stepX, 10 * stepY));
 
-		sprite->setAnimationSpeed(CLIMB_LEFT_DOWN, 6);
+		sprite->setAnimationSpeed(CLIMB_LEFT_DOWN, 8);
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-12 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-11 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-10 * stepX, 10 * stepY));
@@ -340,7 +340,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-1 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-1 * stepX, 10 * stepY));
 
-		sprite->setAnimationSpeed(CLIMB_RIGHT_DOWN, 6);
+		sprite->setAnimationSpeed(CLIMB_RIGHT_DOWN, 8);
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(11 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(10 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(8 * stepX, 10 * stepY));
@@ -799,7 +799,7 @@ void Player::update(int deltaTime)
 			break;
 		case FALLING_RIGHT:
 			//posPlayer.y += FALL_STEP;
-			position_col.y = position_col.y + deltaTime / magic*speed * 2;
+			position_col.y = position_col.y + deltaTime / magic*speed*2;
 			if (map->collisionPoint(glm::ivec2(position_col.x+size.x, position_col.y))) {
 				position_col.x -= 1;
 			}
@@ -817,7 +817,7 @@ void Player::update(int deltaTime)
 			break;
 		case FALLING_LEFT:
 			//posPlayer.y += FALL_STEP;
-			position_col.y = position_col.y + deltaTime / magic*speed * 2;
+			position_col.y = position_col.y + deltaTime / magic*speed*2;
 			if (map->collisionPoint(glm::ivec2(position_col.x, position_col.y))) {
 				position_col.x += 1;
 			}
@@ -845,7 +845,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case JUMP_STANDING_RIGHT:
-			jumpAngle += JUMP_ANGLE_STEP;
+			jumpAngle += JUMP_ANGLE_STEP*deltaTime / magic;
 			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90) {
 				setState(FALLING_RIGHT);
@@ -858,7 +858,7 @@ void Player::update(int deltaTime)
 			
 			break;
 		case JUMP_STANDING_LEFT:
-			jumpAngle += JUMP_ANGLE_STEP;
+			jumpAngle += JUMP_ANGLE_STEP*deltaTime / magic;
 			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90) {
 				setState(FALLING_LEFT);
