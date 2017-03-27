@@ -68,14 +68,18 @@ void Scene::init()
 
 void Scene::update(int deltaTime)
 {
+	
 	//PlaySound(TEXT("sounds/test.wav"), NULL, SND_APPLICATION);
 	//mciSendString("open C:\\M0.wav alias MY_SND");
 	if (first_update){
+		totalPlayTime = 0;
 		mciSendString(TEXT("stop menu_song"), NULL, 0, 0);
-		mciSendString(TEXT("play scene_song repeat"), NULL, 0, 0);
+		mciSendString(TEXT("play scene_song"), NULL, 0, 0);
 		first_update = false;
 	}
-	
+	totalPlayTime += deltaTime;
+	//if (totalPlayTime % ) mciSendString(TEXT("stop scene_song"), NULL, 0, 0);
+	//if (totalPlayTime > 5000 ) mciSendString(TEXT("play scene_song"), NULL, 0, 0);
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	player->down_key = true;

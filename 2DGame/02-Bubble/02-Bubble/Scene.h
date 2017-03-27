@@ -30,6 +30,7 @@ private:
 
 private:
 	bool first_update;
+	int totalPlayTime;
 	EntityMap *entities;
 	TileMap *map;
 	TileMap *background;

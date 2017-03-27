@@ -39,7 +39,8 @@ public:
 	
 private:
 	bool bJumping;
-	bool right, left, up, down, jump, shift;
+	bool right, left, up, down, jump, shift, shift_released;
+	bool shift_rel_soon;
 	bool facingRight;
 	bool is_up;
 	glm::ivec2 tileMapDispl, posPlayer, posStartAnim;

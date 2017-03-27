@@ -14,6 +14,8 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	shift_released = false;
+	shift_rel_soon = false;
 	is_up = false;
 	alive = true;
 	float stepX = 1.0f / 15.0f;
@@ -983,7 +985,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORD_STANDING_RIGHT:
-			if (shift) {
+			if (shift_released) {
 				setState(SWORD_ATTACKING_RIGHT);
 				setAnimation(SWORD_ATTACK_RIGHT);
 			}
@@ -1191,6 +1193,15 @@ void Player::input() {
 	up = Game::instance().getSpecialKey(GLUT_KEY_UP);
 	down = down_key = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
 	shift = Game::instance().getSpecialKey(112);
+
+	if (shift && !shift_released){
+		shift_rel_soon = true;
+	}
+	else if (!shift && shift_rel_soon) {
+		shift_rel_soon = false;
+		shift_released = true;
+	}
+	else shift_released = false;
 }
 
 void Player::setState(PlayerState newState) {
