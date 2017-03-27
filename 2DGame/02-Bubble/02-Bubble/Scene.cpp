@@ -71,13 +71,13 @@ void Scene::update(int deltaTime)
 	
 	//PlaySound(TEXT("sounds/test.wav"), NULL, SND_APPLICATION);
 	//mciSendString("open C:\\M0.wav alias MY_SND");
-	if (first_update){
-		totalPlayTime = 0;
-		mciSendString(TEXT("stop menu_song"), NULL, 0, 0);
-		mciSendString(TEXT("play scene_song"), NULL, 0, 0);
+	if (first_update || (int)currentTime % 390000 < 385000){
+		mciSendString(TEXT("close menu_song"), NULL, 0, 0);
+		mciSendString(TEXT("open sounds/Crypto.wav alias scene_song"), NULL, 0, 0);
+		mciSendString(TEXT("play scene_song"), NULL, 0,0);
 		first_update = false;
 	}
-	totalPlayTime += deltaTime;
+	else mciSendString(TEXT("close scene_song"), NULL, 0, 0);
 	//if (totalPlayTime % ) mciSendString(TEXT("stop scene_song"), NULL, 0, 0);
 	//if (totalPlayTime > 5000 ) mciSendString(TEXT("play scene_song"), NULL, 0, 0);
 	currentTime += deltaTime;

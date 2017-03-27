@@ -12,6 +12,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	int menu_status;
+	bool first_update;
 private:
 	void initShaders();
 	ShaderProgram texProgram;

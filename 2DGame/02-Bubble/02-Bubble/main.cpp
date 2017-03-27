@@ -75,7 +75,7 @@ static void idleCallback()
 	if(deltaTime > TIME_PER_FRAME)
 	{
 		// Every time we enter here is equivalent to a game loop execution
-		if(!Game::instance().update(50))
+		if (!Game::instance().update(deltaTime))
 			exit(0);
 		prevTime = currentTime;
 		glutPostRedisplay();
@@ -110,10 +110,7 @@ int main(int argc, char **argv)
 	prevTime = glutGet(GLUT_ELAPSED_TIME);
 	// GLUT gains control of the application
 	//PlaySound(TEXT("sounds/test.wav"), NULL, SND_ASYNC);
-	mciSendString(TEXT("open sounds/Crypto.wav alias scene_song"),NULL,0,0);
-	mciSendString(TEXT("open sounds/test.wav alias menu_song"), NULL, 0, 0);
-	mciSendString(TEXT("open sounds/spike.wav alias spike"), NULL, 0, 0);
-	mciSendString(TEXT("play menu_song"), NULL, 0, 0);
+	
 
 	glutMainLoop();
 

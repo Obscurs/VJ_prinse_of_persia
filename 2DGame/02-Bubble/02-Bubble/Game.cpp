@@ -83,6 +83,7 @@ void Game::keyReleased(int key)
 	else if (key == 82 || key == 114){
 		switch (game_status){
 		case PLAYING:
+			menu.first_update = true;
 			scene.init();
 			game_status = MAINMENU;
 			break;

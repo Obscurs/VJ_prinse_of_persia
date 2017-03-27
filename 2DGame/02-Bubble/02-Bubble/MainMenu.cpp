@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <iostream>
 #include <sstream>
+#include <Windows.h>
 MainMenu::MainMenu()
 {
 }
@@ -14,6 +15,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::init(ShaderProgram &shaderProgram)
 {
+	first_update = true;
 	menu_status = 0;
 	texProgram = shaderProgram;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -51,6 +53,13 @@ void MainMenu::init(ShaderProgram &shaderProgram)
 
 void MainMenu::update(int deltaTime)
 {
+
+	mciSendString(TEXT("close scene_song"), NULL, 0, 0);
+	if (first_update){
+		mciSendString(TEXT("open sounds/test.wav alias menu_song"), NULL, 0, 0);
+		mciSendString(TEXT("play menu_song"), NULL, 0, 0);
+		first_update = false;
+	}
 	sprite->update(deltaTime);
 }
 

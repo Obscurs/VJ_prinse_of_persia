@@ -8,7 +8,9 @@
 #include "EntityMap.h"
 #include "Player.h"
 #include "Gui.h"
-
+#include<iostream>
+#include<fstream>
+#include<sstream>
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
