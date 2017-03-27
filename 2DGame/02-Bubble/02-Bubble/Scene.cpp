@@ -72,7 +72,7 @@ void Scene::update(int deltaTime)
 	//mciSendString("open C:\\M0.wav alias MY_SND");
 	if (first_update){
 		mciSendString(TEXT("stop menu_song"), NULL, 0, 0);
-		mciSendString(TEXT("play scene_song"), NULL, 0, 0);
+		mciSendString(TEXT("play scene_song repeat"), NULL, 0, 0);
 		first_update = false;
 	}
 	

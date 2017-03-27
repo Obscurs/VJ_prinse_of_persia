@@ -214,6 +214,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 				*posY = tileSize * y - size.y;
 				return true;
 			}
+			*posY = tileSize * y - size.y;
+			return true;
 		}
 	}
 	
