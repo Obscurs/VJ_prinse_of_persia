@@ -803,7 +803,7 @@ void Player::update(int deltaTime)
 			if (map->collisionPoint(glm::ivec2(position_col.x+size.x, position_col.y))) {
 				position_col.x -= 1;
 			}
-			if (map->collisionMoveDown(position_col, size, &position_col.y))
+			else if (map->collisionMoveDown(position_col, size, &position_col.y))
 			{
 				//ajupir
 				//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
@@ -821,7 +821,7 @@ void Player::update(int deltaTime)
 			if (map->collisionPoint(glm::ivec2(position_col.x, position_col.y))) {
 				position_col.x += 1;
 			}
-			if (map->collisionMoveDown(position_col, size, &position_col.y)){
+			else if (map->collisionMoveDown(position_col, size, &position_col.y)){
 				//ajupir
 				//posPlayer.y = posPlayer.y - deltaTime / magic*speed * 2;
 				setState(DOWNING_LEFT);
