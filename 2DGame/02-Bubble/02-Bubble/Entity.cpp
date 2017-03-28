@@ -180,6 +180,7 @@ bool Entity::action(GameActor &actor){
 			if (actor.state == DOWNING_LEFT || actor.state == DOWNING_RIGHT){
 				actor.drink();
 				actor.max_health++;
+				actor.health++;
 				return true;
 			}
 		}//potion3
