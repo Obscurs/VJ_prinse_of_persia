@@ -1,22 +1,22 @@
 TILEMAP
-36 28 							-- Size of tile map in tiles
+32 28 							-- Size of tile map in tiles
 32 64							-- Tile size & block size
 images/tiles.png 	-- Tilesheet
 8 8								-- Number of tiles in tilesheet
-cccccccccccdcccccccccccccccccccccccc
-ccdccccdcccccddccdccccccdccccdcccccd
-cccccdcccccdcccccccccdccccdcccdccdcc
-cccccccccdcccccccdcccccccdcccccccccc
-ccdcccdcccccdccccccdcccccdcccddccccc
-cccccdcccccdcccccccccdccccdcccdccdcc
-cccccccccccdcccccccccccccccccccccccc
-ccdccccdcccccddccdccccccdccccdcccccd
-cccccdcccccdcccccccccdccccdcccdccdcc
-cccccccccdcccccccdcccccccdcccccccccc
-ccdcccdcccccdccccccdcccccdcccddccccc
-cccccdcccccdcccccccccdccccdcccdccdcc
-cccccccccccdcccccccccccccccccccccccc
-ccdccccdcccccddccdccccccdccccdcccccd
-cccccdcccccdcccccccccdccccdcccdccdcc
-cccccccccdcccccccdcccccccdcccccccccc
+cccccccccccdcccccccccccccccccccc
+ccdccccdcccccddccdccccccdccccdcc
+cccccdcccccdcccccccccdccccdcccdc
+cccccccccdcccccccdcccccccdcccccc
+ccdcccdcccccdccccccdcccccdcccddc
+cccccdcccccdcccccccccdccccdcccdc
+cccccccccccdcccccccccccccccccccc
+ccdccccdcccccddccdccccccdccccdcc
+cccccdcccccdcccccccccdccccdcccdc
+cccccccccdcccccccdcccccccdcccccc
+ccdcccdcccccdccccccdcccccdcccddc
+cccccdcccccdcccccccccdccccdcccdc
+cccccccccccdcccccccccccccccccccc
+ccdccccdcccccddccdccccccdccccdcc
+cccccdcccccdcccccccccdccccdcccdc
+cccccccccdcccccccdcccccccdcccccc
 
