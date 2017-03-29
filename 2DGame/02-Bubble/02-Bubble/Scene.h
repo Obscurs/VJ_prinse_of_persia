@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "EntityMap.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Gui.h"
 #include<iostream>
 #include<fstream>
@@ -39,6 +40,7 @@ private:
 	TileMap *foreground;
 	Gui *gui;
 	Player *player;
+	Enemy *enemy;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
