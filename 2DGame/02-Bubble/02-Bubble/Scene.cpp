@@ -127,8 +127,8 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	entities->render();
-	player->render();
 	enemy->render();
+	player->render();
 
 	texProgram.free();
 	texProgram.use();
