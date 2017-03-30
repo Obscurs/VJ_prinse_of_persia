@@ -16,6 +16,7 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	player = pl;
 	type = tp;
 	alive = true;
+	timer = 0;
 	float stepX = 1.0f / 8.0f; //CHECK
 	float stepY = 1.0f / 8.0f;
 	tileMapDispl = tileMapPos;
@@ -49,6 +50,26 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	sprite->addKeyframe(eWALK_LEFT, glm::vec2(-4 * stepX, 1 * stepY));
 	sprite->addKeyframe(eWALK_LEFT, glm::vec2(-5 * stepX, 1 * stepY));
 	sprite->addKeyframe(eWALK_LEFT, glm::vec2(-6 * stepX, 1 * stepY));
+
+	sprite->setAnimationSpeed(ePARRY_RIGHT, 8);
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(0 * stepX, 1 * stepY));
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(1 * stepX, 1 * stepY));
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(2 * stepX, 1 * stepY));
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_RIGHT, glm::vec2(1 * stepX, 2 * stepY));
+
+	sprite->setAnimationSpeed(ePARRY_LEFT, 8);
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-1 * stepX, 1 * stepY));
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-2 * stepX, 1 * stepY));
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-3 * stepX, 1 * stepY));
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-1 * stepX, 2 * stepY));
+	sprite->addKeyframe(ePARRY_LEFT, glm::vec2(-1 * stepX, 2 * stepY));
 
 	sprite->setAnimationSpeed(eATACK_RIGHT, 7);
 	sprite->addKeyframe(eATACK_RIGHT, glm::vec2(0 * stepX, 2 * stepY));
@@ -84,10 +105,12 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	sprite->addKeyframe(eDAMAGE_RIGHT, glm::vec2(0 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDAMAGE_RIGHT, glm::vec2(1 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDAMAGE_RIGHT, glm::vec2(1 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDAMAGE_RIGHT, glm::vec2(1 * stepX, 4 * stepY)); //copy
 
 	sprite->setAnimationSpeed(eDAMAGE_LEFT, 6);
 	sprite->addKeyframe(eDAMAGE_LEFT, glm::vec2(-1 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDAMAGE_LEFT, glm::vec2(-2 * stepX, 4 * stepY));
+	sprite->addKeyframe(eDAMAGE_LEFT, glm::vec2(-2 * stepX, 4 * stepY)); //copy
 	sprite->addKeyframe(eDAMAGE_LEFT, glm::vec2(-2 * stepX, 4 * stepY)); //copy
 
 	//sprite->addKeyframe(eATACK_RIGHT, glm::vec2(6 * stepX, 1 * stepY)); //maybe parry?
@@ -143,8 +166,8 @@ bool Enemy::playerClose(){
 	}
 }
 bool Enemy::playerDirection(){
-	glm::vec2 p_center = glm::vec2((player->position_col.x + player->size.x) / 2, (player->position_col.y + player->size.y) / 2);
-	int my_center = (position_col.x + size.x) / 2;
+	glm::vec2 p_center = glm::vec2((player->position_col.x + player->size.x / 2), (player->position_col.y + player->size.y / 2));
+	int my_center = (position_col.x + size.x / 2);
 	return (p_center.x > my_center);
 }
 void Enemy::newDecision(){
@@ -173,33 +196,68 @@ void Enemy::newDecision(){
 		}
 	}
 	else if (playerClose()){
-		//if (sprite->getCurrentKeyframe < old_frame){
-
-		//}
-		
-		int random_variable = std::rand() % (50 - 1);
-		if (random_variable == 3){
+		std::cout << state << std::endl;
+		if (state == SWORD_STEPING_F_RIGHT || state == SWORD_STEPING_F_LEFT){
 			if (direction){
-				if (state != SWORD_ATTACKING_RIGHT)setAnimation(eATACK_RIGHT);
-				setState(SWORD_ATTACKING_RIGHT);
+				setState(STANDING_RIGHT);
+				setAnimation(eSTAND_RIGHT);
 			}
-			else if (!direction){
-				if (state != SWORD_ATTACKING_LEFT)setAnimation(eATACK_LEFT);
-					setState(SWORD_ATTACKING_LEFT);
+			else {
+				setState(STANDING_LEFT);
+				setAnimation(eSTAND_LEFT);
 			}
-			
 		}
-		else{
-			if (state != SWORD_ATTACKING_RIGHT && state != SWORD_ATTACKING_LEFT){
-				if (direction){
-					setState(STANDING_RIGHT);
-					setAnimation(eSTAND_RIGHT);
+		if (state == STANDING_RIGHT || state == STANDING_LEFT){
+			
+			//ESTO HAY QUE HACERLO PORQUE SINO A VECES NO MIRA DONDE TOCA
+			if (direction){
+				setState(STANDING_RIGHT);
+				setAnimation(eSTAND_RIGHT);
+			}
+			else {
+				setState(STANDING_LEFT);
+				setAnimation(eSTAND_LEFT);
+			}
+			////////
+			if (!wait){
+				int random_variable = std::rand() % (4 - 1);
+				
+				if (random_variable == 1){
+					
+					if (direction){
+						if (state != SWORD_ATTACKING_RIGHT)setAnimation(eATACK_RIGHT);
+						setState(SWORD_ATTACKING_RIGHT);
+					}
+					else if (!direction){
+						if (state != SWORD_ATTACKING_LEFT)setAnimation(eATACK_LEFT);
+						setState(SWORD_ATTACKING_LEFT);
+					}
+
+				}
+				else if (random_variable == 2 || random_variable == 3){
+					if (direction){
+						if (state != PARRYING_RIGHT)setAnimation(ePARRY_RIGHT);
+						setState(PARRYING_RIGHT);
+					}
+					else if (!direction){
+						if (state != PARRYING_LEFT)setAnimation(ePARRY_LEFT);
+						setState(PARRYING_LEFT);
+					}
+
 				}
 				else {
-					setState(STANDING_LEFT);
-					setAnimation(eSTAND_LEFT);
+					wait = true;
+					if (direction){
+						setState(STANDING_RIGHT);
+						setAnimation(eSTAND_RIGHT);
+					}
+					else {
+						setState(STANDING_LEFT);
+						setAnimation(eSTAND_LEFT);
+					}
 				}
 			}
+
 		}
 	}
 	else if(direction){
@@ -212,16 +270,48 @@ void Enemy::newDecision(){
 	}
 	
 }
+void Enemy::damage(bool direction, int dmg){
+
+	if (direction){
+		setState(DAMAGING_LEFT);
+		setAnimation(eDAMAGE_LEFT);
+	}
+	else{
+		setState(DAMAGING_RIGHT);
+		setAnimation(eDAMAGE_RIGHT);
+	}
+
+}
 void Enemy::update(int deltaTime)
 {
 	//deltaTime = 50;
+	if (wait) timer = timer + deltaTime;
+	if (timer > 1000) {
+		timer = 0;
+		
+		wait = false;
+	}
+	//std::cout << timer << std::endl;
 	if (alive) {
-		//...
 		old_position_col = position_col;
 		sprite->update(deltaTime);
 		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
 		glm::ivec2 new_pos;
 		newDecision();
+
+		if (playerClose()){
+			
+			if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() >= 6){
+				if (!(state == PARRYING_LEFT)){
+					damage(1, 1);
+				}
+			}
+			else if (player->state == SWORD_ATTACKING_RIGHT && direction && player->sprite->getCurrentKeyframe() >= 6){
+				if (!(state == PARRYING_RIGHT)){
+					damage(0, 1);
+				}
+			}
+		}
 		switch (state) {
 		case STANDING_RIGHT:
 			break;
@@ -252,14 +342,48 @@ void Enemy::update(int deltaTime)
 			break;
 		case SWORD_ATTACKING_LEFT:
 			if (sprite->getCurrentKeyframe() >= 5) {
-				setState(SWORD_STANDING_LEFT);
-				//setAnimation(eSTAND_LEFT);
+				if (!(player->state == PARRYING_RIGHT && player->sprite->getCurrentKeyframe() >= 2)){
+					player->damage(0, 1);
+				}
+				setState(STANDING_LEFT);
+				setAnimation(eSTAND_LEFT);
 			}
 			break;
 		case SWORD_ATTACKING_RIGHT:
 			if (sprite->getCurrentKeyframe() >= 5) {
-				setState(SWORD_STANDING_RIGHT);
-				//setAnimation(eSTAND_RIGHT);
+				if (!(player->state == PARRYING_LEFT && player->sprite->getCurrentKeyframe() >= 2)){
+					player->damage(1, 1);
+				}
+				setState(STANDING_RIGHT);
+				setAnimation(eSTAND_RIGHT);
+			}
+			break;
+		case PARRYING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 6) {
+				setState(STANDING_LEFT);
+				setAnimation(eSTAND_LEFT);
+			}
+			break;
+		case PARRYING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 6) {
+				setState(STANDING_RIGHT);
+				setAnimation(eSTAND_RIGHT);
+			}
+			break;
+		case DAMAGING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 1) {
+				health = health - 1;
+				if (health <= 0) alive = false;
+				setState(STANDING_LEFT);
+				setAnimation(eSTAND_LEFT);
+			}
+			break;
+		case DAMAGING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 1) {
+				health = health - 1;
+				if (health <= 0) alive = false;
+				setState(STANDING_RIGHT);
+				setAnimation(eSTAND_RIGHT);
 			}
 			break;
 		}

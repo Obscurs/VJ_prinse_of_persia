@@ -4,7 +4,7 @@
 #include "TileMap.h"
 #include "Player.h"
 enum EnemyAnims {
-	eSTAND_LEFT, eSTAND_RIGHT, eATACK_RIGHT, eATACK_LEFT, eWALK_RIGHT, eWALK_LEFT, eDIE_RIGHT, eDIE_LEFT, eDAMAGE_RIGHT, eDAMAGE_LEFT,
+	eSTAND_LEFT, eSTAND_RIGHT, ePARRY_LEFT, ePARRY_RIGHT, eATACK_RIGHT, eATACK_LEFT, eWALK_RIGHT, eWALK_LEFT, eDIE_RIGHT, eDIE_LEFT, eDAMAGE_RIGHT, eDAMAGE_LEFT,
 	eANIMATION_COUNT
 };
 
@@ -25,7 +25,10 @@ public:
 	void DIE();
 	glm::vec2 getPosition();
 	int type;
+	int timer;
+	void damage(bool direction, int dmg);
 private:
+	bool wait;
 	int eye_distance;
 	int close_distance;
 	bool canSeePlayer();

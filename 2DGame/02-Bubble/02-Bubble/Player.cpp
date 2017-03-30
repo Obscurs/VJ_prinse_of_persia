@@ -517,6 +517,20 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(POST_JUMP_LEFT2, glm::vec2(-14 * stepX, 6 * stepY));
 		sprite->addKeyframe(POST_JUMP_LEFT2, glm::vec2(-15 * stepX, 6 * stepY));
 		sprite->addKeyframe(POST_JUMP_LEFT2, glm::vec2(-15 * stepX, 6 * stepY)); //copy
+
+		sprite->setAnimationSpeed(DAMAGE_LEFT, 8);
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-4 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+
+		sprite->setAnimationSpeed(DAMAGE_RIGHT, 8);
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(4 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(3 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 11 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 11 * stepY));
 		//END ANIMATIONS
 
 		setAnimation(FALL_RIGHT);
@@ -1279,6 +1293,34 @@ void Player::update(int deltaTime)
 				setAnimation(STAND_LEFT);
 			}
 			break;
+		case DAMAGING_LEFT:
+			
+			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y)){
+				setState(FALLING_LEFT);
+				setAnimation(FALL_LEFT);
+			}
+			else if (sprite->getCurrentKeyframe() >= 3) {
+				position_col = glm::ivec2((position_col.x +5), position_col.y);
+				health = health - 1;
+				if (health <= 0) alive = false;
+				setState(SWORD_STANDING_LEFT);
+				setAnimation(SWORD_STAND_LEFT);
+			}
+			break;
+		case DAMAGING_RIGHT:
+			
+			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y)){
+				setState(FALLING_RIGHT);
+				setAnimation(FALL_RIGHT);
+			}
+			else if (sprite->getCurrentKeyframe() >= 3) {
+				position_col = glm::ivec2(ceil(position_col.x - 5), position_col.y);
+				health = health - 1;
+				if (health <= 0) alive = false;
+				setState(SWORD_STANDING_RIGHT);
+				setAnimation(SWORD_STAND_RIGHT);
+			}
+			break;
 			//end switch
 		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
@@ -1288,7 +1330,18 @@ void Player::update(int deltaTime)
 		//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
 	}
 }
-
+void Player::damage(bool direction, int dmg){
+	
+	if (direction){
+		setState(DAMAGING_LEFT);
+		setAnimation(DAMAGE_LEFT);
+	}
+	else{
+		setState(DAMAGING_RIGHT);
+		setAnimation(DAMAGE_RIGHT);
+	}
+	
+}
 void Player::render()
 {
 	if(alive)sprite->render();
