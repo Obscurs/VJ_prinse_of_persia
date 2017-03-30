@@ -10,6 +10,7 @@ Enemy::~Enemy()
 
 void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int tp, Player *pl)
 {
+	old_frame = 0;
 	eye_distance = 256;
 	close_distance = 32;
 	player = pl;
@@ -54,11 +55,15 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	sprite->addKeyframe(eATACK_RIGHT, glm::vec2(1 * stepX, 2 * stepY));
 	sprite->addKeyframe(eATACK_RIGHT, glm::vec2(2 * stepX, 2 * stepY));
 	sprite->addKeyframe(eATACK_RIGHT, glm::vec2(3 * stepX, 2 * stepY));
+	sprite->addKeyframe(eATACK_RIGHT, glm::vec2(3 * stepX, 2 * stepY));
+	sprite->addKeyframe(eATACK_RIGHT, glm::vec2(3 * stepX, 2 * stepY));
 
 	sprite->setAnimationSpeed(eATACK_LEFT, 7);
 	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-1 * stepX, 2 * stepY));
 	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-2 * stepX, 2 * stepY));
 	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-3 * stepX, 2 * stepY));
+	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-4 * stepX, 2 * stepY));
+	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-4 * stepX, 2 * stepY));
 	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-4 * stepX, 2 * stepY));
 
 	sprite->setAnimationSpeed(eDIE_RIGHT, 7);
@@ -156,6 +161,36 @@ void Enemy::newDecision(){
 			
 		}
 	}
+	else if (playerClose()){
+		//if (sprite->getCurrentKeyframe < old_frame){
+
+		//}
+		
+		int random_variable = std::rand() % (50 - 1);
+		if (random_variable == 3){
+			if (direction){
+				if (state != SWORD_ATTACKING_RIGHT)setAnimation(eATACK_RIGHT);
+				setState(SWORD_ATTACKING_RIGHT);
+			}
+			else if (!direction){
+				if (state != SWORD_ATTACKING_LEFT)setAnimation(eATACK_LEFT);
+					setState(SWORD_ATTACKING_LEFT);
+			}
+			
+		}
+		else{
+			if (state != SWORD_ATTACKING_RIGHT && state != SWORD_ATTACKING_LEFT){
+				if (direction){
+					setState(STANDING_RIGHT);
+					setAnimation(eSTAND_RIGHT);
+				}
+				else {
+					setState(STANDING_LEFT);
+					setAnimation(eSTAND_LEFT);
+				}
+			}
+		}
+	}
 	else if(direction){
 		setState(STANDING_RIGHT);
 		setAnimation(eSTAND_RIGHT);
@@ -202,6 +237,18 @@ void Enemy::update(int deltaTime)
 			}
 			else if (!map->collisionMoveLeft(new_pos, size)) {
 				position_col.x = new_pos.x;
+			}
+			break;
+		case SWORD_ATTACKING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				setState(SWORD_STANDING_LEFT);
+				//setAnimation(eSTAND_LEFT);
+			}
+			break;
+		case SWORD_ATTACKING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				setState(SWORD_STANDING_RIGHT);
+				//setAnimation(eSTAND_RIGHT);
 			}
 			break;
 		}

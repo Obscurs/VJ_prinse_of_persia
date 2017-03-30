@@ -2,6 +2,7 @@
 #include <GL/glut.h>
 #include <Windows.h>
 #include <MMSystem.h>
+#include <ctime>
 #include "Game.h"
 
 
@@ -85,6 +86,7 @@ static void idleCallback()
 
 int main(int argc, char **argv)
 {
+	std::srand(std::time(0));
 	// GLUT initialization
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
