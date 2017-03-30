@@ -12,7 +12,7 @@ void Game::init()
 	bPlay = true;
 	game_status = MAINMENU;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene.init();
+	scene.init(false);
 	
 	menu.init(scene.getProgram());
 	pause.init(scene.getProgram());
@@ -84,7 +84,7 @@ void Game::keyReleased(int key)
 		switch (game_status){
 		case PLAYING:
 			menu.first_update = true;
-			scene.init();
+			scene.init(true);
 			game_status = MAINMENU;
 			break;
 		}

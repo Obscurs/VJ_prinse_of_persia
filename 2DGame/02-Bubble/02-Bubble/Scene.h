@@ -24,7 +24,7 @@ public:
 	Scene();
 	~Scene();
 
-	void init();
+	void init(bool is_reset);
 	void update(int deltaTime);
 	void render();
 	ShaderProgram& getProgram();

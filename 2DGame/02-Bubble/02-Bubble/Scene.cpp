@@ -53,10 +53,10 @@ Scene::~Scene()
 }
 
 
-void Scene::init()
+void Scene::init(bool is_reset)
 {
 	first_update = true;
-	initShaders();
+	if(!is_reset)initShaders();
 	player = new Player();
 	map = TileMap::createTileMap("levels/level01test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	entities = EntityMap::createTileMap("levels/level01teste.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map,player);
@@ -128,7 +128,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	entities->render();
-	//enemy->render();
+
 	player->render();
 
 	texProgram.free();

@@ -132,6 +132,7 @@ bool Enemy::canSeePlayer(){
 }
 bool Enemy::playerClose(){
 	glm::vec2 p_center = glm::vec2((player->position_col.x + player->size.x / 2) , (player->position_col.y + player->size.y / 2));
+	if (!player->alive) return false;
 	if (p_center.y > position_col.y && p_center.y < position_col.y + size.y){
 		int my_center = (position_col.x + size.x / 2) ;
 		int dist = abs(p_center.x - my_center);
@@ -147,7 +148,17 @@ bool Enemy::playerDirection(){
 	return (p_center.x > my_center);
 }
 void Enemy::newDecision(){
-	if (canSeePlayer() && !playerClose()){
+	if (!player->alive){
+		if (direction){
+			setState(STANDING_RIGHT);
+			setAnimation(eSTAND_RIGHT);
+		}
+		else {
+			setState(STANDING_LEFT);
+			setAnimation(eSTAND_LEFT);
+		}
+	}
+	else if (canSeePlayer() && !playerClose()){
 		if (playerDirection()){
 			if (state != SWORD_STEPING_F_RIGHT)setAnimation(eWALK_RIGHT);
 			setState(SWORD_STEPING_F_RIGHT);
