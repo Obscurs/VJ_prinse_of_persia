@@ -38,6 +38,7 @@ void EntityMap::update(int deltaTime)
 		
 	}
 	for (int i = 0; i < enemies.size(); i++){
+		interactEntitiesWithActor(*enemies[i]);
 		enemies[i]->update(deltaTime);
 
 	}
