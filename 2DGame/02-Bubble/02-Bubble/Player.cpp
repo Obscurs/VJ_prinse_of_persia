@@ -921,13 +921,21 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case PRE_JUMPING_RIGHT:
-			if (sprite->getCurrentKeyframe() >= 8) {
+			if (right && sprite->getCurrentKeyframe() < 4) {
+				setState(PRE_JUMPING_RIGHT2);
+				setAnimation(PRE_JUMP_RIGHT2);
+			}
+			else if (sprite->getCurrentKeyframe() >= 8) {
 				setState(JUMP_STANDING_RIGHT);
 				setAnimation(JUMP_STAND_RIGHT);
 			}
 			break;
 		case PRE_JUMPING_LEFT:
-			if (sprite->getCurrentKeyframe() >= 8) {
+			if (left && sprite->getCurrentKeyframe() < 4) {
+				setState(PRE_JUMPING_LEFT2);
+				setAnimation(PRE_JUMP_LEFT2);
+			}
+			else if (sprite->getCurrentKeyframe() >= 8) {
 				setState(JUMP_STANDING_LEFT);
 				setAnimation(JUMP_STAND_LEFT);
 			}
