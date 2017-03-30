@@ -1,5 +1,5 @@
 #include "Enemy.h"
-
+#include <iostream>
 Enemy::Enemy()
 {
 }
@@ -8,8 +8,12 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int tp, Player *pl)
 {
+	eye_distance = 256;
+	close_distance = 32;
+	player = pl;
+	type = tp;
 	alive = true;
 	float stepX = 1.0f / 8.0f; //CHECK
 	float stepY = 1.0f / 8.0f;
@@ -85,20 +89,122 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	setAnimation(eSTAND_LEFT);
 	setState(STANDING_LEFT);
-
+	direction = 0;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	size = glm::vec2(float(19), float(42));
 	position_col = glm::vec2(float(posPlayer.x + 16), float(posPlayer.y + 16));
 	old_position_col = position_col;
 }
-
+bool Enemy::canSeePlayer(){
+	glm::vec2 p_center = glm::vec2((player->position_col.x + player->size.x / 2), (player->position_col.y + player->size.y / 2));
+	std::cout << p_center.y << " " << position_col.y << std::endl;
+	if (p_center.y > position_col.y && p_center.y < position_col.y + size.y){
+		int my_center = (position_col.x + size.x / 2);
+		int dist = abs(p_center.x - my_center);
+		if (dist < eye_distance){
+			if (playerDirection()){
+				for (int i = my_center; i < my_center+dist; i = i + 10){
+					if (map->collisionPoint(glm::ivec2(i, p_center.y))) {
+						return false;
+					}
+				}
+			}
+			else{
+				for (int i = my_center; i < my_center-dist; i = i - 10){
+					if (map->collisionPoint(glm::ivec2(i, p_center.y))) {
+						return false;
+					}
+				}
+			}
+			return true;
+			
+		}
+		else return false;
+	}
+	else{
+		return false;
+	}
+}
+bool Enemy::playerClose(){
+	glm::vec2 p_center = glm::vec2((player->position_col.x + player->size.x / 2) , (player->position_col.y + player->size.y / 2));
+	if (p_center.y > position_col.y && p_center.y < position_col.y + size.y){
+		int my_center = (position_col.x + size.x / 2) ;
+		int dist = abs(p_center.x - my_center);
+		return (dist < close_distance);
+	}
+	else{
+		return false;
+	}
+}
+bool Enemy::playerDirection(){
+	glm::vec2 p_center = glm::vec2((player->position_col.x + player->size.x) / 2, (player->position_col.y + player->size.y) / 2);
+	int my_center = (position_col.x + size.x) / 2;
+	return (p_center.x > my_center);
+}
+void Enemy::newDecision(){
+	if (canSeePlayer() && !playerClose()){
+		if (playerDirection()){
+			if (state != SWORD_STEPING_F_RIGHT)setAnimation(eWALK_RIGHT);
+			setState(SWORD_STEPING_F_RIGHT);
+			direction = 1;
+			
+		}
+		else{
+			if (state != SWORD_STEPING_F_LEFT)setAnimation(eWALK_LEFT);
+			setState(SWORD_STEPING_F_LEFT);
+			direction = 0;
+			
+		}
+	}
+	else if(direction){
+		setState(STANDING_RIGHT);
+		setAnimation(eSTAND_RIGHT);
+	}
+	else {
+		setState(STANDING_LEFT);
+		setAnimation(eSTAND_LEFT);
+	}
+	
+}
 void Enemy::update(int deltaTime)
 {
 	//deltaTime = 50;
 	if (alive) {
 		//...
+		old_position_col = position_col;
 		sprite->update(deltaTime);
+		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
+		glm::ivec2 new_pos;
+		newDecision();
+		switch (state) {
+		case STANDING_RIGHT:
+			break;
+		case STANDING_LEFT:
+			break;
 
+		case SWORD_STEPING_F_RIGHT:
+			new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
+			if (!map->collisionMoveDown(glm::ivec2(new_pos.x + 10, position_col.y + 5), size, &position_col.y))
+			{
+				setState(STANDING_RIGHT);
+				setAnimation(eSTAND_RIGHT);
+			}
+			else if (!map->collisionMoveRight(new_pos, size)) {
+				position_col.x = new_pos.x;
+			}
+			break;
+		case SWORD_STEPING_F_LEFT:
+			new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
+			if (!map->collisionMoveDown(glm::ivec2(new_pos.x - 10, position_col.y + 5), size, &position_col.y))
+			{
+				setState(STANDING_LEFT);
+				setAnimation(eSTAND_LEFT);
+			}
+			else if (!map->collisionMoveLeft(new_pos, size)) {
+				position_col.x = new_pos.x;
+			}
+			break;
+		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
 	}

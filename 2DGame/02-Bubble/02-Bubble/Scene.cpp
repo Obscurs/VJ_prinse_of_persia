@@ -57,19 +57,20 @@ void Scene::init()
 {
 	first_update = true;
 	initShaders();
+	player = new Player();
 	map = TileMap::createTileMap("levels/level01test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	entities = EntityMap::createTileMap("levels/level01teste.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	entities = EntityMap::createTileMap("levels/level01teste.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map,player);
 	background = TileMap::createTileMap("levels/level01testb.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	foreground = TileMap::createTileMap("levels/level01testf.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	player = new Player();
-	enemy = new Enemy();
+	
+	//enemy = new Enemy();
 	gui = new Gui();
 	player->init(glm::ivec2(SCREEN_X+16, SCREEN_Y+8), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
-	enemy->init(glm::ivec2(SCREEN_X + 16, SCREEN_Y + 8), texProgram);
-	enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
-	enemy->setTileMap(map);
+	//enemy->init(glm::ivec2(SCREEN_X + 16, SCREEN_Y + 8), texProgram, 0);
+	//enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
+	//enemy->setTileMap(map);
 	
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -92,7 +93,7 @@ void Scene::update(int deltaTime)
 	//if (totalPlayTime > 5000 ) mciSendString(TEXT("play scene_song"), NULL, 0, 0);
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	enemy->update(deltaTime);
+	//enemy->update(deltaTime);
 	player->down_key = true;
 	entities->update(deltaTime);
 	entities->interactEntitiesWithActor(*player);
@@ -127,7 +128,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	entities->render();
-	enemy->render();
+	//enemy->render();
 	player->render();
 
 	texProgram.free();

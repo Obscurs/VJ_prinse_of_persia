@@ -8,20 +8,20 @@
 using namespace std;
 
 
-EntityMap *EntityMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+EntityMap *EntityMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap, Player *pl)
 {
 	
-	EntityMap *map = new EntityMap(levelFile, minCoords, program);
+	EntityMap *map = new EntityMap(levelFile, minCoords, program, tileMap,pl);
 
 	return map;
 }
 
 
-EntityMap::EntityMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+EntityMap::EntityMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap, Player *pl)
 {
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);	//per a fer servir coordenades negatives i fer mirror
 	spritesheet.loadFromFile("images/entities.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	loadLevel(levelFile, minCoords, program);
+	loadLevel(levelFile, minCoords, program, tileMap,pl);
 	//prepareArrays(minCoords, program);
 }
 
@@ -37,12 +37,20 @@ void EntityMap::update(int deltaTime)
 		entities[i]->update(deltaTime);
 		
 	}
+	for (int i = 0; i < enemies.size(); i++){
+		enemies[i]->update(deltaTime);
+
+	}
 }
 void EntityMap::render() const
 {
 	for (int i = 0; i < entities.size(); i++){
 		entities[i]->render();
 	}
+	for (int i = 0; i < enemies.size(); i++){
+		enemies[i]->render();
+	}
+
 	
 }
 
@@ -65,7 +73,7 @@ void EntityMap::interactEntitiesWithActor(GameActor &actor){
 		}
 	}
 }
-bool EntityMap::loadLevel(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+bool EntityMap::loadLevel(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap, Player *pl)
 {
 
 	ifstream fin;
@@ -100,10 +108,17 @@ bool EntityMap::loadLevel(const string &levelFile, const glm::vec2 &minCoords, S
 		{
 			fin.get(tile);
 			//if (tile != ' ') map[j*mapSize.x + i].init(minCoords, program, tile - int('0'));
-			if (tile == '1' || tile == '2' || tile == '3' || tile == '4' || tile == '5' || tile == '6') {
+			if (tile != ' ' && tile != '0' && tile != '1' && tile != '2' && tile != '3') {
 				Entity *ent = new Entity();
-				ent->init(minCoords, glm::ivec2(i *tileSize, j * tileSize), program,spritesheet, tile - int('0'));
+				ent->init(minCoords, glm::ivec2(i *tileSize, j * tileSize), program, spritesheet, tile - int('a') + 1);
 				entities.push_back(ent);
+			}
+			else if (tile != ' ' && tile != '0'){
+				Enemy *en = new Enemy();
+				en->init(glm::ivec2(minCoords.x+16, minCoords.y+8), program, tile - int('0'),pl);
+				en->setPosition(glm::ivec2(i *tileSize, j * tileSize));
+				en->setTileMap(tileMap);
+				enemies.push_back(en);
 			}
 		}
 		fin.get(tile);

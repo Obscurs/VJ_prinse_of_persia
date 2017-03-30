@@ -5,6 +5,9 @@
 #include "Sprite.h"
 #include "ShaderProgram.h"
 #include "Entity.h"
+#include "Enemy.h"
+#include "TileMap.h"
+#include "Player.h"
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
@@ -17,9 +20,9 @@ class EntityMap
 
 public:
 	// Tile maps can only be created inside an OpenGL context
-	static EntityMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
+	static EntityMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap, Player *pl);
 
-	EntityMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
+	EntityMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap,  Player *pl);
 	~EntityMap();
 
 	void render() const;
@@ -29,7 +32,7 @@ public:
 	int getTileSize() const { return tileSize; }
 
 private:
-	bool loadLevel(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
+	bool loadLevel(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap, Player *pl);
 
 private:
 	GLint posLocation, texCoordLocation;
@@ -38,6 +41,7 @@ private:
 	glm::vec2 tileTexSize;
 	Texture spritesheet;
 	std::vector<Entity* > entities;
+	std::vector<Enemy* > enemies;
 	//std::vector<Entity> *map;
 
 };
