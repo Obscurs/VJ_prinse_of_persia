@@ -25,7 +25,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	max_health = 4;
 	bJumping = false;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);	//per a fer servir coordenades negatives i fer mirror
-	spritesheet.loadFromFile("images/Prince2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/Prince.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
 	
@@ -525,12 +525,27 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
 		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
 
-		sprite->setAnimationSpeed(DAMAGE_RIGHT, 8);
-		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(4 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(3 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 11 * stepY));
+		sprite->setAnimationSpeed(DAMAGE_RIGHT, 15);
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(0 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(1 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(3 * stepX, 16 * stepY));
+
+		sprite->setAnimationSpeed(DIE_RIGHT, 6);
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(0 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(1 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(2 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(3 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(4 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(4 * stepX, 17 * stepY)); //copy
+
+		sprite->setAnimationSpeed(DIE_LEFT, 6);
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-1 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-2 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-3 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-4 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-5 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-5 * stepX, 17 * stepY)); //copy
 		//END ANIMATIONS
 
 		setAnimation(FALL_RIGHT);
