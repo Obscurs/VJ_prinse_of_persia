@@ -1336,6 +1336,16 @@ void Player::update(int deltaTime)
 				setAnimation(SWORD_STAND_RIGHT);
 			}
 			break;
+		case DYING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				// static death
+			}
+			break;
+		case DYING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 5) {
+				// static death
+			}
+			break;
 			//end switch
 		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));

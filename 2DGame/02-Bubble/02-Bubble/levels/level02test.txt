@@ -1,0 +1,21 @@
+TILEMAP
+32 28 							-- Size of tile map in tiles
+32 64 -- Tile size & block size
+images/tiles2.png 	-- Tilesheet
+8 8 								-- Number of tiles in tilesheet
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+fa       ffe                  ff
+rb       rrb                  rr
+fffa      fe         fa   ffffff
+rrrb      rb         rb   rrrrrr
+fe                  fa      ffff
+rb                  rb      rrrr
+fe  ffffffffffffffffffffffa ffff
+rb  rrrrrrrrrrrrrrrrrrrrrrb rrrr
+fe                            ff
+rb                            rr
+ffffa a  aa  a              ffff
+rrrrb        b              rrrr
+fffe         fa  a   a      ffff
+rrrb         rb  b   b      rrrr
+ffffaaaaaaaaaffaaaaaafaaaaaaffff

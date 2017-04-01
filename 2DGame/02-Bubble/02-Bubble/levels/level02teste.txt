@@ -1,0 +1,32 @@
+TILEMAP
+32 28 							-- Size of tile map in tiles
+32 64							-- Tile size & block size
+images/entities.png 	-- Tilesheet
+4 4 								-- Number of tiles in tilesheet
+00000000000000000000000000000000
+00                            00
+00f                           00
+00                            00
+00                            00
+00             1           00 00
+00000e0   00      f 00  c  00 00
+00000000000000000000000000000000
+00                            00
+00                            00
+00                          e 00
+00                            00
+00                            00
+00   aaaaaaa      a           00
+0000f000000000000000000000000000
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+
+
