@@ -28,8 +28,31 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);	//per a fer servir coordenades negatives i fer mirror
 	spritesheet.loadFromFile("images/Prince.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMagFilter(GL_NEAREST);
+
+	fightTexture.loadFromFile("images/fight.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	fightTexture.setMagFilter(GL_NEAREST);
+
+
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
+	fightPos = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25f, 1), &fightTexture, &shaderProgram);
 	
+	fightPos->setNumberAnimations(4);
+
+	fightPos->setAnimationSpeed(0, 1);
+	fightPos->addKeyframe(0, glm::vec2(0 , 0));
+
+	fightPos->setAnimationSpeed(1, 1);
+	fightPos->addKeyframe(1, glm::vec2(0.25f, 0));
+
+	fightPos->setAnimationSpeed(2, 1);
+	fightPos->addKeyframe(2, glm::vec2(0.5f, 0));
+
+	fightPos->setAnimationSpeed(3, 1);
+	fightPos->addKeyframe(3, glm::vec2(0.75f, 0));
+
+	fightPos->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+
+	//PLAYER ANIMS
 	sprite->setNumberAnimations(ANIMATION_COUNT);
 	
 		sprite->setAnimationSpeed(STAND_LEFT, 8);
