@@ -49,6 +49,7 @@ void EntityMap::render() const
 		entities[i]->render();
 	}
 	for (int i = 0; i < enemies.size(); i++){
+		std::cout << enemies[i]->type << " " << std::endl;
 		enemies[i]->render();
 	}
 

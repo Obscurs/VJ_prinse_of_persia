@@ -20,10 +20,17 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	float stepX = 1.0f / 8.0f; //CHECK
 	float stepY = 1.0f / 8.0f;
 	tileMapDispl = tileMapPos;
-	health = 3;
-	max_health = 4;
+	if (type == 1){
+		health = 6;
+		max_health = 6;
+	}
+	else {
+		health = 3;
+		max_health = 4;
+	}
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);	//per a fer servir coordenades negatives i fer mirror
-	spritesheet.loadFromFile("images/Enemy.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (type == 1) spritesheet.loadFromFile("images/Enemy.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (type == 2) spritesheet.loadFromFile("images/Enemy2.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
 
