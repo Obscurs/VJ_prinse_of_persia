@@ -4,18 +4,18 @@ TILEMAP
 images/tiles2.png 	-- Tilesheet
 8 8 								-- Number of tiles in tilesheet
 00000000000000000000000000000000
-00        0t                  00
-00        00                  00
-00s       s0         i    i i 00
-000       00         j    j j 00
-t0u       km        i0      i000
-00        ln        j0      j000
+00         t                  00
+00                            00
+00s       s        i      i i 00
+000                j      j j 00
+t00               iii       i000
+00                jjj       j000
 0000i00s0000000s0000000t0000i000
 0000j00000000000000000000000j000
 00                            i0
 00                            j0
-00    i  i   i              i 00
-00           j              j 00
-00           i   i   i      i 00
-00           j   j   j      j 00
+00                          i 00
+00                          j 00
+00             i         iiii 00
+00             j         jjjj 00
 00000000000000000000000000000000
