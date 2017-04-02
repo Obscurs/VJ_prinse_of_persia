@@ -24,6 +24,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	tileMapDispl = tileMapPos;
 	health = 3;
 	max_health = 4;
+	figtPosition = 0;
 	bJumping = false;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);	//per a fer servir coordenades negatives i fer mirror
 	spritesheet.loadFromFile("images/Prince.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -34,7 +35,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
-	fightPos = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25f, 1), &fightTexture, &shaderProgram);
+
+	fightPos = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25f, 1), &fightTexture, &shaderProgram);
 	
 	fightPos->setNumberAnimations(4);
 
@@ -50,7 +52,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	fightPos->setAnimationSpeed(3, 1);
 	fightPos->addKeyframe(3, glm::vec2(0.75f, 0));
 
-	fightPos->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+	//fightPos->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
+	fightPos->changeAnimation(0);
 
 	//PLAYER ANIMS
 	sprite->setNumberAnimations(ANIMATION_COUNT);
@@ -62,10 +65,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
 		
 		sprite->setAnimationSpeed(RUN_LEFT, 15);
-		//sprite->addKeyframe(RUN_LEFT, glm::vec2(-1 *stepX, 0.f));
-		//sprite->addKeyframe(RUN_LEFT, glm::vec2(-1* stepX, stepY));
-		//sprite->addKeyframe(RUN_LEFT, glm::vec2(-2* stepX, stepY));
-		//sprite->addKeyframe(RUN_LEFT, glm::vec2(-3* stepX, stepY));
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-4* stepX, stepY));
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-5* stepX, stepY));
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-6* stepX, stepY));
@@ -79,9 +78,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(RUN_LEFT, glm::vec2(-14*stepX, stepY));
 
 		sprite->setAnimationSpeed(RUN_RIGHT, 15);
-		//sprite->addKeyframe(RUN_RIGHT, glm::vec2(0*stepX, stepY));
-		//sprite->addKeyframe(RUN_RIGHT, glm::vec2(1*stepX, stepY));
-		//sprite->addKeyframe(RUN_RIGHT, glm::vec2(2*stepX, stepY));
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(3*stepX, stepY));
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(4*stepX, stepY));
 		sprite->addKeyframe(RUN_RIGHT, glm::vec2(5*stepX, stepY));
@@ -594,6 +590,7 @@ void Player::update(int deltaTime)
 	if (alive){
 		old_position_col = position_col;
 		sprite->update(deltaTime);
+		fightPos->update(deltaTime);
 		input();
 		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
 		//std::cout << position_col.x << " " << position_col.y << std::endl;
@@ -1090,6 +1087,8 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORDING_OUT_RIGHT:
+			fightPos->changeAnimation(1);
+			figtPosition = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(SWORD_STANDING_RIGHT);
 				setAnimation(SWORD_STAND_RIGHT);
@@ -1118,6 +1117,8 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORDING_IN_RIGHT:
+			fightPos->changeAnimation(0);
+			figtPosition = 0;
 			if(sprite->getCurrentKeyframe() >= 5) {
 				setState(STANDING_RIGHT);
 				setAnimation(STAND_RIGHT);
@@ -1172,6 +1173,8 @@ void Player::update(int deltaTime)
 
 			/////////////////////////////////CUIDAOOOOO
 		case SWORDING_OUT_LEFT:
+			fightPos->changeAnimation(1);
+			figtPosition = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(SWORD_STANDING_LEFT);
 				setAnimation(SWORD_STAND_LEFT);
@@ -1200,6 +1203,8 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORDING_IN_LEFT:
+			fightPos->changeAnimation(0);
+			figtPosition = 0;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
@@ -1396,6 +1401,7 @@ void Player::update(int deltaTime)
 		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
+		fightPos->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x + 20), float(posPlayer.y + tileMapDispl.y - 0)));
 		//position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
 		//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << posPlayer.x + 64 << " " << posPlayer.y + 64 << std::endl;
 		//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;
@@ -1427,7 +1433,10 @@ void Player::damage(bool direction, int dmg){
 }
 void Player::render()
 {
-	if(alive)sprite->render();
+	if (alive) {
+		sprite->render();
+		fightPos->render();
+	}
 }
 
 void Player::setTileMap(TileMap *tileMap)
@@ -1465,6 +1474,29 @@ void Player::input() {
 		shift_released = true;
 	}
 	else shift_released = false;
+
+	//fight positions
+	if (figtPosition != 0) {
+		if (Game::instance().getKey(49)) {
+			fightPos->changeAnimation(1);
+			figtPosition = 1;
+		}
+		else if (Game::instance().getKey(50)) {
+			fightPos->changeAnimation(2);
+			figtPosition = 2;
+		}
+		else if (Game::instance().getKey(51)) {
+			fightPos->changeAnimation(3);
+			figtPosition = 3;
+		}
+	}
+
+	/*THE HACK
+	for (int i = 0; i < 128; i++) {
+		if (Game::instance().getKey(i)) {
+			cout << "KEY: " << i << endl;
+		}
+	}*/
 }
 
 void Player::setState(PlayerState newState) {

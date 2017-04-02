@@ -31,6 +31,7 @@ public:
 	Texture fightTexture;
 	virtual void drink();
 	int type;
+	int figtPosition;
 protected:
 	
 	
