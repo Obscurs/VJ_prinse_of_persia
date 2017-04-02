@@ -28,6 +28,7 @@ public:
 	PlayerState state;
 	Sprite *sprite;
 	virtual void drink();
+	int type;
 protected:
 	
 	

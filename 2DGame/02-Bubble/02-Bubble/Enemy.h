@@ -24,7 +24,7 @@ public:
 	void setAnimation(EnemyAnims newAnim);
 	void DIE();
 	glm::vec2 getPosition();
-	int type;
+	
 	int timer;
 	void damage(bool direction, int dmg);
 private:

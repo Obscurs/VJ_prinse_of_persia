@@ -21,13 +21,13 @@ public:
 	bool collides(glm::vec2 pos, glm::vec2 size);
 	bool action(GameActor &actor);
 	int type;
-	int actived;
-
+	bool actived;
+	Sprite *sprite;
 private:
 	bool sound_playing;
 	bool overlapping1D(glm::vec2 box1, glm::vec2 box2);
 	glm::ivec2 tileMapDispl, position, col_position, col_size;
-	Sprite *sprite;
+	
 
 };
 

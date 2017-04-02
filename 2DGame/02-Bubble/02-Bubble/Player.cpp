@@ -14,6 +14,7 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	type = 0;
 	shift_released = false;
 	shift_rel_soon = false;
 	is_up = false;
