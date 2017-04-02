@@ -95,6 +95,13 @@ void Game::keyReleased(int key)
 			break;
 		}
 	}
+	else if (key == 83 || key == 115){
+		switch (game_status){
+		case PLAYING:
+			scene.init(true, 2);
+			break;
+		}
+	}
 	else if ((key == 72 || key == 104) && game_status == MAINMENU){
 		menu.menu_status = 1;
 	}
