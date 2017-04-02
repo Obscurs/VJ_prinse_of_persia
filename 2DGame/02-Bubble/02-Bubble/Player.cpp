@@ -539,6 +539,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(DIE_RIGHT, glm::vec2(3 * stepX, 17 * stepY));
 		sprite->addKeyframe(DIE_RIGHT, glm::vec2(4 * stepX, 17 * stepY));
 		sprite->addKeyframe(DIE_RIGHT, glm::vec2(4 * stepX, 17 * stepY)); //copy
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(4 * stepX, 17 * stepY)); //copy
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(4 * stepX, 17 * stepY)); //copy
+		sprite->addKeyframe(DIE_RIGHT, glm::vec2(4 * stepX, 17 * stepY)); //copy
 
 		sprite->setAnimationSpeed(DIE_LEFT, 6);
 		sprite->addKeyframe(DIE_LEFT, glm::vec2(-1 * stepX, 17 * stepY));
@@ -546,6 +549,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(DIE_LEFT, glm::vec2(-3 * stepX, 17 * stepY));
 		sprite->addKeyframe(DIE_LEFT, glm::vec2(-4 * stepX, 17 * stepY));
 		sprite->addKeyframe(DIE_LEFT, glm::vec2(-5 * stepX, 17 * stepY));
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-5 * stepX, 17 * stepY)); //copy
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-5 * stepX, 17 * stepY)); //copy
+		sprite->addKeyframe(DIE_LEFT, glm::vec2(-5 * stepX, 17 * stepY)); //copy
 		sprite->addKeyframe(DIE_LEFT, glm::vec2(-5 * stepX, 17 * stepY)); //copy
 		//END ANIMATIONS
 
@@ -1318,9 +1324,16 @@ void Player::update(int deltaTime)
 			else if (sprite->getCurrentKeyframe() >= 3) {
 				position_col = glm::ivec2((position_col.x +5), position_col.y);
 				health = health - 1;
-				if (health <= 0) alive = false;
-				setState(SWORD_STANDING_LEFT);
-				setAnimation(SWORD_STAND_LEFT);
+				if (health <= 0) {
+					setState(DYING_LEFT);
+					setAnimation(DIE_LEFT);
+
+					//alive = false;
+				}
+				else {
+					setState(SWORD_STANDING_LEFT);
+					setAnimation(SWORD_STAND_LEFT);
+				}
 			}
 			break;
 		case DAMAGING_RIGHT:
@@ -1332,19 +1345,28 @@ void Player::update(int deltaTime)
 			else if (sprite->getCurrentKeyframe() >= 3) {
 				position_col = glm::ivec2(ceil(position_col.x - 5), position_col.y);
 				health = health - 1;
-				if (health <= 0) alive = false;
-				setState(SWORD_STANDING_RIGHT);
-				setAnimation(SWORD_STAND_RIGHT);
+				if (health <= 0) {
+					setState(DYING_RIGHT);
+					setAnimation(DIE_RIGHT);
+
+					//alive = false;
+				}
+				else {
+					setState(SWORD_STANDING_RIGHT);
+					setAnimation(SWORD_STAND_RIGHT);
+				}
 			}
 			break;
 		case DYING_RIGHT:
-			if (sprite->getCurrentKeyframe() >= 5) {
+			if (sprite->getCurrentKeyframe() >= 8) {
 				// static death
+				alive = false;
 			}
 			break;
 		case DYING_LEFT:
-			if (sprite->getCurrentKeyframe() >= 5) {
+			if (sprite->getCurrentKeyframe() >= 8) {
 				// static death
+				alive = false;
 			}
 			break;
 			//end switch
@@ -1359,12 +1381,24 @@ void Player::update(int deltaTime)
 void Player::damage(bool direction, int dmg){
 	
 	if (direction){
-		setState(DAMAGING_LEFT);
-		setAnimation(DAMAGE_LEFT);
+		if (health > 0) {
+			setState(DAMAGING_LEFT);
+			setAnimation(DAMAGE_LEFT);
+		}
+		else {
+			setState(DYING_LEFT);
+			setAnimation(DIE_LEFT);
+		}
 	}
 	else{
-		setState(DAMAGING_RIGHT);
-		setAnimation(DAMAGE_RIGHT);
+		if (health > 0) {
+			setState(DAMAGING_RIGHT);
+			setAnimation(DAMAGE_RIGHT);
+		}
+		else {
+			setState(DYING_RIGHT);
+			setAnimation(DIE_RIGHT);
+		}
 	}
 	
 }
