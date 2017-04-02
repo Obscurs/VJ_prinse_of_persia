@@ -893,7 +893,7 @@ void Player::update(int deltaTime)
 			break;
 		case FALLING_RIGHT:
 			//posPlayer.y += FALL_STEP;
-			position_col.y = position_col.y + deltaTime / magic*speed*2;
+			if (deltaTime / magic*speed * 2 < 32)position_col.y = position_col.y + deltaTime / magic*speed * 2;
 			if (map->collisionPoint(glm::ivec2(position_col.x+size.x, position_col.y))) {
 				position_col.x -= 1;
 			}
@@ -911,7 +911,7 @@ void Player::update(int deltaTime)
 			break;
 		case FALLING_LEFT:
 			//posPlayer.y += FALL_STEP;
-			position_col.y = position_col.y + deltaTime / magic*speed*2;
+			if (deltaTime / magic*speed * 2 < 32)position_col.y = position_col.y + deltaTime / magic*speed * 2;
 			if (map->collisionPoint(glm::ivec2(position_col.x, position_col.y))) {
 				position_col.x += 1;
 			}

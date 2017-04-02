@@ -30,7 +30,7 @@ public:
 	void free();
 	void interactEntitiesWithActor(GameActor &actor);
 	int getTileSize() const { return tileSize; }
-
+	bool winer(GameActor &actor);
 private:
 	bool loadLevel(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap, Player *pl);
 

@@ -12,7 +12,7 @@ void Game::init()
 	bPlay = true;
 	game_status = MAINMENU;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene.init(false);
+	scene.init(false, 1);
 	
 	menu.init(scene.getProgram());
 	pause.init(scene.getProgram());
@@ -22,7 +22,12 @@ bool Game::update(int deltaTime)
 {
 	switch (game_status){
 		case PLAYING:
-			scene.update(deltaTime);
+			if (scene.completed) {
+				//menu.first_update = true;
+				scene.init(true, 2);
+				//game_status = MAINMENU;
+			}
+			else scene.update(deltaTime);
 			break;
 		case MAINMENU:
 			menu.update(deltaTime);
@@ -84,7 +89,7 @@ void Game::keyReleased(int key)
 		switch (game_status){
 		case PLAYING:
 			menu.first_update = true;
-			scene.init(true);
+			scene.init(true, 1);
 			game_status = MAINMENU;
 			break;
 		}

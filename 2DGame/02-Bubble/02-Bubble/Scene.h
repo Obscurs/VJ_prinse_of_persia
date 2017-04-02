@@ -24,10 +24,12 @@ public:
 	Scene();
 	~Scene();
 
-	void init(bool is_reset);
+	void init(bool is_reset, int lvl);
 	void update(int deltaTime);
 	void render();
 	ShaderProgram& getProgram();
+	bool completed;
+	int level;
 private:
 	void initShaders();
 

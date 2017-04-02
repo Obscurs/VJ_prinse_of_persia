@@ -53,15 +53,26 @@ Scene::~Scene()
 }
 
 
-void Scene::init(bool is_reset)
+void Scene::init(bool is_reset, int lvl)
 {
+	completed = false;
 	first_update = true;
 	if(!is_reset)initShaders();
 	player = new Player();
-	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	entities = EntityMap::createTileMap("levels/level02e.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map,player);
-	background = TileMap::createTileMap("levels/level02b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	foreground = TileMap::createTileMap("levels/level02f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	level = lvl;
+	if (level == 1){
+		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		entities = EntityMap::createTileMap("levels/level01e.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+		background = TileMap::createTileMap("levels/level01b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		foreground = TileMap::createTileMap("levels/level01f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
+	else if (level == 2){
+		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		entities = EntityMap::createTileMap("levels/level02e.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+		background = TileMap::createTileMap("levels/level02b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		foreground = TileMap::createTileMap("levels/level02f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
+	
 	
 	//enemy = new Enemy();
 	gui = new Gui();
@@ -97,8 +108,13 @@ void Scene::update(int deltaTime)
 	player->down_key = true;
 	entities->update(deltaTime);
 	entities->interactEntitiesWithActor(*player);
+	if (entities->winer(*player)) {
+		
+		completed = true;
+	}
 	int x = player->getPosition().x + 16;
 	int y = player->getPosition().y + 16;
+	
 	int chunk_x = x / (CHUNK_X_SIZE);
 	int chunk_y = y / (CHUNK_Y_SIZE);
 	x = chunk_x*(CHUNK_X_SIZE);

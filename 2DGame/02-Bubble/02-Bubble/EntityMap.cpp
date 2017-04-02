@@ -75,6 +75,18 @@ void EntityMap::interactEntitiesWithActor(GameActor &actor){
 		}
 	}
 }
+bool EntityMap::winer(GameActor &actor){
+	if (actor.alive){
+		glm::vec2 actorPos = actor.position_col;
+		glm::vec2 actorSize = actor.size;
+		for (int i = 0; i < entities.size(); i++){
+			if (entities[i]->type == 8 && entities[i]->collides(actorPos, actorSize)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
 bool EntityMap::loadLevel(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, TileMap *tileMap, Player *pl)
 {
 
