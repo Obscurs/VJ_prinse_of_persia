@@ -345,7 +345,7 @@ void Enemy::update(int deltaTime)
 					damage(1, 1);
 				}
 			}
-			else if (player->state == SWORD_ATTACKING_RIGHT && direction && player->sprite->getCurrentKeyframe() >= 6){
+			else if (player->state == SWORD_ATTACKING_LEFT && direction && player->sprite->getCurrentKeyframe() >= 6){
 				if (!(state == PARRYING_RIGHT)){
 					damage(0, 1);
 				}
