@@ -25,6 +25,7 @@ bool Game::update(int deltaTime)
 			if (scene.completed) {
 				//menu.first_update = true;
 				scene.init(true, 2);
+
 				//game_status = MAINMENU;
 			}
 			else scene.update(deltaTime);

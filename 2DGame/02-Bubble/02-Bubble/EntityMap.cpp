@@ -135,6 +135,7 @@ bool EntityMap::loadLevel(const string &levelFile, const glm::vec2 &minCoords, S
 				enemies.push_back(en);
 			}
 		}
+
 		fin.get(tile);
 #ifndef _WIN32
 		fin.get(tile);

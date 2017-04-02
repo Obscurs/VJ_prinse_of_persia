@@ -13,6 +13,7 @@ class Entity
 {
 
 public:
+
 	Entity();
 	~Entity();
 	void init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &shader, Texture &spritesheet , int tp);

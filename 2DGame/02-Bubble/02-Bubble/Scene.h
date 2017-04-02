@@ -30,6 +30,7 @@ public:
 	ShaderProgram& getProgram();
 	bool completed;
 	int level;
+
 private:
 	void initShaders();
 

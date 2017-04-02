@@ -128,6 +128,7 @@ void Scene::render()
 {
 	glm::mat4 modelview;
 	
+
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);

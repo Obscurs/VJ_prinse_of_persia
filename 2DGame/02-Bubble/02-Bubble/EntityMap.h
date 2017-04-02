@@ -44,6 +44,7 @@ private:
 	std::vector<Enemy* > enemies;
 	//std::vector<Entity> *map;
 
+
 };
 
 
