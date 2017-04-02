@@ -30,11 +30,11 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.loadFromFile("images/Prince.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMagFilter(GL_NEAREST);
 
+	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
+
+	//fight position
 	fightTexture.loadFromFile("images/fight.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	fightTexture.setMagFilter(GL_NEAREST);
-
-
-	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
 
 	fightPos = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25f, 1), &fightTexture, &shaderProgram);
 	
@@ -52,7 +52,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	fightPos->setAnimationSpeed(3, 1);
 	fightPos->addKeyframe(3, glm::vec2(0.75f, 0));
 
-	//fightPos->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y - 32)));
 	fightPos->changeAnimation(0);
 
 	//PLAYER ANIMS

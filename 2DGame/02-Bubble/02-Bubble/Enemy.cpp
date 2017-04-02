@@ -15,6 +15,7 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	close_distance = 32;
 	player = pl;
 	type = tp;
+	figtPosition = 0;
 	alive = true;
 	timer = 0;
 	float stepX = 1.0f / 8.0f; //CHECK
@@ -34,6 +35,28 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(stepX, stepY), &spritesheet, &shaderProgram);
 
+	fightTexture.loadFromFile("images/fight.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	fightTexture.setMagFilter(GL_NEAREST);
+
+	fightPos = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25f, 1), &fightTexture, &shaderProgram);
+
+	fightPos->setNumberAnimations(4);
+
+	fightPos->setAnimationSpeed(0, 1);
+	fightPos->addKeyframe(0, glm::vec2(0, 0));
+
+	fightPos->setAnimationSpeed(1, 1);
+	fightPos->addKeyframe(1, glm::vec2(0.25f, 0));
+
+	fightPos->setAnimationSpeed(2, 1);
+	fightPos->addKeyframe(2, glm::vec2(0.5f, 0));
+
+	fightPos->setAnimationSpeed(3, 1);
+	fightPos->addKeyframe(3, glm::vec2(0.75f, 0));
+
+	fightPos->changeAnimation(1);
+
+	//enemy animations
 	sprite->setNumberAnimations(eANIMATION_COUNT);
 
 	sprite->setAnimationSpeed(eSTAND_RIGHT, 1);
@@ -94,19 +117,27 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-4 * stepX, 2 * stepY));
 	sprite->addKeyframe(eATACK_LEFT, glm::vec2(-4 * stepX, 2 * stepY));
 
-	sprite->setAnimationSpeed(eDIE_RIGHT, 7);
+	sprite->setAnimationSpeed(eDIE_RIGHT, 6);
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(2 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(3 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(4 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(5 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY));
+	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
 
-	sprite->setAnimationSpeed(eDIE_LEFT, 7);
+	sprite->setAnimationSpeed(eDIE_LEFT, 6);
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-3 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-4 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-5 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-6 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY));
+	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
 
 	sprite->setAnimationSpeed(eDAMAGE_RIGHT, 6);
 	sprite->addKeyframe(eDAMAGE_RIGHT, glm::vec2(0 * stepX, 4 * stepY));
@@ -302,6 +333,7 @@ void Enemy::update(int deltaTime)
 	if (alive) {
 		old_position_col = position_col;
 		sprite->update(deltaTime);
+		fightPos->update(deltaTime);
 		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
 		glm::ivec2 new_pos;
 		newDecision();
@@ -380,29 +412,53 @@ void Enemy::update(int deltaTime)
 		case DAMAGING_LEFT:
 			if (sprite->getCurrentKeyframe() >= 1) {
 				health = health - 1;
-				if (health <= 0) alive = false;
-				setState(STANDING_LEFT);
-				setAnimation(eSTAND_LEFT);
+				if (health <= 0) {
+					setState(DYING_LEFT);
+					setAnimation(eDIE_LEFT);
+				}
+				else {
+					setState(STANDING_LEFT);
+					setAnimation(eSTAND_LEFT);
+				}
 			}
 			break;
 		case DAMAGING_RIGHT:
 			if (sprite->getCurrentKeyframe() >= 1) {
 				health = health - 1;
-				if (health <= 0) alive = false;
-				setState(STANDING_RIGHT);
-				setAnimation(eSTAND_RIGHT);
+				if (health <= 0) {
+					setState(DYING_RIGHT);
+					setAnimation(eDIE_RIGHT);
+				}
+				else {
+					setState(STANDING_RIGHT);
+					setAnimation(eSTAND_RIGHT);
+				}
+			}
+			break;
+		case DYING_RIGHT:
+			if (sprite->getCurrentKeyframe() >= 8) {
+				alive = false;
+			}
+			break;
+		case DYING_LEFT:
+			if (sprite->getCurrentKeyframe() >= 8) {
+				alive = false;
 			}
 			break;
 		}
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
+		fightPos->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x + 20), float(posPlayer.y + tileMapDispl.y - 0)));
 	}
 }
 
 
 void Enemy::render()
 {
-	if (alive)sprite->render();
+	if (alive) {
+		sprite->render();
+		fightPos->render();
+	}
 }
 
 void Enemy::setTileMap(TileMap *tileMap)
