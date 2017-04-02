@@ -16,7 +16,7 @@ images/entities.png 	-- Tilesheet
 00                          e 00
 00                            00
 00                            00
-00   aaaaaaa      a       h   00
+00   aaaaaaa      a  gb   h   00
 0000f000000000000000000000000000
                                     
                                     

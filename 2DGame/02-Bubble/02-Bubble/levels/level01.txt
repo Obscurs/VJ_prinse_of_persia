@@ -12,10 +12,10 @@ fe                  fa      ffff
 rb                  rb      rrrr
 fe  ffffffffffffffffffffffa ffff
 rb  rrrrrrrrrrrrrrrrrrrrrrb rrrr
-fe                            ff
-rb                            rr
-ffffa a  aa  a              ffff
-rrrrb        b              rrrr
-fffe         fa  a   a      ffff
-rrrb         rb  b   b      rrrr
-ffffaaaaaaaaaffaaaaaafaaaaaaffff
+fe                   fe       ff
+rb                   rb       rr
+ffffa a  aa  a       fe     ffff
+rrrrb        b       rb     rrrr
+fffe         fa  a          ffff
+rrrb         rb  b          rrrr
+ffffaaaaaaaaaffaaaaaaaaaaaaaffff
