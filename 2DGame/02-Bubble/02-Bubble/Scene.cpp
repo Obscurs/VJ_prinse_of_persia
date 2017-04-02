@@ -58,10 +58,10 @@ void Scene::init(bool is_reset)
 	first_update = true;
 	if(!is_reset)initShaders();
 	player = new Player();
-	map = TileMap::createTileMap("levels/level02test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	entities = EntityMap::createTileMap("levels/level02teste.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map,player);
-	background = TileMap::createTileMap("levels/level02testb.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	foreground = TileMap::createTileMap("levels/level02testf.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	entities = EntityMap::createTileMap("levels/level02e.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map,player);
+	background = TileMap::createTileMap("levels/level02b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	foreground = TileMap::createTileMap("levels/level02f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	
 	//enemy = new Enemy();
 	gui = new Gui();

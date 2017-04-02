@@ -27,6 +27,8 @@ public:
 	bool alive;
 	PlayerState state;
 	Sprite *sprite;
+	Sprite *fightPos;
+	Texture fightTexture;
 	virtual void drink();
 	int type;
 protected:
