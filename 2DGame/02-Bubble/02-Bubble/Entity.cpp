@@ -186,7 +186,7 @@ void Entity::render()
 	sprite->render();
 }
 bool Entity::action(GameActor &actor){
-	if (actor.alive || type == 7){
+	if (actor.alive){
 		//spikes
 		if (type == 1){
 			actived = true;
@@ -242,7 +242,6 @@ bool Entity::action(GameActor &actor){
 				actor.health = 0;
 				actor.alive = false;
 				
-				actived = false;
 			}
 
 
