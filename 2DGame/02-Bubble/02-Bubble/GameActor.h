@@ -32,6 +32,8 @@ public:
 	virtual void drink();
 	int type;
 	int figtPosition;
+	bool direction;
+	virtual void DIE();
 protected:
 	
 	

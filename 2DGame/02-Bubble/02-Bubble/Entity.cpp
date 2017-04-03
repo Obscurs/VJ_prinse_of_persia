@@ -156,7 +156,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		position = glm::vec2(position.x, position.y);
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x, position.y);
-		col_size = glm::vec2(16, 64);
+		col_size = glm::vec2(25, 64);
 	}
 	else if (type == 8){
 		sprite->setNumberAnimations(1);
@@ -196,6 +196,7 @@ void Entity::render()
 	
 	sprite->render();
 }
+
 bool Entity::action(GameActor &actor){
 	if (actor.alive){
 		//spikes
@@ -208,6 +209,7 @@ bool Entity::action(GameActor &actor){
 			if (sprite->getCurrentKeyframe() >= 4){
 				actor.health = 0;
 				actor.alive = false;
+				actor.DIE();
 				if (actor.type == 0)sprite->changeAnimation(ANIM2);
 				else if (actor.type == 1) sprite->changeAnimation(ANIM3);
 				else if (actor.type == 2) sprite->changeAnimation(ANIM4);
@@ -219,7 +221,10 @@ bool Entity::action(GameActor &actor){
 		else if (type == 2){
 			if (actor.health > 0 && sprite->getCurrentKeyframe() < 8){
 				actor.health = 0;
-				actor.alive = false;
+				if (actor.health <= 0 && actor.state != DYING_LEFT && actor.state != DYING_RIGHT) {
+					actor.DIE();
+				}
+				//actor.alive = false;
 			}
 		}//potion1
 		else if (type == 3){
@@ -240,18 +245,27 @@ bool Entity::action(GameActor &actor){
 		else if (type == 5){
 			if (actor.state == DOWNING_LEFT || actor.state == DOWNING_RIGHT){
 				actor.drink();
+				
 				if (actor.health > 0) actor.health--;
+				if (actor.health <= 0 && actor.state != DYING_LEFT && actor.state != DYING_RIGHT) {
+					actor.DIE();
+				}
+				else{
+					PlaySound(TEXT("sounds/pain2"), NULL, SND_ASYNC);
+				}
 				return true;
 			}
 		} else if (type == 7){
 			actived = true;
 			if (!sound_playing && sprite->getCurrentKeyframe() >= 1){
-				PlaySound(TEXT("sounds/spike"), NULL, SND_ASYNC);
+				PlaySound(TEXT("sounds/press"), NULL, SND_ASYNC);
 				sound_playing = true;
 			}
 			if (sprite->getCurrentKeyframe() >= 4){
 				actor.health = 0;
-				actor.alive = false;
+				if (actor.health <= 0 && actor.state != DYING_LEFT && actor.state != DYING_RIGHT) {
+					actor.DIE();
+				}
 				
 			}
 

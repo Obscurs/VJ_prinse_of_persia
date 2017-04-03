@@ -34,7 +34,7 @@ private:
 	bool canSeePlayer();
 	bool playerClose();
 	bool playerDirection();
-	bool direction;
+	
 	void newDecision();
 	int old_frame;
 	glm::ivec2 tileMapDispl, posPlayer, posStartAnim;

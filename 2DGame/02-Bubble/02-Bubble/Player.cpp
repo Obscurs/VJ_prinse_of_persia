@@ -5,7 +5,8 @@
 #include "Player.h"
 #include "Game.h"
 #include <math.h>  
-
+#include <windows.h>
+#include <MMSystem.h>
 #define JUMP_ANGLE_STEP 5
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
@@ -14,6 +15,7 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	direction = 0;
 	type = 0;
 	shift_released = false;
 	shift_rel_soon = false;
@@ -595,6 +597,7 @@ void Player::update(int deltaTime)
 		//std::cout << position_col.x << " " << position_col.y << std::endl;
 		switch (state) {
 		case STANDING_RIGHT:
+			direction = 1;
 			is_up = false;
 			if (map->collisionPoint(glm::ivec2(position_col.x+size.x, position_col.y))) {
 				position_col.x -= 1;
@@ -636,6 +639,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case STANDING_LEFT:
+			direction = 0;
 			is_up = false;
 			if (map->collisionPoint(glm::ivec2(position_col.x, position_col.y))) {
 				position_col.x += 1;
@@ -677,6 +681,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case RUNING_LEFT:
+			direction = 0;
 			if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
 				setState(JUMPING_LEFT);
 				setAnimation(JUMP_RUN_LEFT);
@@ -715,6 +720,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case RUNING_RIGHT:
+			direction = 1;
 			if (up && position_col.x % 32 == 0 && position_col != posStartAnim) {
 				setState(JUMPING_RIGHT);
 				setAnimation(JUMP_RUN_RIGHT);
@@ -754,6 +760,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case WALKING_RIGHT:
+			direction = 1;
 			is_up = false;
 			if (position_col.x % 32 == 0 && position_col != posStartAnim && !left) {
 				setAnimation(STAND_RIGHT);
@@ -783,6 +790,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case WALKING_LEFT:
+			direction = 0;
 			is_up = false;
 			if (position_col.x % 32 == 0 && position_col != posStartAnim && !right) {
 				setAnimation(STAND_LEFT);
@@ -812,6 +820,7 @@ void Player::update(int deltaTime)
 			break;
 
 		case JUMPING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 10){
 				setState(STANDING_RIGHT);
 				setAnimation(STAND_RIGHT);
@@ -834,6 +843,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case JUMPING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 10) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
@@ -855,6 +865,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case TURNING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(STANDING_RIGHT);
 				setAnimation(STAND_RIGHT);
@@ -864,6 +875,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case TURNING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
@@ -873,6 +885,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case STOPING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 6) {
 				setState(STANDING_RIGHT);
 				setAnimation(STAND_RIGHT);
@@ -882,6 +895,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case STOPING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 6) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
@@ -891,6 +905,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case FALLING_RIGHT:
+			direction = 1;
 			//posPlayer.y += FALL_STEP;
 			if (deltaTime / magic*speed * 2 < 32)position_col.y = position_col.y + deltaTime / magic*speed * 2;
 			if (map->collisionPoint(glm::ivec2(position_col.x+size.x, position_col.y))) {
@@ -909,6 +924,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case FALLING_LEFT:
+			direction = 0;
 			//posPlayer.y += FALL_STEP;
 			if (deltaTime / magic*speed * 2 < 32)position_col.y = position_col.y + deltaTime / magic*speed * 2;
 			if (map->collisionPoint(glm::ivec2(position_col.x, position_col.y))) {
@@ -926,18 +942,21 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case DOWNING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(STANDING_RIGHT);
 				setAnimation(STAND_RIGHT);
 			}
 			break;
 		case DOWNING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
 			}
 			break;
 		case JUMP_STANDING_RIGHT:
+			direction = 1;
 			jumpAngle += JUMP_ANGLE_STEP*deltaTime / magic;
 			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90) {
@@ -951,6 +970,7 @@ void Player::update(int deltaTime)
 			
 			break;
 		case JUMP_STANDING_LEFT:
+			direction = 0;
 			jumpAngle += JUMP_ANGLE_STEP*deltaTime / magic;
 			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90) {
@@ -964,18 +984,21 @@ void Player::update(int deltaTime)
 			
 			break;
 		case TURN_RUNING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(RUNING_LEFT);
 				setAnimation(RUN_LEFT);
 			}
 			break;
 		case TURN_RUNING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(RUNING_RIGHT);
 				setAnimation(RUN_RIGHT);
 			}
 			break;
 		case PRE_JUMPING_RIGHT:
+			direction = 1;
 			if (right && sprite->getCurrentKeyframe() < 4) {
 				setState(PRE_JUMPING_RIGHT2);
 				setAnimation(PRE_JUMP_RIGHT2);
@@ -986,6 +1009,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case PRE_JUMPING_LEFT:
+			direction = 0;
 			if (left && sprite->getCurrentKeyframe() < 4) {
 				setState(PRE_JUMPING_LEFT2);
 				setAnimation(PRE_JUMP_LEFT2);
@@ -996,6 +1020,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case PRE_RUNING_RIGHT:
+			direction = 1;
 			if (up) {
 				setState(PRE_JUMPING_RIGHT2);
 				setAnimation(PRE_JUMP_RIGHT2);
@@ -1006,6 +1031,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case PRE_RUNING_LEFT:
+			direction = 0;
 			if (up) {
 				setState(PRE_JUMPING_LEFT2);
 				setAnimation(PRE_JUMP_LEFT2);
@@ -1016,6 +1042,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case GRABING_RIGHT:
+			direction = 1;
 			if (!shift) {
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
@@ -1027,6 +1054,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case GRABING_LEFT:
+			direction = 0;
 			if (!shift) {
 				setState(FALLING_LEFT);
 				setAnimation(FALL_LEFT);
@@ -1038,6 +1066,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case CLIMBING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 12){
 				setState(WALKING_LEFT);
 				setAnimation(WALK_LEFT);
@@ -1050,6 +1079,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case CLIMBING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 12){
 				setState(WALKING_RIGHT);
 				setAnimation(WALK_RIGHT);
@@ -1062,6 +1092,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case CLIMBING_LEFT_DOWN:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 11){
 				setState(GRABING_LEFT);
 				setAnimation(GRAB_LEFT);
@@ -1074,6 +1105,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case CLIMBING_RIGHT_DOWN:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 11){
 				setState(GRABING_RIGHT);
 				setAnimation(GRAB_RIGHT);
@@ -1086,6 +1118,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORDING_OUT_RIGHT:
+			direction = 1;
 			fightPos->changeAnimation(1);
 			figtPosition = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
@@ -1094,6 +1127,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORD_STANDING_RIGHT:
+			direction = 1;
 			if (shift_released) {
 				setState(SWORD_ATTACKING_RIGHT);
 				setAnimation(SWORD_ATTACK_RIGHT);
@@ -1116,6 +1150,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORDING_IN_RIGHT:
+			direction = 1;
 			fightPos->changeAnimation(0);
 			figtPosition = 0;
 			if(sprite->getCurrentKeyframe() >= 5) {
@@ -1124,18 +1159,21 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORD_ATTACKING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 8) {
 				setState(SWORD_STANDING_RIGHT);
 				setAnimation(SWORD_STAND_RIGHT);
 			}
 			break;
 		case PARRYING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 6) {
 				setState(SWORD_STANDING_RIGHT);
 				setAnimation(SWORD_STAND_RIGHT);
 			}
 			break;
 		case SWORD_STEPING_F_RIGHT:
+			direction = 1;
 			if (!right) {
 				setState(SWORD_STANDING_RIGHT);
 				setAnimation(SWORD_STAND_RIGHT);
@@ -1153,6 +1191,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORD_STEPING_B_RIGHT:
+			direction = 1;
 			if (!left) {
 				setState(SWORD_STANDING_RIGHT);
 				setAnimation(SWORD_STAND_RIGHT);
@@ -1172,6 +1211,7 @@ void Player::update(int deltaTime)
 
 			/////////////////////////////////CUIDAOOOOO
 		case SWORDING_OUT_LEFT:
+			direction = 0;
 			fightPos->changeAnimation(1);
 			figtPosition = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
@@ -1180,6 +1220,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORD_STANDING_LEFT:
+			direction = 0;
 			if (shift) {
 				setState(SWORD_ATTACKING_LEFT);
 				setAnimation(SWORD_ATTACK_LEFT);
@@ -1202,6 +1243,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORDING_IN_LEFT:
+			direction = 0;
 			fightPos->changeAnimation(0);
 			figtPosition = 0;
 			if (sprite->getCurrentKeyframe() >= 5) {
@@ -1210,18 +1252,21 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORD_ATTACKING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 8) {
 				setState(SWORD_STANDING_LEFT);
 				setAnimation(SWORD_STAND_LEFT);
 			}
 			break;
 		case PARRYING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 6) {
 				setState(SWORD_STANDING_LEFT);
 				setAnimation(SWORD_STAND_LEFT);
 			}
 			break;
 		case SWORD_STEPING_F_LEFT:
+			direction = 0;
 			if (!left) {
 				setState(SWORD_STANDING_LEFT);
 				setAnimation(SWORD_STAND_LEFT);
@@ -1239,6 +1284,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case SWORD_STEPING_B_LEFT:
+			direction = 0;
 			if (!right) {
 				setState(SWORD_STANDING_LEFT);
 				setAnimation(SWORD_STAND_LEFT);
@@ -1256,30 +1302,35 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case DRINKING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(STANDING_RIGHT);
 				setAnimation(STAND_RIGHT);
 			}
 			break;
 		case DRINKING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 11) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
 			}
 			break;
 		case PRE_JUMPING_RIGHT2:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(JUMPING_RIGHT2);
 				setAnimation(JUMP_RIGHT2);
 			}
 			break;
 		case PRE_JUMPING_LEFT2:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(JUMPING_LEFT2);
 				setAnimation(JUMP_LEFT2);
 			}
 			break;
 		case JUMPING_RIGHT2:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 4) {
 				setState(POST_JUMPING_RIGHT2);
 				setAnimation(POST_JUMP_RIGHT2);
@@ -1302,6 +1353,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case JUMPING_LEFT2:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 4) {
 				setState(POST_JUMPING_LEFT2);
 				setAnimation(POST_JUMP_LEFT2);
@@ -1323,6 +1375,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case POST_JUMPING_RIGHT2:
+			direction = 1;
 			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y)){
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
@@ -1333,6 +1386,7 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case POST_JUMPING_LEFT2:
+			direction = 0;
 			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y)){
 				setState(FALLING_LEFT);
 				setAnimation(FALL_LEFT);
@@ -1343,54 +1397,57 @@ void Player::update(int deltaTime)
 			}
 			break;
 		case DAMAGING_LEFT:
-			
+			direction = 0;
 			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y)){
 				setState(FALLING_LEFT);
 				setAnimation(FALL_LEFT);
 			}
 			else if (sprite->getCurrentKeyframe() >= 3) {
-				position_col = glm::ivec2((position_col.x +5), position_col.y);
+				//position_col = glm::ivec2((position_col.x +5), position_col.y);
 				health = health - 1;
-				if (health <= 0) {
+				if (health <= 0 && state != DYING_LEFT && state != DYING_RIGHT) {
 					setState(DYING_LEFT);
 					setAnimation(DIE_LEFT);
 
 					//alive = false;
 				}
-				else {
+				else if (health > 0){
 					setState(SWORD_STANDING_LEFT);
 					setAnimation(SWORD_STAND_LEFT);
 				}
 			}
 			break;
 		case DAMAGING_RIGHT:
-			
+			direction = 1;
 			if (!map->collisionMoveDown(glm::ivec2(position_col.x, position_col.y + 5), size, &position_col.y)){
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
 			}
 			else if (sprite->getCurrentKeyframe() >= 3) {
-				position_col = glm::ivec2(ceil(position_col.x - 5), position_col.y);
+				//position_col = glm::ivec2(ceil(position_col.x - 5), position_col.y);
 				health = health - 1;
-				if (health <= 0) {
+				if (health <= 0 && state != DYING_LEFT && state != DYING_RIGHT) {
 					setState(DYING_RIGHT);
 					setAnimation(DIE_RIGHT);
 
 					//alive = false;
 				}
-				else {
+				else if (health > 0){
 					setState(SWORD_STANDING_RIGHT);
 					setAnimation(SWORD_STAND_RIGHT);
 				}
 			}
 			break;
 		case DYING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 8) {
 				// static death
+				
 				alive = false;
 			}
 			break;
 		case DYING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 8) {
 				// static death
 				alive = false;
@@ -1510,7 +1567,15 @@ void Player::setAnimation(PlayerAnims newAnim) {
 }
 
 void Player::DIE() {
-	//TODO
+	PlaySound(TEXT("sounds/die2"), NULL, SND_ASYNC);
+	if (direction){
+		setState(DYING_RIGHT);
+		setAnimation(DIE_RIGHT);
+	}
+	else {
+		setState(DYING_LEFT);
+		setAnimation(DIE_LEFT);
+	}
 }
 
 void Player::drink() {

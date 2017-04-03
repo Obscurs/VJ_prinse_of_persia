@@ -1,5 +1,7 @@
 #include "Enemy.h"
 #include <iostream>
+#include <windows.h>
+#include <MMSystem.h>
 Enemy::Enemy()
 {
 }
@@ -127,6 +129,8 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
 	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_RIGHT, glm::vec2(6 * stepX, 4 * stepY)); //copy
 
 	sprite->setAnimationSpeed(eDIE_LEFT, 6);
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-3 * stepX, 4 * stepY));
@@ -134,6 +138,8 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-5 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-6 * stepX, 4 * stepY));
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY));
+	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
+	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
 	sprite->addKeyframe(eDIE_LEFT, glm::vec2(-7 * stepX, 4 * stepY)); //copy
@@ -336,28 +342,40 @@ void Enemy::update(int deltaTime)
 		fightPos->update(deltaTime);
 		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
 		glm::ivec2 new_pos;
-		newDecision();
+		if (state != DYING_LEFT && state != DYING_RIGHT)newDecision();
 
-		if (playerClose()){
+		if (playerClose() && state != DYING_LEFT && state != DYING_RIGHT){
 			
 			if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() >= 6){
+				
 				if (!(state == PARRYING_LEFT)){
+					PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
 					damage(1, 1);
+				}
+				else {
+					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
 				}
 			}
 			else if (player->state == SWORD_ATTACKING_LEFT && direction && player->sprite->getCurrentKeyframe() >= 6){
 				if (!(state == PARRYING_RIGHT)){
+					PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
 					damage(0, 1);
+				}
+				else {
+					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
 				}
 			}
 		}
 		switch (state) {
 		case STANDING_RIGHT:
+			direction = 1;
 			break;
 		case STANDING_LEFT:
+			direction = 0;
 			break;
 
 		case SWORD_STEPING_F_RIGHT:
+			direction = 1;
 			new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
 			if (!map->collisionMoveDown(glm::ivec2(new_pos.x + 10, position_col.y + 5), size, &position_col.y))
 			{
@@ -369,6 +387,7 @@ void Enemy::update(int deltaTime)
 			}
 			break;
 		case SWORD_STEPING_F_LEFT:
+			direction = 0;
 			new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
 			if (!map->collisionMoveDown(glm::ivec2(new_pos.x - 10, position_col.y + 5), size, &position_col.y))
 			{
@@ -380,67 +399,83 @@ void Enemy::update(int deltaTime)
 			}
 			break;
 		case SWORD_ATTACKING_LEFT:
-			if (sprite->getCurrentKeyframe() >= 5) {
-				if (!(player->state == PARRYING_RIGHT && player->sprite->getCurrentKeyframe() >= 2)){
+			direction = 0;
+			if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
+				if (!(player->state == PARRYING_RIGHT)){
 					player->damage(0, 1);
+					PlaySound(TEXT("sounds/pain2"), NULL, SND_ASYNC);
+				}
+				else if (player->state == PARRYING_RIGHT){
+					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
 				}
 				setState(STANDING_LEFT);
 				setAnimation(eSTAND_LEFT);
 			}
 			break;
 		case SWORD_ATTACKING_RIGHT:
-			if (sprite->getCurrentKeyframe() >= 5) {
-				if (!(player->state == PARRYING_LEFT && player->sprite->getCurrentKeyframe() >= 2)){
+			direction = 1;
+			if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
+				if (!(player->state == PARRYING_LEFT)){
 					player->damage(1, 1);
+					PlaySound(TEXT("sounds/pain2"), NULL, SND_ASYNC);
+				}
+				else if (player->state == PARRYING_LEFT){
+					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
 				}
 				setState(STANDING_RIGHT);
 				setAnimation(eSTAND_RIGHT);
 			}
 			break;
 		case PARRYING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 6) {
 				setState(STANDING_LEFT);
 				setAnimation(eSTAND_LEFT);
 			}
 			break;
 		case PARRYING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 6) {
 				setState(STANDING_RIGHT);
 				setAnimation(eSTAND_RIGHT);
 			}
 			break;
 		case DAMAGING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 1) {
 				health = health - 1;
-				if (health <= 0) {
+				if (health <= 0 && state != DYING_LEFT && state != DYING_RIGHT) {
 					setState(DYING_LEFT);
 					setAnimation(eDIE_LEFT);
 				}
-				else {
+				else if (health > 0){
 					setState(STANDING_LEFT);
 					setAnimation(eSTAND_LEFT);
 				}
 			}
 			break;
 		case DAMAGING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 1) {
 				health = health - 1;
-				if (health <= 0) {
+				if (health <= 0 && state != DYING_LEFT && state != DYING_RIGHT) {
 					setState(DYING_RIGHT);
 					setAnimation(eDIE_RIGHT);
 				}
-				else {
+				else if (health > 0){
 					setState(STANDING_RIGHT);
 					setAnimation(eSTAND_RIGHT);
 				}
 			}
 			break;
 		case DYING_RIGHT:
+			direction = 1;
 			if (sprite->getCurrentKeyframe() >= 8) {
 				alive = false;
 			}
 			break;
 		case DYING_LEFT:
+			direction = 0;
 			if (sprite->getCurrentKeyframe() >= 8) {
 				alive = false;
 			}
@@ -487,5 +522,13 @@ void Enemy::setAnimation(EnemyAnims newAnim) {
 }
 
 void Enemy::DIE() {
-	//TODO
+	PlaySound(TEXT("sounds/die1"), NULL, SND_ASYNC);
+	if (direction){
+		setState(DYING_RIGHT);
+		setAnimation(eDIE_RIGHT);
+	}
+	else {
+		setState(DYING_LEFT);
+		setAnimation(eDIE_LEFT);
+	}
 }

@@ -16,6 +16,6 @@ fe                   fe       ff
 rb                   rb       rr
 ffffa a  aa  a       fe     ffff
 rrrrb        b       rb     rrrr
-fffe         fa  a          ffff
-rrrb         rb  b          rrrr
+ffe          fa  a          ffff
+rrb          rb  b          rrrr
 ffffaaaaaaaaaffaaaaaaaaaaaaaffff

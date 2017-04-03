@@ -24,6 +24,7 @@ public:
 	int type;
 	bool actived;
 	Sprite *sprite;
+	void kill(GameActor &actor);
 private:
 	bool sound_playing;
 	bool overlapping1D(glm::vec2 box1, glm::vec2 box2);
