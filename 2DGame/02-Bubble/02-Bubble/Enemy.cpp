@@ -17,7 +17,7 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	close_distance = 32;
 	player = pl;
 	type = tp;
-	figtPosition = 0;
+	fightPosition = 1;
 	alive = true;
 	timer = 0;
 	float stepX = 1.0f / 8.0f; //CHECK
@@ -346,7 +346,13 @@ void Enemy::update(int deltaTime)
 
 		if (playerClose() && state != DYING_LEFT && state != DYING_RIGHT){
 			
-			if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() >= 6){
+			if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() == 0) {
+				if (player->fightPosition == fightPosition) {
+					setState(PARRYING_LEFT);
+					setAnimation(ePARRY_LEFT);
+				}
+			}
+			else if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() >= 6){
 				
 				if (!(state == PARRYING_LEFT)){
 					PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
@@ -354,6 +360,13 @@ void Enemy::update(int deltaTime)
 				}
 				else {
 					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
+				}
+			}
+			//LEFT
+			else if (player->state == SWORD_ATTACKING_LEFT && direction && player->sprite->getCurrentKeyframe() == 0) {
+				if (player->fightPosition == fightPosition) {
+					setState(PARRYING_RIGHT);
+					setAnimation(ePARRY_RIGHT);
 				}
 			}
 			else if (player->state == SWORD_ATTACKING_LEFT && direction && player->sprite->getCurrentKeyframe() >= 6){
@@ -400,8 +413,14 @@ void Enemy::update(int deltaTime)
 			break;
 		case SWORD_ATTACKING_LEFT:
 			direction = 0;
-			if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
-				if (!(player->state == PARRYING_RIGHT)){
+			if (sprite->getCurrentKeyframe() == 0) {
+				if (player->fightPosition == fightPosition) {
+					player->setState(PARRYING_RIGHT);
+					player->setAnimation(PARRY_RIGHT);
+				}
+			}
+			else if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
+				if (player->state != PARRYING_RIGHT){
 					player->damage(0, 1);
 					PlaySound(TEXT("sounds/pain2"), NULL, SND_ASYNC);
 				}
@@ -414,7 +433,13 @@ void Enemy::update(int deltaTime)
 			break;
 		case SWORD_ATTACKING_RIGHT:
 			direction = 1;
-			if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
+			if (sprite->getCurrentKeyframe() == 0) {
+				if (player->fightPosition == fightPosition) {
+					player->setState(PARRYING_LEFT);
+					player->setAnimation(PARRY_LEFT);
+				}
+			}
+			else if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
 				if (!(player->state == PARRYING_LEFT)){
 					player->damage(1, 1);
 					PlaySound(TEXT("sounds/pain2"), NULL, SND_ASYNC);

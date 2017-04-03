@@ -26,7 +26,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	tileMapDispl = tileMapPos;
 	health = 3;
 	max_health = 4;
-	figtPosition = 0;
+	fightPosition = 0;
 	bJumping = false;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);	//per a fer servir coordenades negatives i fer mirror
 	spritesheet.loadFromFile("images/Prince.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -38,7 +38,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	fightTexture.loadFromFile("images/fight.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	fightTexture.setMagFilter(GL_NEAREST);
 
-	fightPos = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25f, 1), &fightTexture, &shaderProgram);
+	fightPos = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.24f, 1), &fightTexture, &shaderProgram);
 	
 	fightPos->setNumberAnimations(4);
 
@@ -539,18 +539,19 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(POST_JUMP_LEFT2, glm::vec2(-15 * stepX, 6 * stepY));
 		sprite->addKeyframe(POST_JUMP_LEFT2, glm::vec2(-15 * stepX, 6 * stepY)); //copy
 
-		sprite->setAnimationSpeed(DAMAGE_LEFT, 8);
-		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-4 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
-		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-5 * stepX, 11 * stepY));
+		sprite->setAnimationSpeed(DAMAGE_LEFT, 15);
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-1 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-2 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-3 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-4 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_LEFT, glm::vec2(-4 * stepX, 16 * stepY)); //copy
 
 		sprite->setAnimationSpeed(DAMAGE_RIGHT, 15);
 		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(0 * stepX, 16 * stepY));
 		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(1 * stepX, 16 * stepY));
 		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(2 * stepX, 16 * stepY));
 		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(3 * stepX, 16 * stepY));
+		sprite->addKeyframe(DAMAGE_RIGHT, glm::vec2(3 * stepX, 16 * stepY)); //copy
 
 		sprite->setAnimationSpeed(DIE_RIGHT, 6);
 		sprite->addKeyframe(DIE_RIGHT, glm::vec2(0 * stepX, 17 * stepY));
@@ -1120,7 +1121,7 @@ void Player::update(int deltaTime)
 		case SWORDING_OUT_RIGHT:
 			direction = 1;
 			fightPos->changeAnimation(1);
-			figtPosition = 1;
+			fightPosition = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(SWORD_STANDING_RIGHT);
 				setAnimation(SWORD_STAND_RIGHT);
@@ -1152,7 +1153,7 @@ void Player::update(int deltaTime)
 		case SWORDING_IN_RIGHT:
 			direction = 1;
 			fightPos->changeAnimation(0);
-			figtPosition = 0;
+			fightPosition = 0;
 			if(sprite->getCurrentKeyframe() >= 5) {
 				setState(STANDING_RIGHT);
 				setAnimation(STAND_RIGHT);
@@ -1213,7 +1214,7 @@ void Player::update(int deltaTime)
 		case SWORDING_OUT_LEFT:
 			direction = 0;
 			fightPos->changeAnimation(1);
-			figtPosition = 1;
+			fightPosition = 1;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(SWORD_STANDING_LEFT);
 				setAnimation(SWORD_STAND_LEFT);
@@ -1245,7 +1246,7 @@ void Player::update(int deltaTime)
 		case SWORDING_IN_LEFT:
 			direction = 0;
 			fightPos->changeAnimation(0);
-			figtPosition = 0;
+			fightPosition = 0;
 			if (sprite->getCurrentKeyframe() >= 5) {
 				setState(STANDING_LEFT);
 				setAnimation(STAND_LEFT);
@@ -1402,7 +1403,7 @@ void Player::update(int deltaTime)
 				setState(FALLING_LEFT);
 				setAnimation(FALL_LEFT);
 			}
-			else if (sprite->getCurrentKeyframe() >= 3) {
+			else if (sprite->getCurrentKeyframe() >= 4) {
 				//position_col = glm::ivec2((position_col.x +5), position_col.y);
 				health = health - 1;
 				if (health <= 0 && state != DYING_LEFT && state != DYING_RIGHT) {
@@ -1423,7 +1424,7 @@ void Player::update(int deltaTime)
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
 			}
-			else if (sprite->getCurrentKeyframe() >= 3) {
+			else if (sprite->getCurrentKeyframe() >= 4) {
 				//position_col = glm::ivec2(ceil(position_col.x - 5), position_col.y);
 				health = health - 1;
 				if (health <= 0 && state != DYING_LEFT && state != DYING_RIGHT) {
@@ -1532,18 +1533,18 @@ void Player::input() {
 	else shift_released = false;
 
 	//fight positions
-	if (figtPosition != 0) {
+	if (fightPosition != 0) {
 		if (Game::instance().getKey(49)) {
 			fightPos->changeAnimation(1);
-			figtPosition = 1;
+			fightPosition = 1;
 		}
 		else if (Game::instance().getKey(50)) {
 			fightPos->changeAnimation(2);
-			figtPosition = 2;
+			fightPosition = 2;
 		}
 		else if (Game::instance().getKey(51)) {
 			fightPos->changeAnimation(3);
-			figtPosition = 3;
+			fightPosition = 3;
 		}
 	}
 
