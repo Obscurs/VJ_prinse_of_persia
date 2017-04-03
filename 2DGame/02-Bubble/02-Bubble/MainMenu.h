@@ -20,9 +20,11 @@ private:
 	Texture menu_tex;
 	Texture menu_tex2;
 	Texture menu_tex3;
+	Texture menu_tex4;
 	Sprite *sprite;
 	Sprite *sprite_help;
 	Sprite *sprite_credits;
+	Sprite *sprite_win;
 	
 };
 

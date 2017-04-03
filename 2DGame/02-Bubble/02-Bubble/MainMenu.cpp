@@ -29,6 +29,9 @@ void MainMenu::init(ShaderProgram &shaderProgram)
 	menu_tex3.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite_credits = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &menu_tex3, &texProgram);
 
+	menu_tex4.loadFromFile("images/win.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite_win = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &menu_tex4, &texProgram);
+
 	sprite->setNumberAnimations(1);
 	sprite->setAnimationSpeed(0, 2);
 	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
@@ -47,6 +50,12 @@ void MainMenu::init(ShaderProgram &shaderProgram)
 	sprite_credits->addKeyframe(0, glm::vec2(0.f, 0.f));
 	sprite_credits->changeAnimation(0);
 	sprite_credits->setPosition(glm::vec2(float(0), float(0)));
+
+	sprite_win->setNumberAnimations(1);
+	sprite_win->setAnimationSpeed(0, 8);
+	sprite_win->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite_win->changeAnimation(0);
+	sprite_win->setPosition(glm::vec2(float(0), float(0)));
 
 }
 
@@ -76,5 +85,6 @@ void MainMenu::render()
 	if (menu_status == 0) sprite->render();
 	else if (menu_status == 1) sprite_help->render();
 	else if (menu_status == 2) sprite_credits->render();
+	else if (menu_status == 3) sprite_win->render();
 
 }

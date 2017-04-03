@@ -32,6 +32,7 @@ Scene::Scene()
 	background = NULL;
 	foreground = NULL;
 	player = NULL;
+	entities_foreground = NULL;
 }
 
 Scene::~Scene()
@@ -40,6 +41,8 @@ Scene::~Scene()
 		delete map;
 	if (entities != NULL)
 		delete entities;
+	if (entities_foreground != NULL)
+		delete entities_foreground;
 	if (background != NULL)
 		delete background;
 	if (foreground != NULL)
@@ -63,12 +66,14 @@ void Scene::init(bool is_reset, int lvl)
 	if (level == 1){
 		map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		entities = EntityMap::createTileMap("levels/level01e.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+		entities_foreground = EntityMap::createTileMap("levels/level01ef.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
 		background = TileMap::createTileMap("levels/level01b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		foreground = TileMap::createTileMap("levels/level01f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	}
 	else if (level == 2){
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		entities = EntityMap::createTileMap("levels/level02e.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+		entities_foreground = EntityMap::createTileMap("levels/level02ef.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
 		background = TileMap::createTileMap("levels/level02b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		foreground = TileMap::createTileMap("levels/level02f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	}
@@ -108,7 +113,10 @@ void Scene::update(int deltaTime)
 	player->down_key = true;
 	entities->update(deltaTime);
 	entities->interactEntitiesWithActor(*player);
-	if (entities->winer(*player)) {
+
+	entities_foreground->update(deltaTime);
+	entities_foreground->interactEntitiesWithActor(*player);
+	if (entities->winer(*player) || entities_foreground->winer(*player)) {
 		
 		completed = true;
 	}
@@ -147,6 +155,8 @@ void Scene::render()
 	entities->render();
 
 	player->render();
+
+	entities_foreground->render();
 
 	texProgram.free();
 	texProgram.use();

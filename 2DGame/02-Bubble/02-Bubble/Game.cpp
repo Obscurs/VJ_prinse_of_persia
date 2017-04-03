@@ -2,9 +2,10 @@
 #include <GL/glut.h>
 #include "Game.h"
 
+#define NUM_LVLS 2
 enum GameStatus
 {
-	PLAYING, MAINMENU, PAUSE
+	PLAYING, MAINMENU, PAUSE, WINER
 };
 
 void Game::init()
@@ -24,7 +25,11 @@ bool Game::update(int deltaTime)
 		case PLAYING:
 			if (scene.completed) {
 				//menu.first_update = true;
-				scene.init(true, 2);
+				if (scene.level == NUM_LVLS) {
+					menu.menu_status = 3;
+					game_status = WINER;
+				}
+				else scene.init(true, scene.level+1);
 
 				//game_status = MAINMENU;
 			}
@@ -35,6 +40,9 @@ bool Game::update(int deltaTime)
 			break;
 		case PAUSE:
 			pause.update(deltaTime);
+			break;
+		case WINER:
+			menu.update(deltaTime);
 			break;
 	}
 	return bPlay;
@@ -54,6 +62,9 @@ void Game::render()
 		case PAUSE:
 			scene.render();
 			pause.render();
+			break;
+		case WINER:
+			menu.render();
 			break;
 	}
 }
@@ -93,12 +104,14 @@ void Game::keyReleased(int key)
 			scene.init(true, 1);
 			game_status = MAINMENU;
 			break;
+		
 		}
+
 	}
 	else if (key == 83 || key == 115){
 		switch (game_status){
 		case PLAYING:
-			scene.init(true, 2);
+			scene.completed = true;
 			break;
 		}
 	}
@@ -108,7 +121,10 @@ void Game::keyReleased(int key)
 	else if ((key == 67 || key == 99) && game_status == MAINMENU){
 		menu.menu_status = 2;
 	}
-	else if ((key == 77 || key == 109) && game_status == MAINMENU){
+	else if ((key == 77 || key == 109) && (game_status == MAINMENU || game_status == WINER)){
+		menu.first_update = true;
+		scene.init(true, 1);
+		game_status = MAINMENU;
 		menu.menu_status = 0;
 	}
 	keys[key] = false;
