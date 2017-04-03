@@ -167,6 +167,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x, position.y);
 		col_size = glm::vec2(16, 64);
+		position = glm::vec2(position.x + 8, position.y - 6);
 	}
 	//paja
 	else if (type == 9){
@@ -205,6 +206,16 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 
 		sprite->addKeyframe(ANIM1, glm::vec2(0.3f, 0.6f));
 		position = glm::vec2(position.x, position.y);
+		sprite->setPosition(position);
+		col_position = glm::vec2(position.x, position.y);
+		col_size = glm::vec2(16, 64);
+	}
+	else if (type == 13){
+		sprite->setNumberAnimations(1);
+		sprite->setAnimationSpeed(ANIM1, 8);
+
+		sprite->addKeyframe(ANIM1, glm::vec2(0.1f, 0.5f));
+		position = glm::vec2(position.x+8, position.y-6);
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x, position.y);
 		col_size = glm::vec2(16, 64);

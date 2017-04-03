@@ -6,8 +6,8 @@ images/tiles2.png 	-- Tilesheet
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 fa                            ff
 rb                            rr
-fffa               fa     ffffff
-rrrb               rb     rrrrrr
+ffa                fa     ffffff
+rrb                rb     rrrrrr
 fe                faa       ffff
 rb                rbb       rrrr
 fe  ffffffffffffffffffffffa ffff

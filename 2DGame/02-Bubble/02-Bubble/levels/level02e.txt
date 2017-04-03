@@ -8,7 +8,7 @@ images/entities.png 	-- Tilesheet
 00f                           00
 00                            00
 00                            00
-00    aaaa                a   00
+00   maaaa                a   00
 0               f   00  c  00 00
 00000000000000000000000000000000
 00                            00
