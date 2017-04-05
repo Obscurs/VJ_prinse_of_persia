@@ -1131,10 +1131,10 @@ void Player::update(int deltaTime)
 				setState(SWORD_ATTACKING_RIGHT);
 				setAnimation(SWORD_ATTACK_RIGHT);
 			}
-			else if (up) {
-				setState(PARRYING_RIGHT);
-				setAnimation(PARRY_RIGHT);
-			}
+			//else if (up) {
+			//	setState(PARRYING_RIGHT);
+			//	setAnimation(PARRY_RIGHT);
+			//}
 			else if (down) {
 				setState(SWORDING_IN_RIGHT);
 				setAnimation(SWORD_IN_RIGHT);
@@ -1226,10 +1226,10 @@ void Player::update(int deltaTime)
 				setState(SWORD_ATTACKING_LEFT);
 				setAnimation(SWORD_ATTACK_LEFT);
 			}
-			else if (up) {
-				setState(PARRYING_LEFT);
-				setAnimation(PARRY_LEFT);
-			}
+			//else if (up) {
+			//	setState(PARRYING_LEFT);
+			//	setAnimation(PARRY_LEFT);
+			//}
 			else if (down) {
 				setState(SWORDING_IN_LEFT);
 				setAnimation(SWORD_IN_LEFT);
