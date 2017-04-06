@@ -354,6 +354,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-12 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-11 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-10 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-9 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-8 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-7 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_LEFT_DOWN, glm::vec2(-6 * stepX, 10 * stepY));
@@ -367,6 +368,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->setAnimationSpeed(CLIMB_RIGHT_DOWN, 8);
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(11 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(10 * stepX, 10 * stepY));
+		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(9 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(8 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(7 * stepX, 10 * stepY));
 		sprite->addKeyframe(CLIMB_RIGHT_DOWN, glm::vec2(6 * stepX, 10 * stepY));
@@ -1109,7 +1111,8 @@ void Player::update(int deltaTime)
 				setAnimation(WALK_LEFT);
 				is_up = false;
 			}
-			else if (sprite->getCurrentKeyframe() >= 6 && !is_up){
+			else if (sprite->getCurrentKeyframe() >= 5 && !is_up){
+				sprite->setCurrentKeyframe(6);
 				is_up = true;
 				position_col.y -= 45;
 				position_col.x -= 4;
@@ -1122,7 +1125,8 @@ void Player::update(int deltaTime)
 				setAnimation(WALK_RIGHT);
 				is_up = false;
 			}
-			else if (sprite->getCurrentKeyframe() >= 6 && !is_up){
+			else if (sprite->getCurrentKeyframe() >= 5 && !is_up){
+				sprite->setCurrentKeyframe(6);
 				position_col.y -= 45;
 				position_col.x += 4;
 				is_up = true;
@@ -1136,6 +1140,7 @@ void Player::update(int deltaTime)
 				is_up = false;
 			}
 			else if (sprite->getCurrentKeyframe() >= 5 && !is_up){
+				sprite->setCurrentKeyframe(6);
 				is_up = true;
 				position_col.y += 45;
 				position_col.x += 4;
@@ -1149,6 +1154,7 @@ void Player::update(int deltaTime)
 				is_up = false;
 			}
 			else if (sprite->getCurrentKeyframe() >= 5 && !is_up){
+				sprite->setCurrentKeyframe(6);
 				position_col.y += 45;
 				position_col.x -= 4;
 				is_up = true;

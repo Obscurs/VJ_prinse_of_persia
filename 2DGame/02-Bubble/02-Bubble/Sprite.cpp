@@ -75,6 +75,9 @@ void Sprite::setNumberAnimations(int nAnimations)
 int Sprite::getCurrentKeyframe(){
 	return currentKeyframe;
 }
+void Sprite::setCurrentKeyframe(int keyframe){
+	currentKeyframe = keyframe;
+}
 void Sprite::setAnimationSpeed(int animId, int keyframesPerSec)
 {
 	if (animId < int(animations.size()))
