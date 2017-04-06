@@ -38,7 +38,7 @@ public:
 	void DIE();
 	glm::vec2 getPosition();
 	virtual void drink();
-	
+	bool is_falling;
 private:
 	bool bJumping;
 	bool right, left, up, down, jump, shift, shift_released;

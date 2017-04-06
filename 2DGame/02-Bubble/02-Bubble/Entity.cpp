@@ -178,7 +178,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		position = glm::vec2(position.x, position.y);
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x, position.y);
-		col_size = glm::vec2(16, 64);
+		col_size = glm::vec2(64, 64);
 	}
 	else if (type == 10){
 		sprite->setNumberAnimations(1);
@@ -188,7 +188,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		position = glm::vec2(position.x, position.y);
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x, position.y);
-		col_size = glm::vec2(16, 64);
+		col_size = glm::vec2(64, 64);
 	}
 	else if (type == 11){
 		sprite->setNumberAnimations(1);
@@ -198,7 +198,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		position = glm::vec2(position.x, position.y);
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x, position.y);
-		col_size = glm::vec2(16, 64);
+		col_size = glm::vec2(64, 64);
 	}
 	else if (type == 12){
 		sprite->setNumberAnimations(1);
@@ -208,7 +208,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		position = glm::vec2(position.x, position.y);
 		sprite->setPosition(position);
 		col_position = glm::vec2(position.x, position.y);
-		col_size = glm::vec2(16, 64);
+		col_size = glm::vec2(64, 64);
 	}
 	else if (type == 13){
 		sprite->setNumberAnimations(1);
@@ -322,7 +322,10 @@ bool Entity::action(GameActor &actor){
 			}
 
 
-		}//saw
+		}
+		else if (type == 9 || type == 10 || type == 11 || type == 12){
+			actor.y_start_falling = actor.position_col.y;
+		}
 
 	}
 	return false;

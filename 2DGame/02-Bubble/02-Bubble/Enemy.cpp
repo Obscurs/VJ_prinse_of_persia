@@ -169,7 +169,7 @@ void Enemy::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 }
 bool Enemy::canSeePlayer(){
 	glm::vec2 p_center = glm::vec2((player->position_col.x + player->size.x / 2), (player->position_col.y + player->size.y / 2));
-	std::cout << p_center.y << " " << position_col.y << std::endl;
+	//std::cout << p_center.y << " " << position_col.y << std::endl;
 	if (p_center.y > position_col.y && p_center.y < position_col.y + size.y){
 		int my_center = (position_col.x + size.x / 2);
 		int dist = abs(p_center.x - my_center);
@@ -311,15 +311,19 @@ void Enemy::newDecision(){
 	
 }
 void Enemy::damage(bool direction, int dmg){
-
-	if (direction){
-		setState(DAMAGING_LEFT);
-		setAnimation(eDAMAGE_LEFT);
+	if (health > 0){
+		PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
+		if (direction){
+			setState(DAMAGING_LEFT);
+			setAnimation(eDAMAGE_LEFT);
+		}
+		else{
+			setState(DAMAGING_RIGHT);
+			setAnimation(eDAMAGE_RIGHT);
+		}
 	}
-	else{
-		setState(DAMAGING_RIGHT);
-		setAnimation(eDAMAGE_RIGHT);
-	}
+	else DIE();
+	
 
 }
 void Enemy::update(int deltaTime)
@@ -351,8 +355,9 @@ void Enemy::update(int deltaTime)
 			}
 			else if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() >= 6){
 				
+
 				if (player->fightPosition != fightPosition){
-					PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
+					//PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
 					damage(1, 1);
 				}
 				else {
@@ -367,8 +372,9 @@ void Enemy::update(int deltaTime)
 				}
 			}
 			else if (player->state == SWORD_ATTACKING_LEFT && direction && player->sprite->getCurrentKeyframe() >= 6){
+
 				if (player->fightPosition != fightPosition){
-					PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
+					//PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
 					damage(0, 1);
 				}
 				else {
@@ -419,7 +425,6 @@ void Enemy::update(int deltaTime)
 			else if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
 				if (player->fightPosition != fightPosition){
 					player->damage(0, 1);
-					PlaySound(TEXT("sounds/pain2"), NULL, SND_ASYNC);
 				}
 				else if (player->fightPosition == fightPosition){
 					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
@@ -439,7 +444,6 @@ void Enemy::update(int deltaTime)
 			else if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
 				if (player->fightPosition != fightPosition){
 					player->damage(1, 1);
-					PlaySound(TEXT("sounds/pain2"), NULL, SND_ASYNC);
 				}
 				else if (player->fightPosition == fightPosition){
 					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
@@ -546,6 +550,7 @@ void Enemy::setAnimation(EnemyAnims newAnim) {
 
 void Enemy::DIE() {
 	PlaySound(TEXT("sounds/die1"), NULL, SND_ASYNC);
+	health = 0;
 	if (direction){
 		setState(DYING_RIGHT);
 		setAnimation(eDIE_RIGHT);
