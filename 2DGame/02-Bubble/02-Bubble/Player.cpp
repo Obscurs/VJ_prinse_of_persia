@@ -851,6 +851,7 @@ void Player::update(int deltaTime)
 			}
 			else {
 				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - (deltaTime / magic*speed)*1.5), position_col.y);
+
 				if (!map->collisionMoveLeft(new_pos, size)) {
 					if (64 * int(position_col.x / 64) != 64 * int(new_pos.x / 64) && position_col.x % 64 != 0) {
 						position_col.x = 64 * int(position_col.x / 64);
@@ -995,7 +996,7 @@ void Player::update(int deltaTime)
 			direction = 1;
 			jumpAngle += JUMP_ANGLE_STEP*deltaTime / magic;
 			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
-			if (jumpAngle > 90) {
+			if (jumpAngle > 90 || map->collisionMoveUp(position_col, size, &position_col.y)) {
 				setState(FALLING_RIGHT);
 				setAnimation(FALL_RIGHT);
 			}
@@ -1009,7 +1010,7 @@ void Player::update(int deltaTime)
 			direction = 0;
 			jumpAngle += JUMP_ANGLE_STEP*deltaTime / magic;
 			position_col.y = int(posStartAnim.y - JUMP * sin(3.14159f * jumpAngle / 180.f));
-			if (jumpAngle > 90) {
+			if (jumpAngle > 90 || map->collisionMoveUp(position_col, size, &position_col.y)) {
 				setState(FALLING_LEFT);
 				setAnimation(FALL_LEFT);
 			}
