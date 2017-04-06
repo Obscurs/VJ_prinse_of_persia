@@ -2,7 +2,7 @@
 #include <GL/glut.h>
 #include "Game.h"
 
-#define NUM_LVLS 2
+#define NUM_LVLS 3
 enum GameStatus
 {
 	PLAYING, MAINMENU, PAUSE, WINER

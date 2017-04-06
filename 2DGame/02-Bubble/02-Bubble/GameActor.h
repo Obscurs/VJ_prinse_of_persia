@@ -34,6 +34,7 @@ public:
 	int fightPosition;
 	bool direction;
 	virtual void DIE();
+	int y_start_falling;
 protected:
 	
 	

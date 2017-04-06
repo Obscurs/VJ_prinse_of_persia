@@ -69,6 +69,9 @@ void Scene::init(bool is_reset, int lvl)
 		entities_foreground = EntityMap::createTileMap("levels/level01ef.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
 		background = TileMap::createTileMap("levels/level01b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		foreground = TileMap::createTileMap("levels/level01f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		player->init(glm::ivec2(SCREEN_X + 16, SCREEN_Y + 8), texProgram);
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+		player->setTileMap(map);
 	}
 	else if (level == 2){
 		map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -76,14 +79,25 @@ void Scene::init(bool is_reset, int lvl)
 		entities_foreground = EntityMap::createTileMap("levels/level02ef.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
 		background = TileMap::createTileMap("levels/level02b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 		foreground = TileMap::createTileMap("levels/level02f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		player->init(glm::ivec2(SCREEN_X + 16, SCREEN_Y + 8), texProgram);
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+		player->setTileMap(map);
+	}
+	else if (level == 3){
+		map = TileMap::createTileMap("levels/level03.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		entities = EntityMap::createTileMap("levels/level03e.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+		entities_foreground = EntityMap::createTileMap("levels/level03ef.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, map, player);
+		background = TileMap::createTileMap("levels/level03b.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		foreground = TileMap::createTileMap("levels/level03f.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+		player->init(glm::ivec2(SCREEN_X + 16, SCREEN_Y + 8), texProgram);
+		player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+		player->setTileMap(map);
 	}
 	
 	
 	//enemy = new Enemy();
 	gui = new Gui();
-	player->init(glm::ivec2(SCREEN_X+16, SCREEN_Y+8), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
+	
 	//enemy->init(glm::ivec2(SCREEN_X + 16, SCREEN_Y + 8), texProgram, 0);
 	//enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
 	//enemy->setTileMap(map);
