@@ -593,8 +593,6 @@ void Player::update(int deltaTime)
 	//deltaTime = 50;
 	if (alive){
 		old_position_col = position_col;
-		sprite->update(deltaTime);
-		fightPos->update(deltaTime);
 		input();
 		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
 		//std::cout << position_col.x << " " << position_col.y << std::endl;
@@ -1170,10 +1168,10 @@ void Player::update(int deltaTime)
 				setState(SWORD_ATTACKING_RIGHT);
 				setAnimation(SWORD_ATTACK_RIGHT);
 			}
-			else if (up) {
-				setState(PARRYING_RIGHT);
-				setAnimation(PARRY_RIGHT);
-			}
+			//else if (up) {
+			//	setState(PARRYING_RIGHT);
+			//	setAnimation(PARRY_RIGHT);
+			//}
 			else if (down) {
 				setState(SWORDING_IN_RIGHT);
 				setAnimation(SWORD_IN_RIGHT);
@@ -1220,6 +1218,7 @@ void Player::update(int deltaTime)
 				glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
 				if (!map->collisionMoveDown(glm::ivec2(new_pos.x + 10, position_col.y + 5), size, &position_col.y))
 				{
+					fightPosition = 0;
 					setState(STANDING_RIGHT);
 					setAnimation(STAND_RIGHT);
 				}
@@ -1238,6 +1237,7 @@ void Player::update(int deltaTime)
 				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
 				if (!map->collisionMoveDown(glm::ivec2(new_pos.x - 10, position_col.y + 5), size, &position_col.y))
 				{
+					fightPosition = 0;
 					setState(STANDING_RIGHT);
 					setAnimation(STAND_RIGHT);
 				}
@@ -1263,10 +1263,10 @@ void Player::update(int deltaTime)
 				setState(SWORD_ATTACKING_LEFT);
 				setAnimation(SWORD_ATTACK_LEFT);
 			}
-			else if (up) {
-				setState(PARRYING_LEFT);
-				setAnimation(PARRY_LEFT);
-			}
+			//else if (up) {
+			//	setState(PARRYING_LEFT);
+			//	setAnimation(PARRY_LEFT);
+			//}
 			else if (down) {
 				setState(SWORDING_IN_LEFT);
 				setAnimation(SWORD_IN_LEFT);
@@ -1313,6 +1313,7 @@ void Player::update(int deltaTime)
 				glm::ivec2 new_pos = glm::ivec2(ceil(position_col.x - deltaTime / magic), position_col.y);
 				if (!map->collisionMoveDown(glm::ivec2(new_pos.x - 10, position_col.y + 5), size, &position_col.y))
 				{
+					fightPosition = 0;
 					setState(STANDING_LEFT);
 					setAnimation(STAND_LEFT);
 				}
@@ -1331,6 +1332,7 @@ void Player::update(int deltaTime)
 				glm::ivec2 new_pos = glm::ivec2((position_col.x + deltaTime / magic), position_col.y);
 				if (!map->collisionMoveDown(glm::ivec2(new_pos.x + 10, position_col.y + 5), size, &position_col.y))
 				{
+					fightPosition = 0;
 					setState(STANDING_LEFT);
 					setAnimation(STAND_LEFT);
 				}
@@ -1496,6 +1498,10 @@ void Player::update(int deltaTime)
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
 		fightPos->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x + 20), float(posPlayer.y + tileMapDispl.y - 0)));
+		fightPos->changeAnimation(fightPosition);
+
+		sprite->update(deltaTime);
+		if (fightPos->animation() != fightPosition) fightPos->update(deltaTime);
 		//position_col = glm::vec2(float(posPlayer.x + tileMapDispl.x + 24), float(posPlayer.y + tileMapDispl.y + 22));
 		//std::cout << "player " << posPlayer.x << " " << posPlayer.y << " to " << posPlayer.x + 64 << " " << posPlayer.y + 64 << std::endl;
 		//std::cout << "player " << position_col.x << " " << position_col.y << " to " << position_col.x + size.x << " " << position_col.y + size.y << std::endl;

@@ -227,7 +227,7 @@ void Enemy::newDecision(){
 	}
 	else if (canSeePlayer() && !playerClose()){
 		if (playerDirection()){
-			if (state != SWORD_STEPING_F_RIGHT)setAnimation(eWALK_RIGHT);
+			if (state != SWORD_STEPING_F_RIGHT) setAnimation(eWALK_RIGHT);
 			setState(SWORD_STEPING_F_RIGHT);
 			direction = 1;
 			
@@ -267,27 +267,23 @@ void Enemy::newDecision(){
 				int random_variable = std::rand() % (4 - 1);
 				
 				if (random_variable == 1){
-					
 					if (direction){
-						if (state != SWORD_ATTACKING_RIGHT)setAnimation(eATACK_RIGHT);
+						if (state != SWORD_ATTACKING_RIGHT) setAnimation(eATACK_RIGHT);
 						setState(SWORD_ATTACKING_RIGHT);
 					}
 					else if (!direction){
-						if (state != SWORD_ATTACKING_LEFT)setAnimation(eATACK_LEFT);
+						if (state != SWORD_ATTACKING_LEFT) setAnimation(eATACK_LEFT);
 						setState(SWORD_ATTACKING_LEFT);
 					}
 
 				}
-				else if (random_variable == 2 || random_variable == 3){
-					if (direction){
-						if (state != PARRYING_RIGHT)setAnimation(ePARRY_RIGHT);
-						setState(PARRYING_RIGHT);
-					}
-					else if (!direction){
-						if (state != PARRYING_LEFT)setAnimation(ePARRY_LEFT);
-						setState(PARRYING_LEFT);
-					}
-
+				else if (random_variable == 2){
+					++fightPosition;
+					fightPosition = fightPosition % 3 + 1;
+				}
+				else if (random_variable == 3) {
+					fightPosition;
+					fightPosition = fightPosition % 3 + 1;
 				}
 				else {
 					wait = true;
@@ -346,11 +342,12 @@ void Enemy::update(int deltaTime)
 		fightPos->update(deltaTime);
 		position_col = glm::vec2(float(posPlayer.x + 24), float(posPlayer.y + 22));
 		glm::ivec2 new_pos;
-		if (state != DYING_LEFT && state != DYING_RIGHT)newDecision();
+		if (state != DYING_LEFT && state != DYING_RIGHT && state != PARRYING_RIGHT && state != PARRYING_LEFT) 
+			newDecision();
 
 		if (playerClose() && state != DYING_LEFT && state != DYING_RIGHT){
 			
-			if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() == 0) {
+			if (player->state == SWORD_ATTACKING_RIGHT && !direction && state != PARRYING_LEFT && player->sprite->getCurrentKeyframe() < 6) {
 				if (player->fightPosition == fightPosition) {
 					setState(PARRYING_LEFT);
 					setAnimation(ePARRY_LEFT);
@@ -358,7 +355,9 @@ void Enemy::update(int deltaTime)
 			}
 			else if (player->state == SWORD_ATTACKING_RIGHT && !direction && player->sprite->getCurrentKeyframe() >= 6){
 				
-				if (!(state == PARRYING_LEFT)){
+
+				if (player->fightPosition != fightPosition){
+					//PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
 					damage(1, 1);
 				}
 				else {
@@ -366,14 +365,16 @@ void Enemy::update(int deltaTime)
 				}
 			}
 			//LEFT
-			else if (player->state == SWORD_ATTACKING_LEFT && direction && player->sprite->getCurrentKeyframe() == 0) {
+			else if (player->state == SWORD_ATTACKING_LEFT && direction && state != PARRYING_RIGHT && player->sprite->getCurrentKeyframe() < 6) {
 				if (player->fightPosition == fightPosition) {
 					setState(PARRYING_RIGHT);
 					setAnimation(ePARRY_RIGHT);
 				}
 			}
 			else if (player->state == SWORD_ATTACKING_LEFT && direction && player->sprite->getCurrentKeyframe() >= 6){
-				if (!(state == PARRYING_RIGHT)){
+
+				if (player->fightPosition != fightPosition){
+					//PlaySound(TEXT("sounds/pain1"), NULL, SND_ASYNC);
 					damage(0, 1);
 				}
 				else {
@@ -415,17 +416,17 @@ void Enemy::update(int deltaTime)
 			break;
 		case SWORD_ATTACKING_LEFT:
 			direction = 0;
-			if (sprite->getCurrentKeyframe() == 0) {
-				if (player->fightPosition == fightPosition) {
+			if (sprite->getCurrentKeyframe() < 4) {
+				if (player->fightPosition == fightPosition && player->state != PARRYING_RIGHT && player->state != DYING_RIGHT) {
 					player->setState(PARRYING_RIGHT);
 					player->setAnimation(PARRY_RIGHT);
 				}
 			}
 			else if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
-				if (player->state != PARRYING_RIGHT){
+				if (player->fightPosition != fightPosition){
 					player->damage(0, 1);
 				}
-				else if (player->state == PARRYING_RIGHT){
+				else if (player->fightPosition == fightPosition){
 					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
 				}
 				setState(STANDING_LEFT);
@@ -434,17 +435,17 @@ void Enemy::update(int deltaTime)
 			break;
 		case SWORD_ATTACKING_RIGHT:
 			direction = 1;
-			if (sprite->getCurrentKeyframe() == 0) {
+			if (sprite->getCurrentKeyframe() < 4) {
 				if (player->fightPosition == fightPosition) {
 					player->setState(PARRYING_LEFT);
 					player->setAnimation(PARRY_LEFT);
 				}
 			}
 			else if (sprite->getCurrentKeyframe() >= 5 && player->state != DYING_LEFT && player->state != DYING_RIGHT) {
-				if (!(player->state == PARRYING_LEFT)){
+				if (player->fightPosition != fightPosition){
 					player->damage(1, 1);
 				}
-				else if (player->state == PARRYING_LEFT){
+				else if (player->fightPosition == fightPosition){
 					PlaySound(TEXT("sounds/parry"), NULL, SND_ASYNC);
 				}
 				setState(STANDING_RIGHT);
@@ -509,6 +510,7 @@ void Enemy::update(int deltaTime)
 		posPlayer = glm::vec2(float(position_col.x - 24), float(position_col.y - 22));
 		sprite->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x), float(posPlayer.y + tileMapDispl.y)));
 		fightPos->setPosition(glm::vec2(float(posPlayer.x + tileMapDispl.x + 20), float(posPlayer.y + tileMapDispl.y - 0)));
+		if (fightPos->animation() != fightPosition) fightPos->changeAnimation(fightPosition);
 	}
 }
 
