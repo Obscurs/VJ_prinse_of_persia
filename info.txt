@@ -1,0 +1,47 @@
+[Integrants del grup]
+Arnau Farràs Llobet
+Martí Lloveras Rosales
+
+
+[Funcionalitats implementades]
+- Part comuna
+Hem implementat les funcionalitats demanades:
+La interície gràfica que mostra la vida actual del jugador.
+Tres nivells de distribució diferent, amb dos aspectes diferents.
+Trampes: Els pinxos que surten del terra i la poció verinosa que resta.
+  També hem implementat dues trampes pròpies: La serra radial que surt del terra i la paret que t'axafa quan passes.
+Dos enemics amb aspecte diferent. Els dos enemics tenen una dificultat diferent a l'hora de lluitar.
+Combat com en el joc original. Tot i així hem afegit funcionalitats al combat (part creativa).
+
+- Tres funcionalitats del joc
+1) Estructura basada en diferents pantalles: Hem fet la pantalla d'inici, instruccions(help), about, pantalla de joc, pantalla de pausa durant el joc i pantalla de Victòria.
+2) So: Hi ha una música per a la pantalla d'inici, una música durant la partida, i sons per a diferents interaccions in-game (Trampes, combat).
+3) Animació d'elements estàtics del joc: Les torxes (a les quals hem canviat el disseny) i les diferents trampes, tant les originals (pinxos) com les pròpies (serra).
+També hem implementat la possibilitat de que els enemics caiguin a les trampes i morin.
+
+- Part creativa
+La nostra funcionalitat creativa consisteix en el sistema de combat del joc For Honor (Ubisoft), que recentment ha sortit al mercat i ha triunfat força.
+El joc consisteix en combats cos a cos basats en èpoques medievals.
+En el combat, podem estar en tres posicions de guàrdia diferents: Dreta, esquerra i amunt.
+Quan realitzem un atac el fem per la posició en que estem. Al rebre un atac, bloquejarem si ens trobem defensant la posició per la que ens han atacat, o rebrem mal altrament.
+
+A l'implementar la funcionalitat hem vist que el feedback visual en cas que el volguéssim fer amb el model del pesonatge no seria gens clar (modificant els sprites) ja que durant el combat es va movent, i que és un joc 2D en comptes de 3D.
+És per això que hem implementat l'estat de combat amb un indicador a sobre el personatge que indica en quina posició ens trobem (1, 2 o 3). D'aquesta manera es veu clarament en quina posició es troba cadascú i facilita la claretat i el feedback visual.
+Quan ataquem en una posició diferent que l'enemic aquest rep mal, i quan ho fem en la mateixa aquest bloqueja l'atac. El mateix passa quan ens ataca l'enemic.
+
+
+[Instruccions del joc]
+Córrer: Fletxa dreta o esquerra.
+Caminar: Shift + fletxa dreta o esquerra.
+Ajupir-se: Fletxa avall.
+Salt vertical: Fletxa amunt mentre estem de peu.
+Salt horitzontal: Fletxa amunt + fletxa en la direcció del salt. És diferent si es fa mentre es corre o si es fa estant quiet.
+Agafar-se a una vora (per escalar): Shift (mentre saltem en vertical arran de la paret).
+Escalar: Fletxa amunt (mentre estem agafats a una vora).
+Desescalar: fletxa avall mentre estem d'esquenes a una vora. Podem agafar-nos i quedar-nos penjant amb la tecla Shift.
+Desembeinar espasa: Shift + fletxa amunt.
+Embainar espasa: Fletxa avall.
+Combat: 
+ Atacar: Fletxa amunt
+ Posició de combat: Números 1, 2 i 3.
+ (Bloqueig automàtic si la posició coincideix amb la de l'atacant).
