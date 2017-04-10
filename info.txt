@@ -17,7 +17,7 @@ Combat com en el joc original. Tot i així hem afegit funcionalitats al combat (p
 1) Estructura basada en diferents pantalles: Hem fet la pantalla d'inici, instruccions(help), about, pantalla de joc, pantalla de pausa durant el joc i pantalla de Victòria.
 2) So: Hi ha una música per a la pantalla d'inici, una música durant la partida, i sons per a diferents interaccions in-game (Trampes, combat).
 3) Animació d'elements estàtics del joc: Les torxes (a les quals hem canviat el disseny) i les diferents trampes, tant les originals (pinxos) com les pròpies (serra).
-També hem implementat la possibilitat de que els enemics caiguin a les trampes i morin.
+També hem implementat la possibilitat de que els enemics caiguin a les trampes i morin, les pocions que restauren vida i que augmenten la vida màxima.
 
 - Part creativa
 La nostra funcionalitat creativa consisteix en el sistema de combat del joc For Honor (Ubisoft), que recentment ha sortit al mercat i ha triunfat força.
@@ -28,7 +28,7 @@ Quan realitzem un atac el fem per la posició en que estem. Al rebre un atac, blo
 A l'implementar la funcionalitat hem vist que el feedback visual en cas que el volguéssim fer amb el model del pesonatge no seria gens clar (modificant els sprites) ja que durant el combat es va movent, i que és un joc 2D en comptes de 3D.
 És per això que hem implementat l'estat de combat amb un indicador a sobre el personatge que indica en quina posició ens trobem (1, 2 o 3). D'aquesta manera es veu clarament en quina posició es troba cadascú i facilita la claretat i el feedback visual.
 Quan ataquem en una posició diferent que l'enemic aquest rep mal, i quan ho fem en la mateixa aquest bloqueja l'atac. El mateix passa quan ens ataca l'enemic.
-
+Encara que la nostra funcionalitat implementada és la del combat, també hem implementat les piles de palla sobre les quals pots caure des de molta alçada sense fer-te mal, agafant la inspiració de jocs com la saga Assasins Creed.
 
 [Instruccions del joc]
 Córrer: Fletxa dreta o esquerra.
@@ -45,3 +45,4 @@ Combat:
  Atacar: Fletxa amunt
  Posició de combat: Números 1, 2 i 3.
  (Bloqueig automàtic si la posició coincideix amb la de l'atacant).
+CHEAT SKIP LEVEL: Tecla S
