@@ -180,6 +180,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_position = glm::vec2(position.x, position.y);
 		col_size = glm::vec2(64, 64);
 	}
+
 	else if (type == 10){
 		sprite->setNumberAnimations(1);
 		sprite->setAnimationSpeed(ANIM1, 8);
@@ -190,26 +191,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_position = glm::vec2(position.x, position.y);
 		col_size = glm::vec2(64, 64);
 	}
-	else if (type == 11){
-		sprite->setNumberAnimations(1);
-		sprite->setAnimationSpeed(ANIM1, 8);
 
-		sprite->addKeyframe(ANIM1, glm::vec2(0.2f, 0.6f));
-		position = glm::vec2(position.x, position.y);
-		sprite->setPosition(position);
-		col_position = glm::vec2(position.x, position.y);
-		col_size = glm::vec2(64, 64);
-	}
-	else if (type == 12){
-		sprite->setNumberAnimations(1);
-		sprite->setAnimationSpeed(ANIM1, 8);
-
-		sprite->addKeyframe(ANIM1, glm::vec2(0.3f, 0.6f));
-		position = glm::vec2(position.x, position.y);
-		sprite->setPosition(position);
-		col_position = glm::vec2(position.x, position.y);
-		col_size = glm::vec2(64, 64);
-	}
 	else if (type == 13){
 		sprite->setNumberAnimations(1);
 		sprite->setAnimationSpeed(ANIM1, 8);
