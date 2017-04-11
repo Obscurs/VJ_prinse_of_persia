@@ -1171,7 +1171,7 @@ void Player::update(int deltaTime)
 			break;
 		case SWORD_STANDING_RIGHT:
 			direction = 1;
-			if (shift_released) {
+			if (up) {
 				setState(SWORD_ATTACKING_RIGHT);
 				setAnimation(SWORD_ATTACK_RIGHT);
 			}
@@ -1266,7 +1266,7 @@ void Player::update(int deltaTime)
 			break;
 		case SWORD_STANDING_LEFT:
 			direction = 0;
-			if (shift) {
+			if (up) {
 				setState(SWORD_ATTACKING_LEFT);
 				setAnimation(SWORD_ATTACK_LEFT);
 			}

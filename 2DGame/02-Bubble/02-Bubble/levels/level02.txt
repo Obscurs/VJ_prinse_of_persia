@@ -17,5 +17,5 @@ rb                            rr
 fffa                        ffff
 rrrb                        rrrr
 ffe            fa        fffffff
-rrb            rb        ffrrrrr
+rrb            rb        rrrrrrr
 ffffaaaaaaaaaffaaaaaaaaaaaaaffff
