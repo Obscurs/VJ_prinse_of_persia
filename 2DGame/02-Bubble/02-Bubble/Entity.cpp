@@ -17,13 +17,12 @@ Entity::Entity()
 	type = 0;
 }
 
-
 Entity::~Entity()
 {
 }
+
 void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &shaderProgram, Texture &spritesheet, int tp )
 {
-	//tileMapDispl = tileMapPos;
 	tileMapDispl = glm::vec2(0,0);
 	position = pos;
 	position = glm::vec2(float(position.x), float(position.y));
@@ -31,9 +30,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 	actived = true;
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.1), &spritesheet, &shaderProgram);		
 	sprite->setPosition(position);
-	sound_playing = false;
-	
-	
+	sound_playing = false;	
 	
 	if (type == 1){
 		sprite->setNumberAnimations(4);
@@ -61,7 +58,6 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_position = glm::vec2(position.x+8, position.y+16);
 		col_size = glm::vec2(24, 32);
 		actived = false;
-
 	}
 	else if (type == 2){
 		sprite->setNumberAnimations(1);
@@ -118,7 +114,6 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		sprite->addKeyframe(ANIM1, glm::vec2(0.2f, 0.2f));
 		col_position = glm::vec2(position.x + 20, position.y + 22);
 		col_size = glm::vec2(8, 8);
-
 	}
 	else if (type == 6){
 		sprite->setNumberAnimations(1);
@@ -169,7 +164,7 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_size = glm::vec2(16, 64);
 		position = glm::vec2(position.x + 8, position.y - 6);
 	}
-	//paja
+	//hay
 	else if (type == 9){
 		sprite->setNumberAnimations(1);
 		sprite->setAnimationSpeed(ANIM1, 8);
@@ -180,7 +175,6 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_position = glm::vec2(position.x, position.y);
 		col_size = glm::vec2(64, 64);
 	}
-
 	else if (type == 10){
 		sprite->setNumberAnimations(1);
 		sprite->setAnimationSpeed(ANIM1, 8);
@@ -191,7 +185,6 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_position = glm::vec2(position.x, position.y);
 		col_size = glm::vec2(64, 64);
 	}
-
 	else if (type == 13){
 		sprite->setNumberAnimations(1);
 		sprite->setAnimationSpeed(ANIM1, 8);
@@ -202,21 +195,22 @@ void Entity::init(const glm::ivec2 &tileMapPos, glm::ivec2 &pos, ShaderProgram &
 		col_position = glm::vec2(position.x, position.y);
 		col_size = glm::vec2(16, 64);
 	}
-
 	sprite->changeAnimation(ANIM1);
 }
 
 void Entity::update(int deltaTime)
 {
-	if(actived) sprite->update(deltaTime);
-	if (type == 1 && actived){
+	if(!actived) return;
+	
+	sprite->update(deltaTime);
+	if (type == 1){
 		if (sprite->getCurrentKeyframe() >= 9){
 			actived = false;
 			sprite->changeAnimation(ANIM1);
 			sound_playing = false;
 		}
 	}
-	if (type == 7 && actived){
+	if (type == 7){
 		if (sprite->getCurrentKeyframe() >= 14){
 			actived = false;
 			sprite->changeAnimation(ANIM1);
@@ -227,7 +221,6 @@ void Entity::update(int deltaTime)
 
 void Entity::render()
 {
-	
 	sprite->render();
 }
 
@@ -249,16 +242,13 @@ bool Entity::action(GameActor &actor){
 				else if (actor.type == 2) sprite->changeAnimation(ANIM4);
 				actived = false;	
 			}
-			
-
 		}//saw
 		else if (type == 2){
 			if (actor.health > 0 && sprite->getCurrentKeyframe() < 8){
 				actor.health = 0;
-				if (actor.health <= 0 && actor.state != DYING_LEFT && actor.state != DYING_RIGHT) {
+				if (actor.state != DYING_LEFT && actor.state != DYING_RIGHT) {
 					actor.DIE();
 				}
-				//actor.alive = false;
 			}
 		}//potion1
 		else if (type == 3){
@@ -279,7 +269,6 @@ bool Entity::action(GameActor &actor){
 		else if (type == 5){
 			if (actor.state == DOWNING_LEFT || actor.state == DOWNING_RIGHT){
 				actor.drink();
-				
 				if (actor.health > 0) actor.health--;
 				if (actor.health <= 0 && actor.state != DYING_LEFT && actor.state != DYING_RIGHT) {
 					actor.DIE();
@@ -299,30 +288,21 @@ bool Entity::action(GameActor &actor){
 				actor.health = 0;
 				if (actor.health <= 0 && actor.state != DYING_LEFT && actor.state != DYING_RIGHT) {
 					actor.DIE();
-				}
-				
+				}				
 			}
-
-
 		}
 		else if (type == 9 || type == 10 || type == 11 || type == 12){
 			actor.y_start_falling = actor.position_col.y;
 		}
-
 	}
 	return false;
 }
+
 bool Entity::overlapping1D(glm::vec2 box1, glm::vec2 box2){
 	return (box1.y >= box2.x && box2.y >= box1.x);
 }
-bool Entity::collides(glm::vec2 pos, glm::vec2 size){
 
+bool Entity::collides(glm::vec2 pos, glm::vec2 size){
 	return (overlapping1D(glm::vec2(pos.x, pos.x + size.x), glm::vec2(col_position.x, col_position.x + col_size.x)) 
 		&& overlapping1D(glm::vec2(pos.y, pos.y + size.y), glm::vec2(col_position.y, col_position.y + col_size.y)));
 }
-
-
-
-
-
-
